@@ -1,0 +1,161 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "software": "Phần mềm",
+    "about": "Giới thiệu",
+    "news": "Tin tức",
+    "login": "Đăng nhập",
+    "contact": "Liên hệ ngay"
+  },
+  "hero": {
+    "badge": "Giải pháp chuyển đổi số toàn diện 4.0",
+    "badgeNew": "Mới",
+    "title1": "Kỷ Nguyên",
+    "titleHighlight": "Số Hóa",
+    "title2": "Doanh Nghiệp",
+    "description": "HISOTECH cung cấp nền tảng công nghệ vượt trội, giúp tối ưu hóa quy trình vận hành và nâng cao hiệu suất kinh doanh của bạn thông qua các giải pháp phần mềm tiên tiến.",
+    "cta": "Bắt đầu ngay",
+    "watchDemo": "Xem giới thiệu",
+    "statSolutions": "Giải pháp",
+    "statUsers": "Người dùng",
+    "statAwards": "Giải thưởng"
+  },
+  "services": {
+    "subtitle": "Dịch vụ cốt lõi",
+    "title": "Sản phẩm tốt nhất",
+    "explore": "Khám phá ngay",
+    "items": {
+      "enterprise": {
+        "title": "Giải pháp Doanh nghiệp",
+        "description": "Tối ưu hóa quy trình quản lý, nhân sự và tài chính với hệ thống ERP thông minh tích hợp AI."
+      },
+      "ai": {
+        "title": "Trí tuệ nhân tạo (AI)",
+        "description": "Ứng dụng Machine Learning và Big Data để phân tích xu hướng và đưa ra dự báo chính xác."
+      },
+      "security": {
+        "title": "An ninh mạng",
+        "description": "Bảo vệ dữ liệu doanh nghiệp trước các cuộc tấn công mạng với công nghệ bảo mật đa lớp."
+      }
+    }
+  },
+  "products": {
+    "subtitle": "Công nghệ 5.0",
+    "title": "Phần mềm nổi bật",
+    "items": {
+      "sales": {
+        "title": "Hệ thống Quản lý Bán hàng",
+        "subtitle": "Quản lý kho, đơn hàng, CRM"
+      },
+      "english": {
+        "title": "App Siêu tiếng Anh",
+        "subtitle": "Ứng dụng giáo dục đa nền tảng"
+      },
+      "platform": {
+        "title": "Learning Platform",
+        "subtitle": "Hệ thống đào tạo nội bộ"
+      }
+    }
+  },
+  "about": {
+    "subtitle": "VỀ CÔNG TY CHÚNG TÔI",
+    "title": "Chúng tôi kiến tạo tương lai số",
+    "description1": "Hisotech mang đến các giải pháp công nghệ hiện đại, tối ưu cho doanh nghiệp trong kỷ nguyên số. Chúng tôi kết hợp giữa tư duy sáng tạo và kỹ thuật tiên tiến để tạo nên giá trị bền vững.",
+    "description2": "Đội ngũ của Hisotech không ngừng đổi mới, cam kết đồng hành cùng khách hàng trên hành trình chuyển đổi số toàn diện.",
+    "learnMore": "Tìm hiểu thêm",
+    "experts": "+200 chuyên gia",
+    "creativeTeam": "Đội ngũ sáng tạo",
+    "creativeTeamDesc": "Luôn đổi mới mỗi ngày",
+    "vision": "Tầm nhìn chiến lược",
+    "visionDesc": "Định hướng 2030"
+  },
+  "team": {
+    "subtitle": "Chuyên viên kỹ thuật",
+    "title": "Gặp gỡ đội ngũ của chúng tôi",
+    "contactUs": "LIÊN HỆ VỚI CHÚNG TÔI",
+    "members": {
+      "duong": {
+        "role": "Technical Staff",
+        "bio": "Thực hiện kiểm tra, bảo trì, lắp đặt và sửa chữa hệ thống/sản phẩm kỹ thuật theo phân công. Hỗ trợ kỹ thuật cho khách hàng, bộ phận kinh doanh."
+      },
+      "huy": {
+        "role": "Chuyên viên kĩ thuật",
+        "bio": "Sửa chữa hệ thống/sản phẩm kỹ thuật theo phân công. Hỗ trợ kỹ thuật cho khách hàng, bộ phận kinh doanh hoặc sản xuất khi cần thiết."
+      }
+    }
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "description": "Quyền tự do lựa chọn của chúng ta là không bị giới hạn, và khi không có gì ngăn cản ta làm điều mình yêu thích nhất.",
+    "needConsulting": "Cần tư vấn chuyên sâu?",
+    "consultingDesc": "Các chuyên gia của chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.",
+    "items": {
+      "q1": "Tôi có thể xem bản demo trước khi mua dịch vụ kinh doanh của bạn không?",
+      "a1": "Tất nhiên! Chúng tôi luôn sẵn lòng cung cấp bản demo chi tiết để bạn có cái nhìn tổng quan nhất về sản phẩm. Hãy liên hệ với chúng tôi để sắp xếp lịch hẹn.",
+      "q2": "Bạn có cung cấp bất kỳ đảm bảo hay bảo hành nào cho các dịch vụ kinh doanh của mình không?",
+      "a2": "Có, tất cả các dịch vụ và sản phẩm của HISOTECH đều đi kèm với chính sách bảo hành và hỗ trợ kỹ thuật dài hạn, đảm bảo sự an tâm tuyệt đối cho khách hàng.",
+      "q3": "Tôi có thể tùy chỉnh dịch vụ kinh doanh của bạn để phù hợp với nhu cầu cụ thể của mình không?",
+      "a3": "Chắc chắn rồi. Chúng tôi chuyên cung cấp các giải pháp \"may đo\" theo nhu cầu đặc thù của từng doanh nghiệp để đạt hiệu quả tối ưu nhất."
+    }
+  },
+  "consult": {
+    "title": "Bạn muốn trao đổi với chuyên gia?",
+    "description": "Để lại thông tin, chúng tôi sẽ liên hệ tư vấn miễn phí trong vòng 24h. Hãy bắt đầu hành trình chuyển đổi số ngay hôm nay.",
+    "benefit1": "Đồng hành cùng doanh nghiệp",
+    "benefit2": "Phân tích và nghiên cứu",
+    "benefit3": "Nhanh chóng, tiện lợi",
+    "viewMore": "Xem thêm"
+  },
+  "news": {
+    "subtitle": "Cập nhật mới nhất",
+    "title": "Tin tức nổi bật",
+    "viewAll": "Xem tất cả tin tức",
+    "readMore": "Đọc tiếp",
+    "items": {
+      "article1": {
+        "category": "Thị trường",
+        "title": "HISOTECH đang hiện thực hóa chuyển đổi số",
+        "excerpt": "Những bước tiến quan trọng trong việc áp dụng công nghệ vào quản lý doanh nghiệp vừa và nhỏ."
+      },
+      "article2": {
+        "category": "Công nghệ",
+        "title": "Ứng dụng trí tuệ nhân tạo (AI) vào quản lý kho",
+        "excerpt": "Giảm thiểu sai sót và tối ưu hóa không gian lưu trữ với các thuật toán thông minh mới nhất."
+      },
+      "article3": {
+        "category": "Nội bộ",
+        "title": "Ra mắt hệ thống CRM phiên bản 5.0",
+        "excerpt": "Nâng cấp giao diện người dùng và tích hợp thêm tính năng automation marketing."
+      }
+    }
+  },
+  "footer": {
+    "description": "Đơn vị tiên phong trong lĩnh vực cung cấp giải pháp chuyển đổi số toàn diện cho doanh nghiệp Việt Nam.",
+    "services": "Dịch vụ",
+    "links": "Liên kết",
+    "newsletter": "Đăng ký nhận tin",
+    "newsletterDesc": "Nhận thông tin cập nhật mới nhất về công nghệ và khuyến mãi.",
+    "emailPlaceholder": "Email của bạn",
+    "subscribe": "Đăng ký",
+    "copyright": "© 2024 HISOTECH. All rights reserved.",
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách quyền riêng tư",
+    "serviceLinks": {
+      "software": "Phát triển phần mềm",
+      "consulting": "Tư vấn chuyển đổi số",
+      "design": "Thiết kế UI/UX",
+      "security": "Bảo mật hệ thống"
+    },
+    "quickLinks": {
+      "aboutUs": "Về chúng tôi",
+      "careers": "Cơ hội nghề nghiệp",
+      "blog": "Blog công nghệ",
+      "privacyPolicy": "Chính sách bảo mật"
+    }
+  },
+  "seo": {
+    "title": "HISOTECH - Giải pháp chuyển đổi số cho doanh nghiệp",
+    "description": "HISOTECH cung cấp giải pháp phần mềm, dịch vụ công nghệ và tư vấn chuyển đổi số toàn diện cho doanh nghiệp Việt Nam."
+  }
+}

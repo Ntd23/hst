@@ -1,0 +1,161 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "software": "Software",
+    "about": "About",
+    "news": "News",
+    "login": "Sign In",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "badge": "Comprehensive Digital Transformation Solutions 4.0",
+    "badgeNew": "New",
+    "title1": "The Era of",
+    "titleHighlight": "Digital",
+    "title2": "Enterprise",
+    "description": "HISOTECH provides an outstanding technology platform that optimizes operational processes and enhances your business performance through advanced software solutions.",
+    "cta": "Get Started",
+    "watchDemo": "Watch Demo",
+    "statSolutions": "Solutions",
+    "statUsers": "Users",
+    "statAwards": "Awards"
+  },
+  "services": {
+    "subtitle": "Core Services",
+    "title": "Best Products",
+    "explore": "Explore Now",
+    "items": {
+      "enterprise": {
+        "title": "Enterprise Solutions",
+        "description": "Optimize management, HR, and finance processes with AI-integrated smart ERP systems."
+      },
+      "ai": {
+        "title": "Artificial Intelligence (AI)",
+        "description": "Apply Machine Learning and Big Data to analyze trends and deliver accurate forecasts."
+      },
+      "security": {
+        "title": "Cybersecurity",
+        "description": "Protect enterprise data against cyber attacks with multi-layered security technology."
+      }
+    }
+  },
+  "products": {
+    "subtitle": "Technology 5.0",
+    "title": "Featured Software",
+    "items": {
+      "sales": {
+        "title": "Sales Management System",
+        "subtitle": "Inventory, Orders & CRM"
+      },
+      "english": {
+        "title": "Super English App",
+        "subtitle": "Multi-platform Education App"
+      },
+      "platform": {
+        "title": "Learning Platform",
+        "subtitle": "Internal Training System"
+      }
+    }
+  },
+  "about": {
+    "subtitle": "ABOUT US",
+    "title": "We Build the Digital Future",
+    "description1": "Hisotech delivers modern, optimized technology solutions for businesses in the digital era. We combine creative thinking and advanced technology to create sustainable value.",
+    "description2": "The Hisotech team continuously innovates, committed to partnering with customers on their comprehensive digital transformation journey.",
+    "learnMore": "Learn More",
+    "experts": "+200 experts",
+    "creativeTeam": "Creative Team",
+    "creativeTeamDesc": "Innovating every day",
+    "vision": "Strategic Vision",
+    "visionDesc": "Towards 2030"
+  },
+  "team": {
+    "subtitle": "Technical Specialists",
+    "title": "Meet Our Team",
+    "contactUs": "CONTACT US",
+    "members": {
+      "duong": {
+        "role": "Technical Staff",
+        "bio": "Performs inspection, maintenance, installation, and repair of technical systems/products as assigned. Provides technical support to customers and the sales department."
+      },
+      "huy": {
+        "role": "Technical Specialist",
+        "bio": "Repairs technical systems/products as assigned. Provides technical support to customers, sales, or production departments as needed."
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Our freedom of choice is unlimited, and when nothing prevents us from doing what we love most.",
+    "needConsulting": "Need Expert Advice?",
+    "consultingDesc": "Our experts are always ready to listen and answer all your questions.",
+    "items": {
+      "q1": "Can I see a demo before purchasing your business services?",
+      "a1": "Of course! We are always happy to provide a detailed demo so you can get the most comprehensive overview of our products. Please contact us to schedule an appointment.",
+      "q2": "Do you provide any guarantees or warranties for your business services?",
+      "a2": "Yes, all HISOTECH services and products come with long-term warranty and technical support policies, ensuring absolute peace of mind for customers.",
+      "q3": "Can I customize your business services to fit my specific needs?",
+      "a3": "Absolutely. We specialize in providing tailor-made solutions for the unique needs of each business to achieve optimal results."
+    }
+  },
+  "consult": {
+    "title": "Want to Talk to an Expert?",
+    "description": "Leave your information, and we'll provide free consultation within 24 hours. Start your digital transformation journey today.",
+    "benefit1": "Partnering with businesses",
+    "benefit2": "Analysis and research",
+    "benefit3": "Fast and convenient",
+    "viewMore": "View More"
+  },
+  "news": {
+    "subtitle": "Latest Updates",
+    "title": "Featured News",
+    "viewAll": "View All News",
+    "readMore": "Read More",
+    "items": {
+      "article1": {
+        "category": "Market",
+        "title": "HISOTECH is Realizing Digital Transformation",
+        "excerpt": "Important milestones in applying technology to manage small and medium enterprises."
+      },
+      "article2": {
+        "category": "Technology",
+        "title": "Applying AI to Warehouse Management",
+        "excerpt": "Minimize errors and optimize storage space with the latest intelligent algorithms."
+      },
+      "article3": {
+        "category": "Internal",
+        "title": "Launching CRM System Version 5.0",
+        "excerpt": "Upgrading the user interface and integrating additional marketing automation features."
+      }
+    }
+  },
+  "footer": {
+    "description": "Pioneer in providing comprehensive digital transformation solutions for Vietnamese businesses.",
+    "services": "Services",
+    "links": "Links",
+    "newsletter": "Subscribe to Newsletter",
+    "newsletterDesc": "Get the latest updates on technology and promotions.",
+    "emailPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "copyright": "© 2024 HISOTECH. All rights reserved.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "serviceLinks": {
+      "software": "Software Development",
+      "consulting": "Digital Transformation Consulting",
+      "design": "UI/UX Design",
+      "security": "System Security"
+    },
+    "quickLinks": {
+      "aboutUs": "About Us",
+      "careers": "Career Opportunities",
+      "blog": "Tech Blog",
+      "privacyPolicy": "Privacy Policy"
+    }
+  },
+  "seo": {
+    "title": "HISOTECH - Digital Transformation Solutions for Businesses",
+    "description": "HISOTECH provides software solutions, technology services, and comprehensive digital transformation consulting for Vietnamese businesses."
+  }
+}

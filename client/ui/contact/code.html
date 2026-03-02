@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HISOTECH - Liên Hệ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007CC3", 
+                        secondary: "#C5A059",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "footer-dark": "#0b1120",
+                        "glass-border": "rgba(255, 255, 255, 0.4)",
+                        "glass-bg": "rgba(255, 255, 255, 0.65)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #007CC3 0%, #005A8D 100%);
+        }
+        .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.1) 0%, rgba(255, 255, 255, 0) 50%),
+                        radial-gradient(circle at 50% 90%, rgba(0, 124, 195, 0.05) 0%, rgba(255, 255, 255, 0) 60%),
+                        #F8FAFC;
+        }
+        .dark .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.1) 0%, rgba(15, 23, 42, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
+                        #0F172A;
+        }
+        .icon-glow {
+            filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.3));
+        }.map-container iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300 flex flex-col">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 px-4 py-4">
+<div class="glass-panel rounded-2xl  mx-auto px-6 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black tracking-tighter text-primary">HISOTECH</span>
+</div>
+<div class="hidden md:flex items-center space-x-6 xl:space-x-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Sản phẩm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Phần mềm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Giới thiệu</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Tin tức</a>
+</div>
+<div class="flex items-center gap-3 lg:gap-4">
+<button class="hidden md:flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium px-2 py-1">
+<span class="material-symbols-outlined text-lg">language</span>
+<span>VN/EN</span>
+</button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 text-sm font-semibold transition-all">
+                    Đăng nhập
+                </button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl bg-primary hover:bg-opacity-90 text-white text-sm font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
+                    Liên hệ ngay
+                </button>
+<button class="md:hidden text-slate-700 dark:text-slate-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<header class="pt-32 pb-10 px-4">
+<div class=" mx-auto">
+<div class="flex flex-col gap-2 mb-6">
+<div class="flex items-center text-sm text-slate-500 mb-2">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+<span class="text-slate-900 font-medium">Liên hệ với chúng tôi</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold text-primary">Liên hệ với chúng tôi</h1>
+</div>
+</div>
+</header>
+<main class="flex-grow pb-20 px-4">
+<div class=" mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-5 space-y-8">
+<div class="glass-panel p-8 rounded-2xl h-full">
+<h2 class="text-2xl font-bold text-slate-900 mb-6">Chúng tôi có thể giúp gì cho bạn?</h2>
+<p class="text-slate-600 mb-8 leading-relaxed">
+                            Khi bạn cần giải pháp, chúng tôi sẵn sàng lắng nghe và đồng hành để tìm ra hướng đi phù hợp nhất. Dù bạn đang tìm kiếm tư vấn công nghệ, hỗ trợ kỹ thuật, hay muốn tối ưu hóa quy trình làm việc...
+                        </p>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-2xl">location_on</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 text-lg">Địa chỉ</h3>
+<p class="text-slate-600 mt-1 text-sm leading-relaxed">
+                                        Tòa C2 , D'Capital , đường Trần Duy Hưng , phường Trung Hòa , quận Cầu Giấy, Hà Nội, Việt Nam
+                                    </p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-2xl">call</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 text-lg">Số điện thoại</h3>
+<p class="text-slate-600 mt-1 font-medium">
+                                        +84 973 73 56 79
+                                    </p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-2xl">mail</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 text-lg">E-mail</h3>
+<p class="text-slate-600 mt-1 font-medium">
+                                        contact@hisotech.com
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<div class="glass-panel p-8 rounded-2xl h-full">
+<h2 class="text-2xl font-bold text-slate-900 mb-2">Gửi tin nhắn cho chúng tôi</h2>
+<p class="text-slate-500 text-sm mb-8">Địa chỉ email của bạn sẽ được bảo mật. Các trường bắt buộc được gắn dấu*</p>
+<form class="space-y-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div>
+<label class="sr-only" for="name">Tên của bạn</label>
+<input class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all" id="name" placeholder="Tên của bạn" type="text"/>
+</div>
+<div>
+<label class="sr-only" for="email">Email của bạn</label>
+<input class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all" id="email" placeholder="Email của bạn" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div>
+<label class="sr-only" for="address">Địa chỉ của bạn</label>
+<input class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all" id="address" placeholder="Địa chỉ của bạn" type="text"/>
+</div>
+<div>
+<label class="sr-only" for="phone">Điện thoại của bạn</label>
+<input class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all" id="phone" placeholder="Điện thoại của bạn" type="tel"/>
+</div>
+</div>
+<div>
+<label class="sr-only" for="subject">Tiêu đề</label>
+<input class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all" id="subject" placeholder="Tiêu đề" type="text"/>
+</div>
+<div>
+<label class="sr-only" for="message">Viết lời nhắn của bạn ở đây</label>
+<textarea class="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-900 placeholder-slate-400 transition-all resize-none" id="message" placeholder="Viết lời nhắn của bạn ở đây" rows="4"></textarea>
+</div>
+<div class="flex items-start gap-2 pt-2">
+<input class="mt-1 w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" id="policy" type="checkbox"/>
+<label class="text-sm text-slate-600" for="policy">Tôi đồng ý với Điều khoản và Chính sách quyền riêng tư</label>
+</div>
+<button class="px-8 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:bg-opacity-90 transition-all transform hover:-translate-y-0.5 uppercase tracking-wide text-sm" type="submit">
+                                Gửi
+                            </button>
+</form>
+</div>
+</div>
+</div>
+<div class="mt-12">
+<div class="glass-panel p-4 rounded-2xl h-[400px] w-full relative overflow-hidden map-container">
+<iframe allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.629339344795!2d105.79383631540243!3d21.00748839387864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aca143131e59%3A0x6e9a0c441c9b68a6!2sVinhomes%20D'Capitale!5e0!3m2!1sen!2s!4v1651817478523!5m2!1sen!2s" style="border:0;"></iframe>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-[#0b1120] text-slate-300 py-16 mt-auto relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+<svg class="w-full h-full text-primary fill-current" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+<path d="M43.7,-74.6C56.6,-68.8,67.3,-58.5,75.4,-46.8C83.5,-35.1,89,-22,87.6,-9.4C86.3,3.2,78.1,15.3,69.5,26.5C60.9,37.7,51.9,48,41.2,56.7C30.5,65.4,18.1,72.5,4.6,74.5C-8.9,76.5,-23.5,73.4,-36.5,66.6C-49.5,59.8,-60.9,49.3,-69.1,36.8C-77.3,24.3,-82.3,9.8,-80.7,-3.8C-79.1,-17.4,-70.9,-30.1,-60.5,-39.8C-50.1,-49.5,-37.5,-56.2,-25.1,-62.4C-12.7,-68.6,-0.5,-74.3,13.6,-77.8L27.7,-81.3" transform="translate(200 200) scale(1.1)"></path>
+</svg>
+</div>
+<div class=" mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-slate-800 pb-12 mb-12">
+<div class="lg:col-span-4 space-y-6">
+<h3 class="text-2xl font-black tracking-tighter text-white">HISOTECH</h3>
+<p class="text-sm text-slate-400 leading-relaxed">
+                        Đơn vị tiên phong trong lĩnh vực cung cấp giải pháp chuyển đổi số toàn diện cho doanh nghiệp Việt Nam.
+                    </p>
+<div class="flex space-x-4">
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors group" href="#">
+<span class="text-sm font-bold">f</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors group" href="#">
+<span class="text-sm font-bold">in</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors group" href="#">
+<span class="text-sm font-bold">yt</span>
+</a>
+</div>
+</div>
+<div class="lg:col-span-2">
+<h4 class="text-white font-bold mb-6 text-lg">Dịch vụ</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Phát triển phần mềm</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Tư vấn chuyển đổi số</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Thiết kế UI/UX</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Bảo mật hệ thống</a></li>
+</ul>
+</div>
+<div class="lg:col-span-2">
+<h4 class="text-white font-bold mb-6 text-lg">Liên kết</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Về chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Cơ hội nghề nghiệp</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Blog công nghệ</a></li>
+<li><a class="hover:text-primary transition-colors block py-1" href="#">Chính sách bảo mật</a></li>
+</ul>
+</div>
+<div class="lg:col-span-4">
+<h4 class="text-white font-bold mb-6 text-lg">Đăng ký nhận tin</h4>
+<p class="text-sm text-slate-400 mb-4">Nhận thông tin cập nhật mới nhất về công nghệ và khuyến mãi.</p>
+<form class="flex flex-col gap-3">
+<input class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" placeholder="Email của bạn" type="email"/>
+<button class="w-full px-4 py-3 rounded-lg bg-primary text-white font-semibold hover:bg-blue-600 transition-colors shadow-lg shadow-blue-900/20" type="submit">Đăng ký</button>
+</form>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+<p>© 2024 HISOTECH. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-white transition-colors" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-white transition-colors" href="#">Chính sách quyền riêng tư</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

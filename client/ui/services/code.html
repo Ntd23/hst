@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HISOTECH - Dịch Vụ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007CC3", 
+                        secondary: "#C5A059",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px -10px rgba(0, 124, 195, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 20px 50px -10px rgba(0, 124, 195, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.9);
+            transform: translateY(-4px);
+        }
+        .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.1) 0%, rgba(255, 255, 255, 0) 50%),
+                        radial-gradient(circle at 50% 90%, rgba(0, 124, 195, 0.05) 0%, rgba(255, 255, 255, 0) 60%),
+                        #F8FAFC;
+        }.footer-bg {
+            background-color: #1a1b4b;background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-700 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 px-4 py-4">
+<div class="glass-panel rounded-2xl  mx-auto px-6 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black tracking-tighter text-primary">HISOTECH</span>
+</div>
+<div class="hidden md:flex items-center space-x-6 xl:space-x-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Phần mềm</a>
+<a class="text-sm font-medium text-primary transition-colors" href="#">Dịch vụ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Bài viết</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Khác</a>
+</div>
+<div class="flex items-center gap-3 lg:gap-4">
+<button class="hidden md:flex items-center gap-1.5 text-slate-600 hover:text-primary transition-colors text-sm font-medium px-2 py-1">
+<span class="material-symbols-outlined text-[20px]">language</span>
+<span>VN/EN</span>
+</button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 text-sm font-semibold transition-all">
+                    Đăng nhập
+                </button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl bg-primary hover:bg-opacity-90 text-white text-sm font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
+                    Liên hệ ngay
+                </button>
+<button class="md:hidden text-slate-700">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-20">
+<div class=" mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-2 text-sm text-slate-500 mb-8">
+<a class="hover:text-primary transition-colors" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-medium">Dịch vụ</span>
+</div>
+<div class="text-center max-w-3xl mx-auto mb-16">
+<span class="text-primary text-xs font-bold tracking-widest uppercase mb-3 block">CHÚNG TÔI CUNG CẤP NHỮNG GÌ?</span>
+<h1 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
+                    Chúng tôi cung cấp tất cả giải pháp <span class="text-primary">công nghệ cao</span> cho tất cả các lĩnh vực doanh nghiệp
+                </h1>
+<p class="text-slate-600 text-lg">
+                    Tận dụng sức mạnh của công nghệ để tối ưu hóa quy trình, nâng cao hiệu suất và thúc đẩy tăng trưởng bền vững cho doanh nghiệp của bạn.
+                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="Website Design" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3zsr5WNPCRqnuhwJM5nbWt7nIxj-boKeTk9lFf5OmfFBme5UBjQAN4240ighNAuS11vwwc8_YfZV3DNTx7Rw6aPQkxJUoyYrT-c4eR7srTdo3sMyaZ56KBdlHRiLkfpLC4hnQFANamuoxlVIxHW1LsD8VAT4Z2ZGs-uu_r9zDITE4Rr26WOtrr3krB3zNF42IeBvuwZfN1hVmNNCzhcxsOGPlZbD-p9AHqvkjYsVyJAJK5a588-VywsE5jzHUqaFgDpbO9J_j1wQ"/>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">web</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Thiết kế giao diện website</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Giao diện website chuyên nghiệp, tối ưu trải nghiệm người dùng, thân thiện với mọi thiết bị.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="Mobile App" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJwo4y-KqbX9lYOMuhz9puBAjY7woSFACdrw1xmAVwehM0lDnEXxWBReoxOMyjKXZtD5-ce_hRdSBaQUHBwQBJxsyUxvJ9qCiDVnRqBfosSBuZbmwVja3qZmcluEhAocyB3WyoIAPBrRrT5r5GZ31AIzLQGBamMyEZKbJsbdRBacDrjXGJt7wUJuL2oy-l3tM1sa756ThQiPX8UyrtUTO1F9cLoqTa74vm3V5k_MptHlfS6OBw1e0caYGbBRjpMWsvDFg1uoMRwig"/>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">smartphone</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Thiết kế ứng dụng di động</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Ứng dụng mượt mà, thân thiện với người dùng trên mọi thiết bị iOS và Android.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="E-commerce" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxVNYSe_mGqMs2dmICNU6hoVSfN-UAHjU6f4v08L05xLJM5_Zipbspbsa-uwA2o8tquzUGkFi__I4a71PNEOmYwM7vOOTFKr1u_gkxWovOPA2Y3U-8YdsEWXcdyNkCMWvUOe_fQJDuXn1Qixcq2QN5tQF0dZ__MxyD-1Pm74StV0sgoiGzBlPLCkCoCR2FKzD_QpcZQEaMdMnJaJizyK_k8iYFT9PgABn8ZRDjWXjy5plXhV_7Zr7UNy7-VzbGHZwknbDLTjX9dq4"/>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Thiết kế website bán hàng</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Website bán hàng đầy đủ tính năng, hỗ trợ thanh toán online và quản lý đơn hàng.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="IoT Integration" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj2MLS14ulBl3rJVJEYdmXyvyAKlGrSvVMgTTIZfu2IUEaNkTBzTH27tIN12Ow0CdupHv_8P4Ci-O4acg5atqDWmC_C2efDzW57YWimrZzlrl8WrHHMpHLXuClOtQjaDnB_gCIf-GzfBn68QKc5IAY-l4fUu7nora0bpfCsUMgU-LJUDn_SbkeKM4dC_0JJhqNrkmC08mpsRVgnWJrpkELl6uZiXxdfg7ramLT48RsUsL8ZSIByYTU3VXzhGdOgRHnl5_F70RWYCQ"/>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">devices_other</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Tích hợp hệ thống IoT</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Kết nối và điều khiển thiết bị qua Internet, tối ưu hóa quy trình vận hành tự động.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<div class="absolute inset-0 bg-blue-50 flex items-center justify-center">
+<img alt="Software Integration" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCygPmP9KAM40xS6T54sjoGralbqb7PuD8vZtGuOGowVT17Vn1AMi9FOAowps9jRbUvWxXt9SewiwdGl5BqfxrqCUEsPXQYkA2fVar1IK98zTj-bDcJXBe01jufhUZc_97sr0frGOoSTwilvNI_Y-YlhYV5QR63LX_EQ90fO7S73igciQwUsI6c7ki1m5t3KC2QrdZuG5OyDpn1ryWPh9h6dAeIXdJAPQRaeFh1v92sBXzo0EPgCXrQvlRINKsXjhX41RiOysAbxU"/>
+</div>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">layers</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Kết nối phần mềm quản lý</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Đồng bộ hóa hệ thống quản lý với máy POS, máy in hóa đơn và các thiết bị ngoại vi.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<div class="absolute inset-0 bg-blue-50 flex items-center justify-center">
+<img alt="Industrial IoT" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT_Tm3cVjyHFYOwbUno8e5OcgpWlGOrdcxawhvqpJURDCUOEf-SRD9cDcy2LgMXD-dri62aF0_T0CzLL5uyh5Bp6809xa5KQb2NfyDqSMqhFPPP6daRuKmU5NPTqsyrjYVcXULGLMbsgLuKYWx_t07up_jN_ZHrrtYADeJ8QUBoaHgvek9vtEoBbcEiZRV1xaZCIM6gieaKEcQ5CM97DnG-lqgh604FwHKD6sIW51p2mzqLL1uuS4t2XbI0orX5uOOKgqv7a-zPcU"/>
+</div>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">factory</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Giải pháp kết nối thiết bị</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Kết nối và điều khiển thiết bị trong nhà máy, xưởng sản xuất theo thời gian thực.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<div class="absolute inset-0 bg-blue-50 flex items-center justify-center">
+<img alt="UX Research" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhZU3c0cr0u7un9hkOc9lv9fetnSrECMUSqinFg09O8pqs6H_BPhT5oWYlzXzBxCjeyIG0hOY_adKkr5qWM1yoBZhxz_hJON6zZ9KYejYhyE_GxSDFegteWeb9Vm_d5ajl7pVe0N3gCxCSTUpwzqgKUDUtdyjIH0SfFMsyVyYm29r1aSS2wyMZNo4gkmlutPM-8CRP6Z1OMvZXwccqXUgVH9CF5eaJQgAZ8VILAEMvEWT3Pf8ozTALKkvtu0reIP6AoBpdDwRPAuU"/>
+</div>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">person_search</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Khảo sát người dùng</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Tìm hiểu nhu cầu, thói quen và phản hồi của khách hàng tiềm năng để tối ưu sản phẩm.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<div class="absolute inset-0 bg-blue-50 flex items-center justify-center">
+<img alt="Competitor Analysis" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJSZ1NIWVZ3lCakSTpvcHE9OpvJONYy0L5dzaGN0t7xr8hGx_Hfgu8xMgsvaw54cl8ds-TTvcySQpHYvwQlApoz3IyJ-nhin4JsZI_bPMXvaG7wTP5WoCauin66j4TkbiWq5yh-Nqeg40TLjaRv6rFJNB-a6EoiYWjcif0pKr-eyIY1W_mscLFeXimC6O-RX-l5SGFEB4ZxRn7TjJhGHpzO-SqrVfujqohG9oO_Yy4lXlMM0yurGLu6zLl8o7WVPfjBW7RTDnHBEw"/>
+</div>
+<div class="absolute bottom-[-24px] left-6">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary border border-blue-100">
+<span class="material-symbols-outlined">manage_search</span>
+</div>
+</div>
+</div>
+<div class="p-6 pt-10 flex flex-col flex-grow">
+<h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">Phân tích đối thủ cạnh tranh</h3>
+<p class="text-sm text-slate-500 mb-6 flex-grow leading-relaxed">Nắm bắt chiến lược và hoạt động của đối thủ trên thị trường số để tạo lợi thế.</p>
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-50 text-primary text-xs font-bold hover:bg-primary hover:text-white transition-all w-full group-hover:shadow-md" href="#">
+                            XEM THÊM <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="footer-bg text-slate-300 py-16 mt-12 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full filter blur-[100px] pointer-events-none"></div>
+<div class=" mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-white/10 pb-12 mb-12">
+<div class="space-y-6">
+<h3 class="text-2xl font-black tracking-tighter text-white">Không Bỏ Lỡ Thông Tin Mới Nhất Về Chúng Tôi</h3>
+<div class="flex flex-col gap-3">
+<div class="flex rounded-lg overflow-hidden bg-white/5 border border-white/10 p-1">
+<input class="w-full px-4 py-2 bg-transparent border-none text-white placeholder-slate-400 focus:outline-none focus:ring-0 text-sm" placeholder="Nhập Email Của Bạn" type="email"/>
+<button class="px-6 py-2 rounded-md bg-primary text-white text-xs font-bold hover:bg-blue-600 transition-colors uppercase tracking-wider" type="submit">Gửi</button>
+</div>
+<p class="text-xs text-slate-400 mt-2">Theo Dõi Chúng Tôi Tại:</p>
+<div class="flex space-x-3">
+<a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">social_leaderboard</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">close</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">smart_display</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">work</span>
+</a>
+</div>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-lg border-b-2 border-primary inline-block pb-1">Thông tin</h4>
+<ul class="space-y-4 text-sm text-slate-400">
+<li class="flex items-start gap-3">
+<span class="font-medium text-white min-w-[100px]">097 3735 679</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-slate-400">contact@hisotechgroup.com</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-slate-400">Tòa C2-D’.Capitale KDT Đông Nam, Đường Trần Duy Hưng, P.Trung Hòa, Q.Cầu Giấy, TP.Hà Nội</span>
+</li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-lg border-b-2 border-primary inline-block pb-1">Liên kết</h4>
+<ul class="space-y-3 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#">Chúng tôi hoạt động thế nào</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#">Đội ngũ của chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#">Dịch vụ bảo hiểm</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-lg border-b-2 border-primary inline-block pb-1">Ảnh bài đăng</h4>
+<div class="grid grid-cols-3 gap-2">
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR1qZvSJ2igH2OACJk8R6heTLozzPCOaCW-SnDxFmy_SZ-Go1hCSdHsM2-m04jfO7z83VpFWc7iyLe70dAR2clA4fEWUxKp6XF-0NqzuO1oi9D2siVvaSn8kG4F_QOqNeIflilpyjt03xyqyctN4-iVRX0c5PrK9YsbGsRv0qoDldUsUGZgUgwSVjORw7HJxGkluU-Nmt2Jp89ELlCLUTW4gkYfwbXUQvH1ebaYeMBIu2b9uFu7POa0TSDLdBTXRH1ZwWEcqhzZGU"/>
+</div>
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBELtRNLxtL5k_GSkk97pJHi_mIZaY9MxUCvaZIxAU7l5nRqDXV7B7yepXVaLDT58ewc0jKk4T01s1oMGlKDgfz1PMd0ZdohbHxBJ-9AG8VfaQ0vX_f1otLrUhNXAKPHmO0nH8afW74ojBo4mWyS1vOzA8rBRl4xO8jYJTUgw0ysrBAgo4TkqjGF5BObOcL6gG3wbLgnP2tRws5yz4hgk5fAhEDIB9o8INR7l8-HeWuiVh5h5qnkB-bD9x7dI3_PE59elrsI4z5_w8"/>
+</div>
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm2VkYCpwjQSWkiZB5gpCGtUn_zaGfe59Z9lSCBd8sYxdAdHe6cPskB4lmjdGesQf-aTVP_7DvdLkIdajZikL0YSUyEggUYelm_Vwt_aRRCzcj_MPzcyU-am_-HubM6aPR-knEdx_lMdexIp90L3S4ejmsj9aCFCdzubDie-rvjbROzPLf2SPK-TQJ0hOrYmmPKJK0by2iXQPAVCRklUnHs7-gnepqzXy1pPRpSi_MM4dq9z-ty39sRLV1EHfvYepo6x-uqZayFW8"/>
+</div>
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxS6Bxb9dJntEv4N1SljqlfbIoEx2Grf38MVG8b5MghPjd18K-UDn0muiJB6KTQiCgQWRwwypqD2QD15MgWff8MayBDOcQrccDkNov1tJVZLqJPv9s26uBAFQk_6dQkLYwdtLPfGpjHq3Ld-L12Kz1B1u0yp-1JyvEsiFf0jQS_k1lDe3WDmbCEZW3tqmSjr-c1YG6Srz4U0JqvLdpECR2F8MTaQ94IoU35OK5gH-sIJ5RgN8KEeXOWnjFyfYO4j9Dh4uzuaARQdc"/>
+</div>
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXh8Zd_PUKNo14pX8jqsDG07adOZEYu-67cEfcZ0K77GS4d7Kx22Riq6pcUF5D2jBJrreEn-vr3_KGZBqjzDB6iVUznYZguWuxk398R_3mmMVTQj-gEqADbe6hOgjLcSCu5vnPF1-koH8z9au8vCbagF5NFEf_qw-dPGgKQXY-ECI0KRLHlJc8Q4Hhvo-qCcfuy9SbnV7Uosipy6P2ZuOBvVHukt-fHRqnmFn-x-wV7eVc5FcfMh4Zp5xT0svF_aKnaGRCXrEKie8"/>
+</div>
+<div class="aspect-square rounded-lg bg-slate-800 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtOLN6FxFOKJ7TBchwD4or-vBHYy1iBsoOO7u5XyddnUZ2gdID0jLtZI50y73X-NRgmgK0KuDjBlc5XY2x0aSPY6KzYxN4URVPyZzAv17iIrFYcOPRzJZl5tEEtFFAa-xJRaieK7pd5a9vg2LayPOt24MMQyUoYd5r6VQucgONzAhKyTj5gtTof5emYFFSOHr-yDO9AkMR42gR8hva-Z6oIz9dh8q0euBN58oJOpi8vtc162iAVSXEL1sk0X_g-HYozxOAgK70hos"/>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 border-t border-white/5 pt-8">
+<p>© HISOTECH Technology Solutions and Investment Group Joint Stock Company. All rights reserved.</p>
+<div class="flex space-x-4 mt-4 md:mt-0">
+<a class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">social_leaderboard</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">close</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">smart_display</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">work</span>
+</a>
+<button class="w-8 h-8 rounded bg-primary text-white flex items-center justify-center hover:bg-blue-600 transition-colors ml-4">
+<span class="material-symbols-outlined text-sm">expand_less</span>
+</button>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

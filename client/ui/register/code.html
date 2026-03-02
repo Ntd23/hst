@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HISOTECH - Đăng ký tài khoản</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007CC3", // Deep textured blue from logo
+                        secondary: "#C5A059", // Champagne Gold/Soft Brass
+                        "primary-dark": "#005A8D",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "glass-border": "rgba(255, 255, 255, 0.4)",
+                        "glass-bg": "rgba(255, 255, 255, 0.65)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>.glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #007CC3 0%, #005A8D 100%);
+        }
+        .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.1) 0%, rgba(255, 255, 255, 0) 50%),
+                        radial-gradient(circle at 50% 90%, rgba(0, 124, 195, 0.05) 0%, rgba(255, 255, 255, 0) 60%),
+                        #F8FAFC;
+        }
+        .dark .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.1) 0%, rgba(15, 23, 42, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
+                        #0F172A;
+        }
+        .icon-glow {
+            filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.3));
+        }.custom-checkbox:checked {
+            background-color: #007CC3;
+            border-color: #007CC3;
+        }
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus-within {
+             border-color: #007CC3;
+             box-shadow: 0 0 0 4px rgba(0, 124, 195, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300 flex flex-col">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 px-4 py-4">
+<div class="glass-panel rounded-2xl  mx-auto px-6 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black tracking-tighter text-primary">HISOTECH</span>
+</div>
+<div class="hidden md:flex items-center space-x-6 xl:space-x-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Sản phẩm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Phần mềm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Giới thiệu</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Tin tức</a>
+</div>
+<div class="flex items-center gap-3 lg:gap-4">
+<button class="hidden md:flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium px-2 py-1">
+<span class="material-icons-round text-lg">language</span>
+<span>VN/EN</span>
+</button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 text-sm font-semibold transition-all">
+                    Đăng nhập
+                </button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl bg-primary hover:bg-opacity-90 text-white text-sm font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
+                    Liên hệ ngay
+                </button>
+<button class="md:hidden text-slate-700 dark:text-slate-200">
+<span class="material-icons-round">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center pt-32 pb-20 px-4 sm:px-6 relative">
+<div class="absolute top-1/4 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+<div class="absolute top-1/3 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+<div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+<div class="w-full max-w-lg relative z-10">
+<div class="glass-panel rounded-3xl p-8 md:p-10 shadow-2xl border border-white/60">
+<div class="flex items-start gap-5 mb-8">
+<div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-icons-round text-3xl">person_add</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-primary">Đăng ký tài khoản</h2>
+<p class="text-sm text-slate-500 mt-1 leading-relaxed">
+                        Dữ liệu cá nhân của bạn sẽ được sử dụng để hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này.
+                    </p>
+</div>
+</div>
+<form class="space-y-5">
+<div>
+<label class="block text-sm font-medium text-primary mb-1.5 ml-1">Họ và tên</label>
+<div class="relative input-field rounded-xl bg-white border border-slate-200 overflow-hidden group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-slate-400 text-xl group-focus-within:text-primary transition-colors">person_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-transparent text-slate-900 placeholder-slate-400 focus:ring-0 sm:text-sm" placeholder="Tên đầy đủ của bạn" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-primary mb-1.5 ml-1">E-mail</label>
+<div class="relative input-field rounded-xl bg-white border border-slate-200 overflow-hidden group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-slate-400 text-xl group-focus-within:text-primary transition-colors">mail_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-transparent text-slate-900 placeholder-slate-400 focus:ring-0 sm:text-sm" placeholder="Email của bạn" type="email"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-primary mb-1.5 ml-1">Điện thoại (tùy chọn)</label>
+<div class="relative input-field rounded-xl bg-white border border-slate-200 overflow-hidden group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-slate-400 text-xl group-focus-within:text-primary transition-colors">phone_iphone</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-transparent text-slate-900 placeholder-slate-400 focus:ring-0 sm:text-sm" placeholder="Số điện thoại" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-primary mb-1.5 ml-1">Mật khẩu</label>
+<div class="relative input-field rounded-xl bg-white border border-slate-200 overflow-hidden group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-slate-400 text-xl group-focus-within:text-primary transition-colors">lock_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-transparent text-slate-900 placeholder-slate-400 focus:ring-0 sm:text-sm" placeholder="Mật khẩu" type="password"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-primary mb-1.5 ml-1">Xác nhận mật khẩu</label>
+<div class="relative input-field rounded-xl bg-white border border-slate-200 overflow-hidden group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-slate-400 text-xl group-focus-within:text-primary transition-colors">lock_reset</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none bg-transparent text-slate-900 placeholder-slate-400 focus:ring-0 sm:text-sm" placeholder="Xác nhận mật khẩu" type="password"/>
+</div>
+</div>
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-primary border-slate-300 rounded custom-checkbox" id="terms" name="terms" type="checkbox"/>
+<label class="ml-2 block text-sm text-slate-700" for="terms">
+                        Tôi đồng ý với <a class="text-primary hover:text-primary-dark font-medium underline decoration-1 underline-offset-2" href="#">Điều khoản</a> và <a class="text-primary hover:text-primary-dark font-medium underline decoration-1 underline-offset-2" href="#">Chính sách quyền riêng tư</a>
+</label>
+</div>
+<button class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-xl shadow-lg shadow-blue-500/30 text-sm font-bold text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-0.5" type="submit">
+                    ĐĂNG KÝ <span class="material-icons-round ml-2 text-lg">arrow_forward</span>
+</button>
+<div class="text-center mt-6">
+<p class="text-sm text-slate-600">
+                        Bạn đã có tài khoản? 
+                        <a class="font-bold text-primary hover:text-primary-dark transition-colors" href="#">Đăng nhập ngay</a>
+</p>
+</div>
+</form>
+</div>
+</div>
+</main>
+<footer class="bg-[#0b1120] text-slate-300 py-16">
+<div class=" mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-slate-800 pb-12 mb-12">
+<div class="space-y-6">
+<h3 class="text-2xl font-black tracking-tighter text-white">HISOTECH</h3>
+<p class="text-sm text-slate-400 leading-relaxed">
+                        Đơn vị tiên phong trong lĩnh vực cung cấp giải pháp chuyển đổi số toàn diện cho doanh nghiệp Việt Nam.
+                    </p>
+<div class="flex space-x-4">
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">fb</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">in</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">yt</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Dịch vụ</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Phát triển phần mềm</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tư vấn chuyển đổi số</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Thiết kế UI/UX</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Bảo mật hệ thống</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Liên kết</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Về chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Cơ hội nghề nghiệp</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Blog công nghệ</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Chính sách bảo mật</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Đăng ký nhận tin</h4>
+<p class="text-sm text-slate-400 mb-4">Nhận thông tin cập nhật mới nhất về công nghệ và khuyến mãi.</p>
+<form class="flex flex-col gap-2">
+<input class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Email của bạn" type="email"/>
+<button class="px-4 py-2 rounded-lg bg-primary text-white font-semibold hover:bg-blue-600 transition-colors" type="submit">Đăng ký</button>
+</form>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+<p>© 2024 HISOTECH. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-white" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-white" href="#">Chính sách quyền riêng tư</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HISOTECH - Dịch vụ bảo hiểm</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007CC3", // Deep textured blue from logo
+                        secondary: "#C5A059", // Champagne Gold/Soft Brass
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "glass-border": "rgba(255, 255, 255, 0.4)",
+                        "glass-bg": "rgba(255, 255, 255, 0.65)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #007CC3 0%, #005A8D 100%);
+        }
+        .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.1) 0%, rgba(255, 255, 255, 0) 50%),
+                        radial-gradient(circle at 50% 90%, rgba(0, 124, 195, 0.05) 0%, rgba(255, 255, 255, 0) 60%),
+                        #F8FAFC;
+        }
+        .dark .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.1) 0%, rgba(15, 23, 42, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
+                        #0F172A;
+        }.service-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .service-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        .service-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 124, 195, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300 flex flex-col">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 px-4 py-4">
+<div class="glass-panel rounded-2xl  mx-auto px-6 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black tracking-tighter text-primary">HISOTECH</span>
+</div>
+<div class="hidden md:flex items-center space-x-6 xl:space-x-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium text-primary transition-colors" href="#">Dịch vụ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Phần mềm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Giới thiệu</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Tin tức</a>
+</div>
+<div class="flex items-center gap-3 lg:gap-4">
+<button class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium px-2 py-1">
+<span class="material-icons-round text-lg">language</span>
+<span>VN/EN</span>
+</button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 text-sm font-semibold transition-all">
+                    Đăng nhập
+                </button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl bg-primary hover:bg-opacity-90 text-white text-sm font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
+                    Liên hệ ngay
+                </button>
+<button class="md:hidden text-slate-700 dark:text-slate-200">
+<span class="material-icons-round">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+<div class=" mx-auto">
+<div class="mb-10">
+<div class="flex items-center gap-2 text-sm text-slate-500 mb-4">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-icons-round text-base">chevron_right</span>
+<span class="text-primary font-medium">Dịch vụ bảo hiểm</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+                    Khám phá <span class="text-gradient">dịch vụ bảo hiểm</span> <br/> của chúng tôi cho tất cả
+                </h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+                    Giải pháp bảo vệ toàn diện, linh hoạt và tối ưu chi phí cho cá nhân và doanh nghiệp.
+                </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-4 space-y-4">
+<div class="glass-panel rounded-2xl p-2 space-y-2 service-list max-h-[600px] overflow-y-auto">
+<button class="w-full text-left p-4 rounded-xl bg-primary text-white shadow-lg shadow-blue-500/20 flex items-center justify-between group transition-all">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl bg-white/20 p-2 rounded-lg">health_and_safety</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Sức khỏe</span>
+</div>
+<span class="material-icons-round">arrow_forward</span>
+</button>
+<button class="w-full text-left p-4 rounded-xl hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center justify-between group transition-all text-slate-700 dark:text-slate-200">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl text-primary bg-blue-50 dark:bg-slate-800 p-2 rounded-lg group-hover:bg-white transition-colors">directions_car</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Ô tô</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity text-primary">arrow_forward</span>
+</button>
+<button class="w-full text-left p-4 rounded-xl hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center justify-between group transition-all text-slate-700 dark:text-slate-200">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl text-primary bg-blue-50 dark:bg-slate-800 p-2 rounded-lg group-hover:bg-white transition-colors">home</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Nhà tư nhân</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity text-primary">arrow_forward</span>
+</button>
+<button class="w-full text-left p-4 rounded-xl hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center justify-between group transition-all text-slate-700 dark:text-slate-200">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl text-primary bg-blue-50 dark:bg-slate-800 p-2 rounded-lg group-hover:bg-white transition-colors">flight_takeoff</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Du lịch</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity text-primary">arrow_forward</span>
+</button>
+<button class="w-full text-left p-4 rounded-xl hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center justify-between group transition-all text-slate-700 dark:text-slate-200">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl text-primary bg-blue-50 dark:bg-slate-800 p-2 rounded-lg group-hover:bg-white transition-colors">business</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Doanh nghiệp</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity text-primary">arrow_forward</span>
+</button>
+<button class="w-full text-left p-4 rounded-xl hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center justify-between group transition-all text-slate-700 dark:text-slate-200">
+<div class="flex items-center gap-4">
+<span class="material-icons-round text-2xl text-primary bg-blue-50 dark:bg-slate-800 p-2 rounded-lg group-hover:bg-white transition-colors">savings</span>
+<span class="font-semibold text-base md:text-lg">Bảo hiểm Tài chính</span>
+</div>
+<span class="material-icons-round opacity-0 group-hover:opacity-100 transition-opacity text-primary">arrow_forward</span>
+</button>
+</div>
+<div class="glass-panel rounded-2xl p-6 bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 mt-6">
+<h3 class="text-lg font-bold text-primary mb-2">Cần tư vấn riêng?</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Chúng tôi sẵn sàng thiết kế gói bảo hiểm phù hợp nhất với nhu cầu của bạn.</p>
+<button class="w-full py-2.5 rounded-lg border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors text-sm">
+                            Liên hệ chuyên gia
+                        </button>
+</div>
+</div>
+<div class="lg:col-span-8">
+<div class="glass-panel rounded-3xl p-8 lg:p-10 h-full flex flex-col justify-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+<div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+<div class="relative group">
+<div class="absolute -inset-2 bg-gradient-to-r from-blue-400 to-primary rounded-2xl opacity-20 blur-lg group-hover:opacity-30 transition-opacity duration-500"></div>
+<div class="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border border-white/40">
+<div class="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-50 dark:from-slate-700 dark:to-slate-800"></div>
+<span class="material-icons-round text-6xl text-primary/30">health_and_safety</span>
+<div class="absolute bottom-4 left-4 right-4 glass-panel p-3 rounded-xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shadow-sm">
+<span class="material-icons-round text-xl">verified_user</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 font-medium">Trạng thái</p>
+<p class="text-sm font-bold text-slate-800">Đang được bảo vệ</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-3">Health Planner Pro</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                        Gói bảo hiểm sức khỏe toàn diện, bảo vệ bạn và gia đình trước những rủi ro không lường trước. Tích hợp công nghệ AI để dự đoán và phòng ngừa rủi ro sức khỏe.
+                                    </p>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<div class="mt-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-icons-round text-white text-xs">check</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-800 dark:text-white text-sm">Thanh toán viện phí 100%</h4>
+<p class="text-xs text-slate-500">Hỗ trợ chi trả tại hơn 500 bệnh viện.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-icons-round text-white text-xs">check</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-800 dark:text-white text-sm">Bảo lãnh toàn cầu</h4>
+<p class="text-xs text-slate-500">Hỗ trợ khẩn cấp 24/7 mọi lúc mọi nơi.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-icons-round text-white text-xs">check</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-800 dark:text-white text-sm">Thủ tục Online nhanh chóng</h4>
+<p class="text-xs text-slate-500">Yêu cầu bồi thường chỉ trong 5 phút qua App.</p>
+</div>
+</div>
+</div>
+<div class="pt-4 flex flex-wrap gap-4">
+<button class="px-6 py-3 rounded-xl bg-primary text-white font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                        Đăng ký ngay
+                                        <span class="material-icons-round text-sm">arrow_forward</span>
+</button>
+<button class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                                        Xem chi tiết
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div class="w-12 h-12 rounded-xl bg-blue-100 text-primary flex items-center justify-center shrink-0">
+<span class="material-icons-round text-2xl">support_agent</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-1">Hỗ trợ 24/7</h3>
+<p class="text-sm text-slate-500">Đội ngũ chuyên gia luôn sẵn sàng giải đáp mọi thắc mắc của bạn.</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+<span class="material-icons-round text-2xl">paid</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-1">Chi phí tối ưu</h3>
+<p class="text-sm text-slate-500">Các gói bảo hiểm được thiết kế linh hoạt phù hợp với mọi ngân sách.</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+<span class="material-icons-round text-2xl">verified</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-1">Uy tín hàng đầu</h3>
+<p class="text-sm text-slate-500">Đối tác chiến lược của các tập đoàn bảo hiểm lớn nhất Việt Nam.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-[#0b1120] text-slate-300 py-16 mt-auto">
+<div class=" mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-slate-800 pb-12 mb-12">
+<div class="space-y-6">
+<h3 class="text-2xl font-black tracking-tighter text-white">HISOTECH</h3>
+<p class="text-sm text-slate-400 leading-relaxed">
+                        Đơn vị tiên phong trong lĩnh vực cung cấp giải pháp chuyển đổi số và dịch vụ bảo hiểm công nghệ cho doanh nghiệp Việt Nam.
+                    </p>
+<div class="flex space-x-4">
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">f</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">in</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">yt</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Dịch vụ</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Bảo hiểm Sức khỏe</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Bảo hiểm Ô tô</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Bảo hiểm Doanh nghiệp</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tư vấn tài chính</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Liên kết</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Về chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Cơ hội nghề nghiệp</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Blog công nghệ</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Chính sách bảo mật</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Đăng ký nhận tin</h4>
+<p class="text-sm text-slate-400 mb-4">Nhận thông tin cập nhật mới nhất về công nghệ và khuyến mãi.</p>
+<form class="flex flex-col gap-2">
+<input class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Email của bạn" type="email"/>
+<button class="px-4 py-2 rounded-lg bg-primary text-white font-semibold hover:bg-blue-600 transition-colors" type="submit">Đăng ký</button>
+</form>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+<p>© 2024 HISOTECH. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-white" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-white" href="#">Chính sách quyền riêng tư</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

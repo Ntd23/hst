@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HISOTECH - Blog Công Nghệ &amp; Tin Tức</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007CC3", // Deep textured blue from logo
+                        secondary: "#C5A059", // Champagne Gold/Soft Brass
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                        "glass-border": "rgba(255, 255, 255, 0.4)",
+                        "glass-bg": "rgba(255, 255, 255, 0.65)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #007CC3 0%, #005A8D 100%);
+        }
+        .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.15) 0%, rgba(255, 255, 255, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.1) 0%, rgba(255, 255, 255, 0) 50%),
+                        radial-gradient(circle at 50% 90%, rgba(0, 124, 195, 0.05) 0%, rgba(255, 255, 255, 0) 60%),
+                        #F8FAFC;
+        }
+        .dark .bg-pastel-gradient {
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.1) 0%, rgba(15, 23, 42, 0) 40%),
+                        radial-gradient(circle at 90% 20%, rgba(0, 124, 195, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
+                        #0F172A;
+        }
+        .sidebar-widget {background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 px-4 py-4">
+<div class="glass-panel rounded-2xl  mx-auto px-6 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black tracking-tighter text-primary">HISOTECH</span>
+</div>
+<div class="hidden md:flex items-center space-x-6 xl:space-x-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Sản phẩm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Phần mềm</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Giới thiệu</a>
+<a class="text-sm font-bold text-primary transition-colors" href="#">Tin tức</a>
+</div>
+<div class="flex items-center gap-3 lg:gap-4">
+<button class="hidden md:flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium px-2 py-1">
+<span class="material-icons-round text-lg">language</span>
+<span>VN/EN</span>
+</button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 text-sm font-semibold transition-all">
+                    Đăng nhập
+                </button>
+<button class="hidden md:block px-5 py-2.5 rounded-xl bg-primary hover:bg-opacity-90 text-white text-sm font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5">
+                    Liên hệ ngay
+                </button>
+<button class="md:hidden text-slate-700 dark:text-slate-200">
+<span class="material-icons-round">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<div class="pt-32 pb-10">
+<div class=" mx-auto px-4 sm:px-6 lg:px-8">
+<h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2">Blog</h1>
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-icons-round text-base">chevron_right</span>
+<span class="text-slate-800 dark:text-slate-300 font-medium">Blog</span>
+</div>
+</div>
+</div>
+<section class="pb-24">
+<div class=" mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col lg:flex-row gap-10">
+<div class="w-full lg:w-2/3">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Doanh nghiệp</span>
+<img alt="Hợp tác doanh nghiệp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_sBlM-UnanMdG02R77aET02SdMaAeq5eLHJVPNkmjx3RLK9twRNnYn77bZ89q2rs-sHUlSrhYs1b8NZQtdsOTb0blNv_tWsGDnfuXAEpRuMa9e95hZhfMfrMpBu6eqfUT-XfvmKEIaVjHURCAR4EQasvTSMLkhh-u3m7ZEXV01VYZIRIFq6CwjkX5hFMAbhr1J-HNNIdtl6S7bSbBJ-nKr4rWX-3nuaBXIIWt5WA8BaOc48zY6IfV8x_c-zOWCZGoxzVi7USnzPY"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Sự Hợp Tác Giữa Hisotechgroup Và ASEAN Business Club
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                06/06/2025
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-[#0EA5E9] text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Trí tuệ nhân tạo</span>
+<img alt="AI Solution" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArvtaftoWBkXMFTvOy9Ghx5LYMEwIy-VG4TkY4V-W63mEKk3ACznycoikQdGLmlqh5ZUyhyHZvSKaXkkDGsGaVTDnhdgyVNQTNWqwvKimKmt9NGSDOveu49Kr2X-qP4EaoGkj4qp3U1ijN7bF2zMSu0PLbJ2cKVE8ewGcxB62_iOgsg6zJpn2V4vzwDpiGEv9-yic0bwEl6ob-rJ2Z8NQL8aylV8m_Tf4QdY-21UchZCqwU_pIAG6oWqDAgdZMfqsw1LLJdB9_Lks"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Tăng Tốc Doanh Số Với Giải Pháp Bán Hàng Thông Minh
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-secondary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Chiến lược</span>
+<img alt="Strategy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGF4S4SAd24CqA8qnuOv7x82hXJ5WBRWccGgYpK81rzoodrTN8Ra7XpTpjOJ9NqZjV0KR0eJVSk6XR28IoWvt59DEzNY6wGDX2KmQiI8Ry4cw84vHCougI7I9uEoOZJ_pHvTTiXai1IMTt1NCS1HbYXlz-yLNxFC2KxYVX5G6GN4SV7U2Ciyx0Zond2ZCW3BAZ6aa-PpXXhmd0vAw9XI-ZYpVBPYIqDC9woArs6DYBe21BavcaQIz8kheukWp8cIHXFr6F1uGP5IE"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Tăng Hiệu Suất Làm Việc Và Thành Công Với Chiến Lược Mới
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-indigo-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Mạng viễn thông</span>
+<img alt="Telecom" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhqqvePJM9gj7sBIPKAtFokgPAN_kp9hBYjITcSWB36a09ldtbVJnIuF1wWZ1qOu5Y-KSHCIz1K7E1b62f_8aqRXJ0ILeLza2OpHOC7HKccmhKh49x4doWEnpkdEKFG8pfSiiDLReYD7Mpui02TNhU4c9PFp04A8ZVXCVZ7dQfKJ6xODRV53P5caXffjos8oIAPQRTpMQwDVwBqFJzm9qV3SV3Zh_2bEd4tpb4Nx1Vql_f6zX3qDlMaHuUsU-1xFLgoGMcJXO4EAA"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                             HISOTECH: Khai Phá Tương Lai - Câu Chuyện Startup
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-purple-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Khoa học máy tính</span>
+<img alt="Computer Science" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiiCHoOtSk1ej8hSGmTTSS5qpC7r0O4uj_gJaPcgWbMJ4E3nxvN9oWnoAMSiQr21l5DQv0y-SDTcaHuuOugKag8k6-BvtpFKU3uo1NoZwKWTybCcPbWWmzXIUcRMtNN3FGkF6bOgZye2zyPFQ5W98Bq1q2nThu7kaXRkP4h1whOAlb0vzN2umRkB4hB8-FI4YyXicnQuvsQE9RO8kl3Zku-AVflja65Zg4vvrZjIOXuca4xyuGkdLvBxDoLnFInahBOgJXKACPTAk"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                             Lãnh Đạo Xuất Sắc Tại HISOTECH: Truyền Cảm Hứng
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-teal-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Công nghệ</span>
+<img alt="Technology" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdG_qpEpZiRR5J3BB43IMBZcNCiO9j1_lhoOL9WVQnw5JbS3NPT8s9MVabxrfavJYHkhEikUtAPIaPdA7RpeNwvlCxIas9Hnp7adqS_RK2EDzZuxoX4UIPZx1M7mtTKqjjHpgw1RuGyjJSR6bX8Ns62sPCsNRrC5il5pPvWRrVegJHLr7PLupbmy3m6pdwTbOBbXLnMKLVn-MeLy_DvwUKJ8KWOXxgOGvmrVMZEInWCzne_L_peaBK4vyIYzeoOPnWbogls9Cu5GM"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                             HISOTECH: Chuyển Đổi Doanh Nghiệp Bằng Công Nghệ Số
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Tài chính</span>
+<img alt="Finance" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwmIFLRwjixhrrShs8P5iXnlqhSHEG7_txgqMldOvJO9Xo36MSYU65mIUXwuUdUOnEt-PY1oBj0P4CFQAtSnJ_wylg-7o0LfZdMa8Vm9lKrCeLN8YxCLoKGQMJ83hEOKs7Y3AabcRG8wJBpw5l0rx5ixvnA7LTCNS7_v6knz2T94dUdx4KrRRvaaJBhJQy9ydhJag3YK1mrH-aqHoz-2fsqpJzTKvg4sw-dlGfGk78jdf0iuPzUktQgPwSoHRecM7Yb8IJ4yfbaOA"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                             Tối Ưu Hóa Công Nghệ - Tăng Trưởng Bền Vững
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+<article class="glass-panel rounded-2xl p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-glass-hover">
+<div class="relative overflow-hidden rounded-xl mb-4 h-48">
+<span class="absolute top-3 left-3 bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide z-10 shadow-sm">Sự đổi mới</span>
+<img alt="Innovation" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAdq9QsqPAXwbGBGKYx4z9QFoeaVNKJappNf5Mv1F1YwlFOO9tQ7At_UTPkx9hLks5JufoiK9mobuo5qctUUU0015VXt6DvJRHZ_uyQ2Gh__JpZgRH4DqIT1lWokyxLvjzZyVyiRhcky_M_zIgwddqXa_-iCXE4G098hEoLC53HodMKJ1ufGEUMGNE0HWlyQo7GX2nYziel8FJIfnxEEo1U0s_glHXlKsp4s1oAtXwYcEJMcSkQ0Gn3U0BXov0chq5ep4zCM70DZE"/>
+</div>
+<div class="flex flex-col flex-grow px-2 pb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                             Đổi Mới Để Dẫn Đầu - Công Nghệ Là Chìa Khóa Của Sáng Tạo
+                        </h3>
+<div class="flex items-center gap-2 mb-4 mt-auto">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">HG</div>
+<span class="text-xs text-slate-500 font-medium">Bởi HisoTech Group</span>
+</div>
+<div class="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-3 mt-auto">
+<a class="inline-flex items-center text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-colors" href="#">
+                                XEM THÊM <span class="material-icons-round text-sm ml-1">arrow_forward</span>
+</a>
+<div class="flex items-center text-slate-400 text-xs">
+<span class="material-icons-round text-sm mr-1">calendar_today</span>
+                                09/12/2024
+                            </div>
+</div>
+</div>
+</article>
+</div>
+<div class="mt-12 flex justify-center gap-2">
+<button class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-500 hover:text-primary transition-colors hover:shadow-glass-hover">
+<span class="material-icons-round">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    1
+                </button>
+<button class="w-10 h-10 rounded-xl glass-panel text-slate-600 dark:text-slate-300 font-medium flex items-center justify-center hover:text-primary hover:bg-white transition-colors hover:shadow-glass-hover">
+                    2
+                </button>
+<button class="w-10 h-10 rounded-xl glass-panel text-slate-600 dark:text-slate-300 font-medium flex items-center justify-center hover:text-primary hover:bg-white transition-colors hover:shadow-glass-hover">
+                    3
+                </button>
+<button class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-500 hover:text-primary transition-colors hover:shadow-glass-hover">
+<span class="material-icons-round">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="w-full lg:w-1/3 space-y-8">
+<div class="sidebar-widget p-6">
+<div class="relative">
+<input class="w-full pl-4 pr-12 py-3 bg-white/50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm" placeholder="Tìm kiếm ..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-md flex items-center justify-center text-white hover:bg-blue-600 transition-colors">
+<span class="material-icons-round text-lg">search</span>
+</button>
+</div>
+</div>
+<div class="sidebar-widget p-6">
+<h4 class="font-bold text-lg text-slate-900 mb-4 border-b border-slate-200 pb-2">Danh mục</h4>
+<ul class="space-y-3">
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Doanh Nghiệp (3)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Trí Tuệ Nhân Tạo (1)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-primary font-medium transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-primary">arrow_forward</span>
+                            Tài Chính &amp; Đầu Tư (3)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Khoa Học Máy Tính (3)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Thiết Bị Phần Cứng (0)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Sự Đổi Mới (2)
+                        </a>
+</li>
+<li>
+<a class="flex items-center text-slate-600 hover:text-primary transition-colors text-sm group" href="#">
+<span class="material-icons-round text-lg mr-2 text-slate-400 group-hover:text-primary">arrow_forward</span>
+                            Mạng Viễn Thông (3)
+                        </a>
+</li>
+</ul>
+</div>
+<div class="sidebar-widget p-6">
+<h4 class="font-bold text-lg text-slate-900 mb-4 border-b border-slate-200 pb-2">Bài viết mới</h4>
+<div class="space-y-4">
+<a class="flex gap-3 group" href="#">
+<div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+<img alt="post" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWzpHALIaVGJLwt7zy3Dy4kb_g2T18NJGDLV9NtZNJK6dUOidVV7pYTYVV06uH_Pdt3c4pqLjIeWE8dnWeanO5re2O_d7fNMhvnA2x-W1HB7aOJ5UfWUoDTPIyve7YBQmgu48svNo7RuQBBD5nlNyEN6rhABDbYmCa_Dm9JCxjINgT09OCu_9p02RnWWTmGvFcNL6P7aFstSS6sXaKyhZce-G1DDcX_jPvSG7Lzcv-7oT61diNIe3c77MnpTQWfhX3EUQCTT7EpzQ"/>
+</div>
+<div>
+<h5 class="text-sm font-semibold text-slate-800 group-hover:text-primary line-clamp-2 transition-colors">Tăng Tốc Doanh Số Với Giải Pháp Bán Hàng...</h5>
+<span class="text-xs text-slate-400 mt-1 flex items-center">
+<span class="material-icons-round text-[10px] mr-1">calendar_today</span> 09/12/2024
+                            </span>
+</div>
+</a>
+<a class="flex gap-3 group" href="#">
+<div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+<img alt="post" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4k-DhixEDYIlOnQ0KMlWaC3LzJMMY-9Bti3jPpqtZrvk6zfMkc9r6RBwbE6NBmiGAnshdxhiO-TFX9NLxr_MW4urRIpNIWFi-VRYT9SLfAZsBi3QG9Ka8VAjqCTCzR57bM3hx_zwFaL_jWzTeVqVI8Yzw7FYSqRV6s_toy4a4xurpgv1DzJbAntmeauY795et-jsOfRys0CSykNHTi42NpVN8LPwCTkid0Y43GgXhLaH_D7iCnKWyYQOS_xolxh19wAAxATb6RpA"/>
+</div>
+<div>
+<h5 class="text-sm font-semibold text-slate-800 group-hover:text-primary line-clamp-2 transition-colors">Tăng Hiệu Suất Làm Việc Và Thành Công Với Chiế...</h5>
+<span class="text-xs text-slate-400 mt-1 flex items-center">
+<span class="material-icons-round text-[10px] mr-1">calendar_today</span> 09/12/2024
+                            </span>
+</div>
+</a>
+<a class="flex gap-3 group" href="#">
+<div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+<img alt="post" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnHJYBiC9uoAu696YTxLVYe4tDjAL_DPWaZu99u4qLJlXK6NXwDnbTaj01Q8A2XNmDaDyQaUXiobkZ-xV6UjcsBz6ojgtN8QOlfwg6nnA0sVPxq_gtvTMrg46btCcOCqIPMcho74eydP8W6X_F6rmhq7PEBP-aG2wdQ3ohjAVRzeBkZK8HiV7Dhj7jrBV72HbxiczhXCM2pEsTr1tqo1a5O2TgMEp3erhn2cynI6jXYVN63hHUxhPAvO6Ia4bCGR4pXziJ0qc7Mj4"/>
+</div>
+<div>
+<h5 class="text-sm font-semibold text-slate-800 group-hover:text-primary line-clamp-2 transition-colors">HISOTECH: Xây Dựng Thành Công Bằng Chiến...</h5>
+<span class="text-xs text-slate-400 mt-1 flex items-center">
+<span class="material-icons-round text-[10px] mr-1">calendar_today</span> 09/12/2024
+                            </span>
+</div>
+</a>
+<a class="flex gap-3 group" href="#">
+<div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+<img alt="post" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxkJmQzsoJRqJWoN_6uewDA3ywsaOMCSe4Bd1npudM8MwBIwzUOHc2z5V-PhVK7ogqS6AROXm36FS2euo3UX4wNo6we7gUKIVEvjFa3JVoVk9B7ROmu2DEpMMbxMrJ-xuEDETLR1-sU47Rm5sqAUPloaDJD952JDiKHYSmFUet_Cw9PBgKRHdp-nO0yKfVHmvP0G33jZMjyBTLdfKC3g8E1m_hfsgqZ7OoumRBWaL3tnJ039fuixKlprlhZo1GMo_2rQHoLaRhUrU"/>
+</div>
+<div>
+<h5 class="text-sm font-semibold text-slate-800 group-hover:text-primary line-clamp-2 transition-colors">Tối Ưu Hóa Công Nghệ – Tăng Trưởng Bền Vững</h5>
+<span class="text-xs text-slate-400 mt-1 flex items-center">
+<span class="material-icons-round text-[10px] mr-1">calendar_today</span> 09/12/2024
+                            </span>
+</div>
+</a>
+</div>
+</div>
+<div class="sidebar-widget p-6">
+<h4 class="font-bold text-lg text-slate-900 mb-4 border-b border-slate-200 pb-2">Tags</h4>
+<div class="flex flex-wrap gap-2">
+<a class="px-3 py-1 bg-blue-50 hover:bg-primary hover:text-white text-primary text-xs font-medium rounded transition-colors" href="#">#Truyền thông</a>
+<a class="px-3 py-1 bg-blue-50 hover:bg-primary hover:text-white text-primary text-xs font-medium rounded transition-colors" href="#">#Công nghệ số</a>
+<a class="px-3 py-1 bg-blue-50 hover:bg-primary hover:text-white text-primary text-xs font-medium rounded transition-colors" href="#">#CNTT</a>
+<a class="px-3 py-1 bg-blue-50 hover:bg-primary hover:text-white text-primary text-xs font-medium rounded transition-colors" href="#">#Thiết bị phần cứng</a>
+<a class="px-3 py-1 bg-blue-50 hover:bg-primary hover:text-white text-primary text-xs font-medium rounded transition-colors" href="#">##HợpTác</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-[#0b1120] text-slate-300 py-16 relative overflow-hidden">
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<div class="w-96 h-96 rounded-full border-[40px] border-white/20 -mb-20 -mr-20"></div>
+<div class="w-[500px] h-[500px] rounded-full border-[2px] border-white/10 absolute bottom-10 right-10"></div>
+</div>
+<div class=" mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-12 border-b border-slate-800 pb-12 mb-12">
+<div class="lg:col-span-1 space-y-6">
+<h3 class="text-2xl font-black tracking-tighter text-white">HISOTECH</h3>
+<p class="text-sm text-slate-400 leading-relaxed font-light">
+                Không Bỏ Lỡ Thông Tin Mới Nhất Về Chúng Tôi
+            </p>
+<form class="flex gap-2">
+<div class="relative flex-grow">
+<input class="w-full px-4 py-2.5 rounded-l-lg bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary text-sm" placeholder="Nhập Email Của Bạn" type="email"/>
+</div>
+<button class="px-4 py-2.5 rounded-r-lg bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors uppercase whitespace-nowrap" type="submit">Gửi</button>
+</form>
+<div class="pt-4">
+<p class="text-xs text-slate-500 mb-3">Theo Dõi Chúng Tôi Tại:</p>
+<div class="flex space-x-3">
+<a class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all group" href="#">
+<i class="fab fa-facebook-f text-xs"></i>
+<span class="material-icons-round text-sm">facebook</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all" href="#">
+<span class="text-xs font-bold">X</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all" href="#">
+<span class="material-icons-round text-sm">smart_display</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-blue-700 hover:text-white hover:border-blue-700 transition-all" href="#">
+<span class="text-xs font-bold">in</span>
+</a>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1">
+<h4 class="text-white font-bold text-lg mb-6 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-0.5 after:bg-primary">Thông tin</h4>
+<ul class="space-y-4 text-sm text-slate-400">
+<li class="flex items-start gap-3">
+<span class="font-semibold text-white min-w-[80px]">Hotline:</span>
+<span>097 3735 679</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="font-semibold text-white min-w-[80px]">Email:</span>
+<span>contact@hisotechgroup.com</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="font-semibold text-white min-w-[80px]">Địa chỉ:</span>
+<span>Tòa C2-D'.Capitale KĐT Đông Nam, Đường Trần Duy Hưng, P.Trung Hòa, Q.Cầu Giấy, TP.Hà Nội</span>
+</li>
+</ul>
+</div>
+<div class="lg:col-span-1">
+<h4 class="text-white font-bold text-lg mb-6 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-0.5 after:bg-primary">Liên kết</h4>
+<ul class="space-y-3 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Chúng tôi hoạt động thế nào</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Đội ngũ của chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Dịch vụ bảo hiểm</a></li>
+</ul>
+</div>
+<div class="lg:col-span-1">
+<h4 class="text-white font-bold text-lg mb-6 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-0.5 after:bg-primary">Ảnh bài đăng</h4>
+<div class="grid grid-cols-3 gap-2">
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEI1TDyzeiA3gJ5D7p-GqFdfG_xunkDfkZtSpWVbZRTIinkg8pjqzeMSZoKPner47R2Soew5pg6OKIknGQbP3keG4C93bpA8L6RwiOO4ti28bkTjOn-5vP9XrUJYxbA_6mm-9GCGaw0f632rAbLMw65OM2-XTD3sq6UtYBgrQQm9RikHqUi78sXv62UWlJ-ieCabDDYQD-7X92kfG3g_DVRRmRBi3tiViag5ollQcWlSyEGopLr708gA-1a0EYpl5Wt8nYmARxkT8"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Dxe8Bn335d9RRMAKKyblMtxsVjiJs88XU3uWDJMLaldKBksJlLpnM_v6JfpEikTZN69yaQqw7s94uht4FDSAKqkg8LS00daiO3phyDDHG9rUQOf-aN6goqtqg16jGI8WlKHiutEG5oYatE9Ug97l4gmtL6MUTBNltUdJmIMKn36TKZjnEx0t-Ag8ggsrmJ_61t8LmlIynQZPL0KVkHX9PoMvZT5AUeSmizrBYO9qqSvGcUPv8dDmhmwP579yOG7wHHRYKGRAeJQ"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsFYV_nIcqcNZICBXCKWgvdEscQhhIWERsKblhvhDMpnSitHrITU8n_r1pkXb3UoR9u5fx7ZixP3BZCGnCLGLMVejqUK18-2GA7rsdv-dUipkppaeczg1RUOKVB0WksLZzcQefXMybpRGRidWEEaiHyRImaUBLa4u9IS-SpT713oxuXhlZkcTZphun3aEkPUhomIvDRhRWyeRBs23XoY_1ik9eFwsC1h0oNWrUNG7LZJjvUXl6Hq7v5Sw0rY21WZh2BWno0BClU-I"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2m2VSuyI-AoN4pZuTvQywOJCwokWJbO7FjNH7i9nJPYm6NAaG-HTbADWg3u9s1TDkErAbmZ11ekif29zi3mgTRcD29WVJ7M0WB-lP9F7UWfRUzhHcrTrmmLKgy1Kn8DyfGnMh7i2nxoMTGLWZ5e3InPaKE8glASVTAJlL5WHGVRCXYaFBlMFuM1CMmaGnk3UGy7SIVnA7wQQQFGBPPgnsA2s9YIZkWV7WslbtThhFch8P9dNYZqU6OZbSfPbcsKWxp3C1ybYtP2U"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj2sNTNa9cavUkqubR622Cs2z00WMM8NDMAKMwGEn-8KRWvaJqGCbYm4_7N36a_uB9uK4GRmOBDt1rrfHXcFLGjSDowUphIKC3SV6fmrNXgIBU7n2WJQh_aorWz8OTFmjGG2qXC8aeV3w7VgLxb0N47HAsMkGju6an0HuaoNew_G0mVpwdxgrUQkp4B2akAaAbQegp9g6mjvJx3_SG0Uv0yEQGDYhkYETaGEUDIrFdeEoG5If7thsKwAVW6GzMbDbvWNx2YlecG3g"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded overflow-hidden">
+<img alt="Gallery" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7V5NgSNrc8_sZirF2QRhP8tGac9SIUR3cqQvsIYWnKzCYZ-ei7-qp23FdQKhGtwqUMe_mS4i09dTc4_Wi2O6iymKaxF4xRC3qtw4hk4MURaK9xbH9QBKoIjASVfiPoJX5iOyvhZ0duSDLrTVRJ9VUwwdLDprpOf0D59dPwrJxKKWGWOW5THNtaaDJuX31EzX38PAGrtQyrQWw4t9t-XVYQFkiSCcV7Etdevwo1-lgBofjJ68o2l0XDMQxKacGLGXHBlLiulB--j8"/>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 pt-4">
+<p>© HISOTECH Technology Solutions and Investment Group Joint Stock Company. All rights reserved.</p>
+<div class="flex space-x-4 mt-4 md:mt-0">
+<div class="flex space-x-2">
+<a class="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center hover:bg-slate-700 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-sm">facebook</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center hover:bg-slate-700 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">X</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center hover:bg-slate-700 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-sm">smart_display</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center hover:bg-slate-700 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="text-xs font-bold">in</span>
+</a>
+</div>
+<a class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white ml-4" href="#">
+<span class="material-icons-round text-sm">expand_less</span>
+</a>
+</div>
+<div class="hidden md:flex gap-6 mt-4 md:mt-0">
+<a class="hover:text-white transition-colors" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-white transition-colors" href="#">Chính sách quyền riêng tư</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

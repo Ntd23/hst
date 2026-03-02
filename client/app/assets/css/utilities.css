@@ -1,0 +1,215 @@
+/* ===========================
+   Glass Panels
+   =========================== */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.05);
+}
+
+.glass-panel-darker {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.1);
+}
+
+.dark .glass-panel {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ===========================
+   Card Hover — Gradient Border Glow (NO translate)
+   =========================== */
+.card-hover-glow {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.4s ease;
+}
+
+/* Animated gradient border */
+.card-hover-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(0, 124, 195, 0) 40%,
+      rgba(0, 124, 195, 0) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease, background 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-hover-glow:hover::before {
+  opacity: 1;
+  background: linear-gradient(135deg,
+      var(--color-primary) 0%,
+      #00a8e8 40%,
+      var(--color-secondary) 70%,
+      var(--color-primary) 100%);
+}
+
+.card-hover-glow:hover {
+  box-shadow:
+    0 0 24px rgba(0, 124, 195, 0.12),
+    0 0 0 1px rgba(0, 124, 195, 0.08);
+}
+
+/* Inner ambient glow */
+.card-hover-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 124, 195, 0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.card-hover-glow:hover::after {
+  opacity: 1;
+}
+
+/* ===========================
+   Text Gradient
+   =========================== */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(135deg, #007cc3 0%, #005a8d 100%);
+}
+
+.bg-pastel-gradient {
+  background: #dceaf5;
+}
+
+.dark .bg-pastel-gradient {
+  background: #dceaf5;
+}
+
+.icon-glow {
+  filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.3));
+}
+
+/* ===========================
+   Navigation Bar
+   =========================== */
+.glass-nav {
+  background: rgba(248, 250, 252, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.glass-nav-scrolled {
+  background: rgba(248, 250, 252, 0.9);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+}
+
+.dark .glass-nav {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.35);
+}
+
+.dark .glass-nav-scrolled {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* ===========================
+   Nav Link — dot indicator below
+   =========================== */
+.nav-link {
+  color: #0f172a;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0;
+  height: 2.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.dark .nav-link {
+  color: #e2e8f0;
+}
+
+.dark .nav-link:hover {
+  color: #93c5fd;
+}
+
+.nav-muted {
+  color: #334155;
+  transition: color 0.2s ease;
+}
+
+.dark .nav-muted {
+  color: #cbd5e1;
+}
+
+.nav-muted:hover {
+  color: var(--color-primary);
+}
+
+/* ===========================
+   Link — Sliding Underline from Left
+   =========================== */
+.link-slide-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.link-slide-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-slide-underline:hover::after {
+  width: 100%;
+}
