@@ -1,6 +1,3 @@
-import botbleFrontend from './modules/botble-frontend/module';
-
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devServer: {
@@ -26,7 +23,7 @@ export default defineNuxtConfig({
       allowedHosts: ['hst.test'],
     },
   },
-  modules: [botbleFrontend, '@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n'],
+  modules: ['@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n'],
   i18n: {
     locales: [
       { code: 'vi', language: 'vi-VN', name: 'Tiếng Việt', file: 'vi.json' },
@@ -42,7 +39,7 @@ export default defineNuxtConfig({
   },
   srcDir: 'app/',
   runtimeConfig: {
-    botbleApiInternalBase: 'http://127.0.0.1:8000/api',
+    apiBaseUrl: 'http://127.0.0.1:8000/api',
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     },
