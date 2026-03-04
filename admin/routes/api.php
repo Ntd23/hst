@@ -12,5 +12,5 @@ Route::prefix('common')->group(function () {
 // -------------------Home Page 
 Route::prefix('pages')->group(function () {
     Route::get('home/meta',              [HomeController::class, 'getMeta']);   // ?locale=vi
-   Route::get('home/section/hero', [HomeController::class,'getSectionHero']);
+   Route::get('home/section/simple-slider', [HomeController::class,'getSectionSimpleSlider']);
 });

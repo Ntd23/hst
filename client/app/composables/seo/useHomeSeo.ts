@@ -23,6 +23,7 @@ export const useHomeSeo = () => {
       image:       data.value.og?.image   || undefined,
       type:        data.value.og?.type    || 'website',
       robots:      data.value.robots      || 'index,follow',
+      favicon:     data.value.favicon     || undefined,
     }
   })
 

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'robots', content: 'index,follow' },
       ],
-      link: [{ rel: 'icon', href: '/favicon.ico' }],
+      link: [],
     },
   },
   css: ['./app/assets/css/main.css'],
@@ -34,9 +34,7 @@ export default defineNuxtConfig({
     langDir: 'locales',
     detectBrowserLanguage: false,
   },
-  routeRules: {
-    '/': { swr: 3600 },
-  },
+  routeRules: {},
   srcDir: 'app/',
   runtimeConfig: {
     apiBaseUrl: 'http://127.0.0.1:8000/api',
