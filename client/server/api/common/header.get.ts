@@ -17,6 +17,12 @@ function getLocaleFromRequest(event: any) {
 export default defineEventHandler(async (event): Promise<any> => {
   const locale = getLocaleFromRequest(event)
 
+  // Không cache API response — admin update thì client nhận ngay
+  setResponseHeaders(event, {
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+    'Pragma': 'no-cache',
+  })
+
   return apiFetch<any>('/common/header', {
     query: { locale: locale },
     headers: { 'X-Locale': locale },

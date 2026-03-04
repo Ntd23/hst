@@ -58,11 +58,16 @@ class HomeController extends Controller
                 $ogImage = RvMedia::getImageUrl($seoImage);
             }
 
+            // Favicon
+            $favicon = theme_option('favicon');
+            $faviconUrl = $favicon ? RvMedia::getImageUrl($favicon) : null;
+
             return [
                 'title' => $seoTitle,
                 'description' => $seoDescription,
                 'robots' => $seoIndex ? 'index, follow' : 'noindex, nofollow',
                 'canonical' => url('/'),
+                'favicon' => $faviconUrl,
                 'locale' => $locale,
                 'og' => [
                     'title' => $seoTitle,
@@ -84,27 +89,25 @@ class HomeController extends Controller
     }
 
     /**
-     * GET /api/pages/home/section/hero?key=home-slider
+     * GET /api/pages/home/section/simple-slider?locale=vi
      *
-     * Trả về dữ liệu hero slider cho trang chủ.
-     * Slider được tìm theo `key` column trong bảng simple_sliders.
-     * Mỗi slide sử dụng các field trực tiếp + MetaData:
+     * Trả về dữ liệu slider cho trang chủ theo ngôn ngữ.
+     * Botble tạo slider riêng cho mỗi ngôn ngữ (giống menu).
+     * Map locale → slider theo thứ tự supportedLocales.
+     *
+     * Mỗi slide trả về:
      *   - title, description, link, image  (direct columns)
      *   - subtitle, button_label           (MetaData)
      *   - data_count, data_count_description (MetaData – style-2 badge)
      *   - tablet_image, mobile_image       (MetaData – responsive)
      */
-    public function getSectionHero(Request $request)
+    public function getSectionSimpleSlider(Request $request)
     {
-        $sliderKey = $request->input('key', 'home-silde');
-        $cacheKey = "api:pages:home:hero:{$sliderKey}";
+        $locale = $request->input('locale', app()->getLocale());
+        $cacheKey = "api:pages:home:simple-slider:{$locale}";
 
-        $payload = Cache::remember($cacheKey, 300, function () use ($sliderKey) {
-            /** @var SimpleSlider|null $slider */
-            $slider = SimpleSlider::query()
-                ->wherePublished()
-                ->where('key', $sliderKey)
-                ->first();
+        $payload = Cache::remember($cacheKey, 300, function () use ($locale) {
+            $slider = $this->getSliderByLocale($locale);
 
             if (!$slider || $slider->sliderItems->isEmpty()) {
                 return null;
@@ -132,13 +135,14 @@ class HomeController extends Controller
                     'subtitle' => $item->getMetaData('subtitle', true) ?: null,
                     'button_label' => $item->getMetaData('button_label', true) ?: null,
 
-                    // Badge style-2 (số năm kinh nghiệm, v.v.)
+                    // Badge style-2
                     'data_count' => $item->getMetaData('data_count', true) ?: null,
                     'data_count_description' => $item->getMetaData('data_count_description', true) ?: null,
                 ];
             })->values()->toArray();
 
             return [
+                'locale' => $locale,
                 'slider_id' => $slider->id,
                 'slider_key' => $slider->key,
                 'slider_name' => (string) $slider->name,
@@ -148,11 +152,51 @@ class HomeController extends Controller
 
         if (!$payload) {
             return response()->json([
-                'message' => "No published slider found for key: {$sliderKey}",
+                'message' => "No published slider found for locale: {$locale}",
+                'locale' => $locale,
                 'data' => null,
             ], 404, [], JSON_UNESCAPED_UNICODE);
         }
 
         return response()->json($payload, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Tìm SimpleSlider theo locale.
+     * Botble tạo slider riêng cho mỗi ngôn ngữ, cùng kiểu list.
+     * Row thứ N trong danh sách published sliders (order by id)
+     * tương ứng với ngôn ngữ thứ N trong supportedLocales.
+     *
+     * DB hiện tại:
+     *   id=2 (home-silde)    → vi (index 0 nếu vi đứng trước)
+     *   id=3 (main-menu-eng) → en (index 1)
+     */
+    private function getSliderByLocale(string $locale): ?SimpleSlider
+    {
+        $supportedLocales = array_keys(config('laravellocalization.supportedLocales', []));
+        if (empty($supportedLocales)) {
+            $supportedLocales = ['vi', 'en'];
+        }
+
+        $localeIndex = array_search($locale, $supportedLocales);
+        if ($localeIndex === false) {
+            return null;
+        }
+
+        // Lấy tất cả sliders published, order by id ASC
+        // Row thứ N tương ứng với ngôn ngữ thứ N
+        $sliders = SimpleSlider::query()
+            ->wherePublished()
+            ->orderBy('id')
+            ->get();
+
+        $slider = $sliders->get($localeIndex);
+
+        // Fallback: lấy row đầu tiên nếu index vượt quá
+        if (!$slider) {
+            $slider = $sliders->first();
+        }
+
+        return $slider;
     }
 }

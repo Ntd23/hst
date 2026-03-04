@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <!-- Above the fold: load immediately -->
-    <HomeSectionsHero />
+    <HomeSectionsSimpleSlider />
     <HomeSectionsServices />
 
     <!-- Below the fold: lazy hydration — only hydrate when scrolled into view -->
