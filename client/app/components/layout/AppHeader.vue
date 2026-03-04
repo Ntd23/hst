@@ -13,9 +13,17 @@
     >
       <div class="flex items-center gap-2">
         <NuxtLink :to="headerData?.logo?.home_url || '/'">
-          <img v-if="headerData?.logo?.logo" :src="headerData.logo.logo" :alt="headerData?.logo?.site_title" class="h-10 w-auto" />
-          <span v-else class="text-xl sm:text-2xl font-black tracking-tighter text-primary">
-            {{ headerData?.logo?.site_title || 'HISOTECH' }}
+          <img
+            v-if="headerData?.logo?.logo"
+            :src="headerData.logo.logo"
+            :alt="headerData?.logo?.site_title"
+            class="h-10 w-auto"
+          />
+          <span
+            v-else
+            class="text-xl sm:text-2xl font-black tracking-tighter text-primary"
+          >
+            {{ headerData?.logo?.site_title || "HISOTECH" }}
           </span>
         </NuxtLink>
       </div>
@@ -31,12 +39,21 @@
         >
           <!-- Item có children -->
           <template v-if="item.has_children && item.children?.length">
-            <NuxtLink :to="item.url || item.to" class="nav-item-desktop flex items-center">
-              <span class="nav-item-text" :data-text="item.title || item.label">{{ item.title || item.label }}</span>
+            <NuxtLink
+              :to="item.url || item.to"
+              class="nav-item-desktop flex items-center"
+            >
+              <span
+                class="nav-item-text"
+                :data-text="item.title || item.label"
+                >{{ item.title || item.label }}</span
+              >
               <UIcon
                 name="i-heroicons-chevron-down-20-solid"
                 class="w-4 h-4 ml-1 opacity-50 transition-transform duration-200"
-                :class="activeDropdown === (item.id ?? item.title) ? 'rotate-180' : ''"
+                :class="
+                  activeDropdown === (item.id ?? item.title) ? 'rotate-180' : ''
+                "
               />
             </NuxtLink>
 
@@ -55,7 +72,10 @@
               >
                 <li v-for="child in item.children" :key="child.id">
                   <NuxtLink :to="child.url" class="nav-dropdown-item">
-                    <UIcon name="i-heroicons-chevron-right-20-solid" class="nav-dropdown-icon" />
+                    <UIcon
+                      name="i-heroicons-chevron-right-20-solid"
+                      class="nav-dropdown-icon"
+                    />
                     <span>{{ child.title }}</span>
                   </NuxtLink>
                 </li>
@@ -65,24 +85,35 @@
 
           <!-- Item thông thường -->
           <NuxtLink v-else :to="item.url || item.to" class="nav-item-desktop">
-            <span class="nav-item-text" :data-text="item.title || item.label">{{ item.title || item.label }}</span>
+            <span class="nav-item-text" :data-text="item.title || item.label">{{
+              item.title || item.label
+            }}</span>
           </NuxtLink>
         </li>
       </ul>
 
       <div class="flex items-center gap-3 lg:gap-4">
         <!-- Language pill toggle -->
-        <div class="hidden md:flex items-center relative bg-slate-100 dark:bg-slate-800 rounded-full p-0.5 border border-slate-200/60 dark:border-slate-700/60">
+        <div
+          class="hidden md:flex items-center relative bg-slate-100 dark:bg-slate-800 rounded-full p-0.5 border border-slate-200/60 dark:border-slate-700/60"
+        >
           <!-- Sliding indicator -->
           <div
             class="absolute top-0.5 h-[calc(100%-4px)] rounded-full bg-white dark:bg-slate-700 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-            :style="{ width: 'calc(50% - 2px)', left: locale === 'vi' ? '2px' : 'calc(50% + 2px)' }"
+            :style="{
+              width: 'calc(50% - 2px)',
+              left: locale === 'vi' ? '2px' : 'calc(50% + 2px)',
+            }"
           />
           <button
             v-for="loc in availableLocales"
             :key="loc.code"
             class="relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors duration-300"
-            :class="locale === loc.code ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'"
+            :class="
+              locale === loc.code
+                ? 'text-primary'
+                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
+            "
             @click="switchLocale(loc.code)"
           >
             {{ loc.code.toUpperCase() }}
@@ -93,7 +124,7 @@
           to="#"
           class="hidden md:flex items-center px-4 py-2 rounded-xl text-[0.9375rem] font-semibold text-slate-700 hover:text-primary transition-colors duration-300 relative nav-login-btn"
         >
-          {{ $t('nav.login') }}
+          {{ $t("nav.login") }}
         </NuxtLink>
 
         <UButton
@@ -102,7 +133,7 @@
           size="md"
           class="hidden md:block rounded-xl font-semibold whitespace-nowrap btn-primary-lift-sm"
         >
-          {{ $t('nav.contact') }}
+          {{ $t("nav.contact") }}
         </UButton>
 
         <!-- Mobile locale toggle — compact, next to hamburger -->
@@ -110,7 +141,7 @@
           class="lg:hidden flex items-center justify-center w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 text-xs font-bold text-primary transition-all duration-200 active:scale-90"
           @click="switchLocale(locale === 'vi' ? 'en' : 'vi')"
         >
-          {{ locale === 'vi' ? 'EN' : 'VN' }}
+          {{ locale === "vi" ? "EN" : "VN" }}
         </button>
 
         <UButton
@@ -142,11 +173,18 @@
         <ul class="space-y-1">
           <li v-for="item in computedNavItems" :key="item.id || item.title">
             <template v-if="item.has_children && item.children?.length">
-              <div class="nav-item-mobile flex justify-between items-center opacity-80">
+              <div
+                class="nav-item-mobile flex justify-between items-center opacity-80"
+              >
                 <span>{{ item.title || item.label }}</span>
-                <UIcon name="i-heroicons-chevron-down-20-solid" class="w-5 h-5" />
+                <UIcon
+                  name="i-heroicons-chevron-down-20-solid"
+                  class="w-5 h-5"
+                />
               </div>
-              <ul class="pl-4 border-l border-slate-200/50 dark:border-slate-700/50 mt-1 space-y-1">
+              <ul
+                class="pl-4 border-l border-slate-200/50 dark:border-slate-700/50 mt-1 space-y-1"
+              >
                 <li v-for="child in item.children" :key="child.id">
                   <NuxtLink
                     :to="child.url"
@@ -168,12 +206,14 @@
             </NuxtLink>
           </li>
         </ul>
-        <div class="pt-4 mt-3 border-t border-slate-200/50 dark:border-slate-700/50 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div
+          class="pt-4 mt-3 border-t border-slate-200/50 dark:border-slate-700/50 grid grid-cols-1 sm:grid-cols-2 gap-3"
+        >
           <NuxtLink
             to="#"
             class="flex items-center justify-center px-4 py-3 rounded-xl text-base font-semibold text-slate-700 border border-slate-200 dark:border-slate-600 hover:border-primary hover:text-primary transition-all duration-300"
           >
-            {{ $t('nav.login') }}
+            {{ $t("nav.login") }}
           </NuxtLink>
           <UButton
             color="primary"
@@ -181,7 +221,7 @@
             size="lg"
             class="w-full rounded-xl font-semibold justify-center btn-primary-lift-sm"
           >
-            {{ $t('nav.contact') }}
+            {{ $t("nav.contact") }}
           </UButton>
         </div>
       </div>
@@ -190,66 +230,68 @@
 </template>
 
 <script setup lang="ts">
-import { useHeader } from '~/composables/common/useHeader';
+import { useHeader } from "~/composables/common/useHeader";
 
-const isScrolled = ref(false)
-const isMobileMenuOpen = ref(false)
-const activeDropdown = ref<string | number | null>(null)
+const isScrolled = ref(false);
+const isMobileMenuOpen = ref(false);
+const activeDropdown = ref<string | number | null>(null);
 
-const { locale, locales, setLocale } = useI18n()
-const availableLocales = computed(() =>
-  (locales.value as Array<{ code: string; name: string }>)
-)
+const { locale, locales, setLocale } = useI18n();
+const availableLocales = computed(
+  () => locales.value as Array<{ code: string; name: string }>
+);
 
-const { t } = useI18n()
-const switchLocalePath = useSwitchLocalePath()
+const { t } = useI18n();
+const switchLocalePath = useSwitchLocalePath();
 
-const { data: headerResponse } = await useHeader()
-const headerData = computed(() => headerResponse.value?.data || headerResponse.value || null)
+const { data: headerResponse } = await useHeader();
+const headerData = computed(
+  () => headerResponse.value?.data || headerResponse.value || null
+);
 
 const switchLocale = (code: string) => {
-  const path = switchLocalePath(code as 'vi' | 'en')
+  const path = switchLocalePath(code as "vi" | "en");
   if (import.meta.client) {
-    window.location.href = path
+    window.location.href = path;
   }
-}
+};
 
 const navItems = computed(() => [
-  { label: t('nav.home'), to: '#' },
-  { label: t('nav.products'), to: '#' },
-  { label: t('nav.software'), to: '#' },
-  { label: t('nav.about'), to: '#' },
-  { label: t('nav.news'), to: '#' },
-])
+  { label: t("nav.home"), to: "#" },
+  { label: t("nav.products"), to: "products" },
+  { label: t("nav.software"), to: "#" },
+  { label: t("nav.about"), to: "#" },
+  { label: t("nav.news"), to: "#" },
+]);
 
 const computedNavItems = computed(() => {
   if (headerData.value?.main_menu?.items) {
-    return headerData.value.main_menu.items
+    return headerData.value.main_menu.items;
   }
-  return navItems.value
-})
+  return navItems.value;
+});
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 12
-}
+  isScrolled.value = window.scrollY > 12;
+};
 
 const handleResize = () => {
   if (window.innerWidth >= 1024) {
-    isMobileMenuOpen.value = false
+    isMobileMenuOpen.value = false;
   }
-}
+};
 
 onMounted(() => {
-  handleScroll()
-  handleResize()
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  window.addEventListener('resize', handleResize, { passive: true })
-})
+  handleScroll();
+  handleResize();
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  window.addEventListener("resize", handleResize, { passive: true });
+});
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('resize', handleResize)
-})
+  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", handleResize);
+});
 </script>
 
 <style scoped>
@@ -294,7 +336,7 @@ onBeforeUnmount(() => {
 
 /* Active dot indicator below */
 .nav-item-desktop::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 2px;
   left: 50%;
@@ -302,7 +344,11 @@ onBeforeUnmount(() => {
   width: 0;
   height: 1px;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -342,7 +388,7 @@ onBeforeUnmount(() => {
    Login Button — underline grows from center
    =========================== */
 .nav-login-btn::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 4px;
   left: 50%;
@@ -373,8 +419,7 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.88);
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.1),
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1),
     0 0 0 1px rgba(0, 124, 195, 0.06);
 
   /* Accent border trên */
@@ -388,7 +433,7 @@ onBeforeUnmount(() => {
 
   /* Caret */
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -7px;
     left: 50%;
@@ -403,7 +448,7 @@ onBeforeUnmount(() => {
 
   /* Primary accent top border */
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -2px;
     left: 0;
