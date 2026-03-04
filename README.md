@@ -83,6 +83,7 @@ Dán toàn bộ nội dung bên dưới vào file đó:
     ProxyPassReverse /storage  http://127.0.0.1:8000/storage
 
     # ==================================
+    
     # Proxy Next.js (npm run dev :3000)
     # ==================================
     ProxyPass        /         http://127.0.0.1:3000/
