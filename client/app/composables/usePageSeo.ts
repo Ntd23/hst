@@ -7,6 +7,7 @@ type PageSeoInput = {
   image?: string;
   type?: "website" | "article";
   robots?: string;
+  favicon?: string;
 };
 
 export type { PageSeoInput };
@@ -50,7 +51,12 @@ export const usePageSeo = (seo: MaybeRefOrGetter<PageSeoInput>) => {
     title: () => seoValue.value.title,
   })
 
-  useHead(() => ({
-    link: [{ rel: 'canonical', href: canonicalUrl.value }],
-  }));
+  useHead(() => {
+    const defaultCanonical = { rel: "canonical", href: canonicalUrl.value };
+    const iconLink = seoValue.value.favicon ? { rel: "icon", href: seoValue.value.favicon } : undefined;
+
+    return {
+      link: [defaultCanonical, ...(iconLink ? [iconLink] : [])],
+    };
+  });
 };
