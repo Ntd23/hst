@@ -21,7 +21,7 @@ class HomeController extends Controller
      */
     public function getMeta(Request $request)
     {
-        $locale = $request->input('locale', app()->getLocale());
+        $locale = $this->getApiLocale($request);
         $cacheKey = "api:pages:home:meta:{$locale}";
 
         $payload = Cache::remember($cacheKey, 300, function () use ($locale) {
@@ -33,23 +33,20 @@ class HomeController extends Controller
             $ogImage = null;
 
             // Fallback: nếu admin set seo_meta trực tiếp trên Page model của homepage
-            $homepageId = theme_option('homepage_id');
-            if ($homepageId) {
-                $page = Page::find($homepageId);
-                if ($page) {
-                    $meta = $page->getMetaData('seo_meta', true);
-                    if (!empty($meta['seo_title'])) {
-                        $seoTitle = $meta['seo_title'];
-                    }
-                    if (!empty($meta['seo_description'])) {
-                        $seoDescription = $meta['seo_description'];
-                    }
-                    if (!empty($meta['seo_image'])) {
-                        $ogImage = RvMedia::getImageUrl($meta['seo_image']);
-                    }
-                    if (!empty($meta['index'])) {
-                        $seoIndex = $meta['index'] === 'index';
-                    }
+            $page = $this->getHomepage();
+            if ($page) {
+                $meta = $page->getMetaData('seo_meta', true);
+                if (!empty($meta['seo_title'])) {
+                    $seoTitle = $meta['seo_title'];
+                }
+                if (!empty($meta['seo_description'])) {
+                    $seoDescription = $meta['seo_description'];
+                }
+                if (!empty($meta['seo_image'])) {
+                    $ogImage = RvMedia::getImageUrl($meta['seo_image']);
+                }
+                if (!empty($meta['index'])) {
+                    $seoIndex = $meta['index'] === 'index';
                 }
             }
 
@@ -92,8 +89,7 @@ class HomeController extends Controller
      * GET /api/pages/home/section/simple-slider?locale=vi
      *
      * Trả về dữ liệu slider cho trang chủ theo ngôn ngữ.
-     * Botble tạo slider riêng cho mỗi ngôn ngữ (giống menu).
-     * Map locale → slider theo thứ tự supportedLocales.
+     * Web dùng shortcode [simple-slider key="home-slider"], API cũng sẽ bóc tách shortcode từ nội dung Page.
      *
      * Mỗi slide trả về:
      *   - title, description, link, image  (direct columns)
@@ -103,11 +99,42 @@ class HomeController extends Controller
      */
     public function getSectionSimpleSlider(Request $request)
     {
-        $locale = $request->input('locale', app()->getLocale());
+        $locale = $this->getApiLocale($request);
         $cacheKey = "api:pages:home:simple-slider:{$locale}";
 
-        $payload = Cache::remember($cacheKey, 300, function () use ($locale) {
-            $slider = $this->getSliderByLocale($locale);
+        $payload = Cache::remember($cacheKey, 300, function () {
+            // Lấy nội dung trang chủ
+            $page = $this->getHomepage();
+            if (!$page) {
+                return null;
+            }
+
+            // Tìm chuỗi shortcode [simple-slider ...] trong nội dung page
+            if (!preg_match_all('/\[simple-slider\s+(.*?)\]/usi', $page->content, $matches) || empty($matches[1][0])) {
+                return null;
+            }
+
+            $attributesString = $matches[1][0];
+            $attributes = [];
+
+            // Pattern lấy tất cả cặp key="value" hoặc key='value'
+            if (preg_match_all('/(\w+)=["\'](.*?)["\']/usi', $attributesString, $attrMatches)) {
+                foreach ($attrMatches[1] as $index => $key) {
+                    $attributes[$key] = $attrMatches[2][$index];
+                }
+            }
+
+            // Lấy slider key
+            $sliderKey = $attributes['key'] ?? null;
+            if (!$sliderKey) {
+                return null;
+            }
+
+            // Tìm slider theo key
+            $slider = SimpleSlider::query()
+                ->wherePublished()
+                ->where('key', $sliderKey)
+                ->first();
 
             if (!$slider || $slider->sliderItems->isEmpty()) {
                 return null;
@@ -142,7 +169,6 @@ class HomeController extends Controller
             })->values()->toArray();
 
             return [
-                'locale' => $locale,
                 'slider_id' => $slider->id,
                 'slider_key' => $slider->key,
                 'slider_name' => (string) $slider->name,
@@ -152,7 +178,103 @@ class HomeController extends Controller
 
         if (!$payload) {
             return response()->json([
-                'message' => "No published slider found for locale: {$locale}",
+                'message' => "No published slider shortcode found in homepage content.",
+                'locale' => $locale,
+                'data' => null,
+            ], 404, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        $payload['locale'] = $locale;
+
+        return response()->json($payload, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+    /**
+     * GET /api/pages/home/section/services?locale=vi
+     *
+     * Trả về dữ liệu của section "Services" từ shortcode ở trang chủ.
+     * Web nhận $shortcode (attributes) và $services, API cũng sẽ trả về đúng cấu trúc như vậy.
+     */
+    public function getSectionServices(Request $request)
+    {
+        $locale = $this->getApiLocale($request);
+        $cacheKey = "api:pages:home:services:{$locale}";
+
+        $payload = Cache::remember($cacheKey, 300, function () {
+            // Lấy nội dung trang chủ
+            $page = $this->getHomepage();
+            if (!$page) {
+                return null;
+            }
+
+            // Tìm chuỗi shortcode [services ...] trong nội dung page
+            // Trích xuất phần cấu hình bên trong (attributes)
+            if (!preg_match_all('/\[services\s+(.*?)\]/usi', $page->content, $matches) || empty($matches[1][0])) {
+                return null;
+            }
+
+            $attributesString = $matches[1][0];
+            $attributes = [];
+
+            // Pattern lấy tất cả cặp key="value" hoặc key='value'
+            if (preg_match_all('/(\w+)=["\'](.*?)["\']/usi', $attributesString, $attrMatches)) {
+                foreach ($attrMatches[1] as $index => $key) {
+                    $attributes[$key] = $attrMatches[2][$index];
+                }
+            }
+
+            // Lấy danh sách ID từ attribute service_ids
+            $serviceIds = isset($attributes['service_ids']) ? explode(',', $attributes['service_ids']) : [];
+            if (empty($serviceIds)) {
+                return null;
+            }
+
+            // Lấy dữ liệu services như Web đang lấy
+            $services = \Botble\Portfolio\Models\Service::query()
+                ->with(['metadata', 'slugable'])
+                ->wherePublished()
+                ->whereIn('id', $serviceIds)
+                ->get();
+
+            if ($services->isEmpty()) {
+                return null;
+            }
+
+            // Format lại data cho services
+            $items = $services->map(function ($service) {
+                return [
+                    'id' => $service->id,
+                    'name' => (string) $service->name,
+                    'description' => (string) $service->description,
+                    'image' => $service->image ? RvMedia::getImageUrl($service->image) : null,
+                    'slug' => $service->slug,
+                    // Metadata theo định nghĩa của functions/shortcode-portfolio.php
+                    'icon' => $service->getMetaData('icon', true) ?: null,
+                    'icon_image' => ($v = $service->getMetaData('icon_image', true))
+                        ? RvMedia::getImageUrl($v) : null,
+                ];
+            })->values()->toArray();
+
+            // Format lại data cho shortcode attributes
+            $bgImage = isset($attributes['background_image']) ? RvMedia::getImageUrl($attributes['background_image']) : null;
+
+            return [
+                'shortcode' => [
+                    'style' => $attributes['style'] ?? 'style-1',
+                    'title' => $attributes['title'] ?? null,
+                    'subtitle' => $attributes['subtitle'] ?? null,
+                    'description' => $attributes['description'] ?? null,
+                    'button_label' => $attributes['button_label'] ?? null,
+                    'button_url' => $attributes['button_url'] ?? null,
+                    'background_color' => $attributes['background_color'] ?? null,
+                    'background_image' => $bgImage,
+                ],
+                'services' => $items,
+            ];
+        });
+
+        if (!$payload) {
+            return response()->json([
+                'message' => 'Services section not found or empty',
                 'locale' => $locale,
                 'data' => null,
             ], 404, [], JSON_UNESCAPED_UNICODE);
@@ -162,41 +284,16 @@ class HomeController extends Controller
     }
 
     /**
-     * Tìm SimpleSlider theo locale.
-     * Botble tạo slider riêng cho mỗi ngôn ngữ, cùng kiểu list.
-     * Row thứ N trong danh sách published sliders (order by id)
-     * tương ứng với ngôn ngữ thứ N trong supportedLocales.
-     *
-     * DB hiện tại:
-     *   id=2 (home-silde)    → vi (index 0 nếu vi đứng trước)
-     *   id=3 (main-menu-eng) → en (index 1)
+     * Helper method để lấy model Page của Trang Chủ (Homepage)
+     * Botble lưu ID của trang chủ trong bảng theme_options với key 'homepage_id'.
      */
-    private function getSliderByLocale(string $locale): ?SimpleSlider
+    protected function getHomepage(): ?Page
     {
-        $supportedLocales = array_keys(config('laravellocalization.supportedLocales', []));
-        if (empty($supportedLocales)) {
-            $supportedLocales = ['vi', 'en'];
-        }
-
-        $localeIndex = array_search($locale, $supportedLocales);
-        if ($localeIndex === false) {
+        $homepageId = theme_option('homepage_id');
+        if (!$homepageId) {
             return null;
         }
 
-        // Lấy tất cả sliders published, order by id ASC
-        // Row thứ N tương ứng với ngôn ngữ thứ N
-        $sliders = SimpleSlider::query()
-            ->wherePublished()
-            ->orderBy('id')
-            ->get();
-
-        $slider = $sliders->get($localeIndex);
-
-        // Fallback: lấy row đầu tiên nếu index vượt quá
-        if (!$slider) {
-            $slider = $sliders->first();
-        }
-
-        return $slider;
+        return Page::find($homepageId);
     }
 }

@@ -12,6 +12,7 @@ html,
 body,
 #__nuxt {
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
