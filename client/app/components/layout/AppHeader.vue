@@ -17,7 +17,7 @@
             v-if="headerData?.logo?.logo"
             :src="headerData.logo.logo"
             :alt="headerData?.logo?.site_title"
-            class="h-10 w-auto"
+            class="h-7 sm:h-10 w-auto"
           />
           <span
             v-else
@@ -138,7 +138,7 @@
 
         <!-- Mobile locale toggle — compact, next to hamburger -->
         <button
-          class="lg:hidden flex items-center justify-center w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 text-xs font-bold text-primary transition-all duration-200 active:scale-90"
+          class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg border border-primary/40 text-[11px] font-bold text-primary hover:bg-primary/10 transition-all duration-200 active:scale-90"
           @click="switchLocale(locale === 'vi' ? 'en' : 'vi')"
         >
           {{ locale === "vi" ? "EN" : "VN" }}
@@ -149,7 +149,7 @@
           variant="ghost"
           :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
           size="lg"
-          class="lg:hidden nav-muted"
+          class="lg:hidden"
           :aria-expanded="isMobileMenuOpen"
           aria-label="Toggle mobile menu"
           @click="isMobileMenuOpen = !isMobileMenuOpen"
@@ -414,15 +414,14 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   min-width: 230px;
 
-  /* Khớp với glass-nav */
-  background: rgba(248, 250, 252, 0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.88);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1),
+  /* glass-panel style */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 124, 195, 0.08),
     0 0 0 1px rgba(0, 124, 195, 0.06);
 
-  /* Accent border trên */
   border-top: 2px solid transparent;
   background-clip: padding-box;
   border-radius: 0 0 1rem 1rem;
@@ -431,22 +430,6 @@ onBeforeUnmount(() => {
   z-index: 100;
   list-style: none;
 
-  /* Caret */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -7px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 12px;
-    height: 12px;
-    background: rgba(248, 250, 252, 0.96);
-    border-left: 1px solid rgba(255, 255, 255, 0.88);
-    border-top: 1px solid rgba(255, 255, 255, 0.88);
-    clip-path: polygon(0 100%, 50% 0, 100% 100%);
-  }
-
-  /* Primary accent top border */
   &::after {
     content: "";
     position: absolute;
@@ -460,14 +443,9 @@ onBeforeUnmount(() => {
 }
 
 .dark .nav-dropdown {
-  background: rgba(15, 23, 42, 0.95);
-  border-color: rgba(148, 163, 184, 0.22);
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.4);
-
-  &::before {
-    background: rgba(15, 23, 42, 0.95);
-    border-color: rgba(148, 163, 184, 0.22);
-  }
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .nav-dropdown-item {
