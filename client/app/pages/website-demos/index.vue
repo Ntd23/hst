@@ -47,7 +47,7 @@ body {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <CommonsProductItem
         v-for="item in products"
-        :key="item.key"
+        :key="item.id"
         :title="item.title"
         :image="item.image"
       />
@@ -70,8 +70,9 @@ body {
             stroke-linejoin="round"
           >
             <path d="M19 12H5" />
-            <path d="M11 19l-7-7 7-7" /></svg
-        ></span>
+            <path d="M11 19l-7-7 7-7" />
+          </svg>
+      </span>
       </a>
       <a
         class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-medium shadow-lg shadow-blue-500/30"
