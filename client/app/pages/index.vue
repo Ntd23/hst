@@ -1,5 +1,10 @@
-﻿<template>
-  <div>
+﻿<style scoped>
+.home {
+  margin-top: -70px;
+}
+</style>
+<template>
+  <div class="home">
     <!-- Above the fold: load immediately -->
     <HomeSectionsSimpleSlider />
     <HomeSectionsServices />
@@ -15,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useHomeSeo } from '~/composables/seo/useHomeSeo'
+import { useHomeSeo } from "~/composables/seo/useHomeSeo";
 
-useHomeSeo()
+useHomeSeo();
 </script>
