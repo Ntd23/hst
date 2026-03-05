@@ -23,9 +23,8 @@
         />
       </div>
 
-      <!-- Overlays -->
-      <div class="absolute inset-0 z-[3] bg-gradient-to-b from-slate-950/70 via-slate-950/45 to-slate-950/80" />
-      <div class="absolute inset-0 z-[3] bg-slate-950/20" />
+      <!-- Base overlay -->
+      <div class="absolute inset-0 z-[3] bg-gradient-to-b from-slate-950/50 via-slate-950/25 to-slate-950/60" />
     </div>
 
     <!-- ====== Center content ====== -->
@@ -43,15 +42,13 @@
           </div>
         </Transition>
 
-        <!-- Title -->
-        <Transition name="hero-text" mode="out-in">
-          <h1
-            :key="'t-' + activeSlide"
-            class="hero-title text-[1.75rem] sm:text-[2.25rem] md:text-[3rem] lg:text-[3.75rem] font-black leading-[1.1] tracking-tight uppercase mb-4 sm:mb-5 whitespace-nowrap"
-          >
-            {{ currentItem?.title || 'HISOTECH' }}
-          </h1>
-        </Transition>
+        <!-- Title — typewriter reveal -->
+        <h1
+          :key="'t-' + activeSlide"
+          class="hero-title text-[1.75rem] sm:text-[2.25rem] md:text-[3rem] lg:text-[3.75rem] font-black leading-[1.1] tracking-tight uppercase mb-4 sm:mb-5 whitespace-nowrap"
+        >
+          <span>{{ typedText }}</span><span v-if="isTyping" class="typewriter-cursor">|</span>
+        </h1>
 
         <!-- Description -->
         <Transition name="hero-text" mode="out-in">
@@ -106,6 +103,37 @@ const activeSlide = ref(0)
 const slideInterval = 6000
 let timer: ReturnType<typeof setInterval> | null = null
 
+// ===== Typewriter =====
+const typedText = ref('')
+const isTyping = ref(false)
+let typeTimer: ReturnType<typeof setTimeout> | null = null
+
+const typeTitle = (text: string) => {
+  if (typeTimer) clearTimeout(typeTimer)
+  typedText.value = ''
+  isTyping.value = true
+  let i = 0
+  const speed = 45 // ms per character
+
+  const tick = () => {
+    if (i < text.length) {
+      typedText.value = text.slice(0, i + 1)
+      i++
+      typeTimer = setTimeout(tick, speed)
+    } else {
+      // Cursor blinks briefly then disappears
+      setTimeout(() => { isTyping.value = false }, 800)
+    }
+  }
+  tick()
+}
+
+// Re-type whenever slide changes
+watch(() => currentItem.value?.title, (newTitle) => {
+  typeTitle(newTitle || 'HISOTECH')
+}, { immediate: true })
+
+// ===== Slide navigation =====
 const goToSlide = (index: number) => {
   activeSlide.value = index
   resetTimer()
@@ -121,8 +149,13 @@ const resetTimer = () => {
   timer = setInterval(nextSlide, slideInterval)
 }
 
-onMounted(() => resetTimer())
-onBeforeUnmount(() => { if (timer) clearInterval(timer) })
+onMounted(() => {
+  resetTimer()
+})
+onBeforeUnmount(() => {
+  if (timer) clearInterval(timer)
+  if (typeTimer) clearTimeout(typeTimer)
+})
 </script>
 
 <style scoped>
@@ -133,8 +166,9 @@ onBeforeUnmount(() => { if (timer) clearInterval(timer) })
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== CTA Button — pill with arrow circle ===== */
+/* ===== CTA Button — pill with glowing border ===== */
 .hero-cta-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.875rem;
@@ -144,16 +178,59 @@ onBeforeUnmount(() => { if (timer) clearInterval(timer) })
   font-weight: 700;
   letter-spacing: 0.05em;
   color: white;
-  background: linear-gradient(135deg, var(--color-primary), #0091d5);
-  box-shadow:
-    0 8px 32px rgba(0, 124, 195, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  background: transparent;
+  box-shadow: 0 8px 32px rgba(0, 124, 195, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.hero-cta-btn > span {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-cta-btn::before {
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -50%;
+  width: 200%;
+  height: 400%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 25%,
+    transparent 28%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.8) 75%,
+    transparent 78%
+  );
+  animation: border-spin 3s linear infinite;
+  z-index: -2;
+}
+
+.hero-cta-btn::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--color-primary), #0091d5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  z-index: -1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes border-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .hero-cta-icon {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,14 +243,17 @@ onBeforeUnmount(() => { if (timer) clearInterval(timer) })
 
 .hero-cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 14px 40px rgba(0, 124, 195, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+  box-shadow: 0 14px 40px rgba(0, 124, 195, 0.5);
+}
+
+.hero-cta-btn:hover::after {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
 }
 
 .hero-cta-btn:hover .hero-cta-icon {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(3px);
+  background: white;
+  color: var(--color-primary);
+  transform: translateX(3px) scale(1.05);
 }
 
 .hero-cta-btn:active {
@@ -214,5 +294,18 @@ onBeforeUnmount(() => { if (timer) clearInterval(timer) })
 .hero-text-leave-to {
   opacity: 0;
   transform: translateY(-6px);
+}
+
+/* ===== Typewriter cursor ===== */
+.typewriter-cursor {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 300;
+  animation: blink 0.6s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 </style>
