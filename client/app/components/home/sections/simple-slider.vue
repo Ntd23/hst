@@ -116,18 +116,11 @@
 <script setup lang="ts">
 const { locale } = useI18n();
 
-const { data: heroData } = await useFetch<any>(
-  "/api/pages/home/section/simple-slider",
-  {
-    key: `simple-slider-section-${locale.value}`,
-    query: computed(() => ({ locale: locale.value })),
-  }
-);
+const { data: heroData } = await usePageSection<any>('home', 'simple-slider')
 
-const sliderItems = computed(() => heroData.value?.items ?? []);
-const currentItem = computed(
-  () => sliderItems.value[activeSlide.value] ?? null
-);
+const sliderData = computed(() => heroData.value?.data || heroData.value || {})
+const sliderItems = computed(() => sliderData.value?.items ?? [])
+const currentItem = computed(() => sliderItems.value[activeSlide.value] ?? null)
 
 const activeSlide = ref(0);
 const slideInterval = 6000;
