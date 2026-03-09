@@ -27,6 +27,9 @@ use Botble\Shortcode\Forms\ShortcodeForm;
 use Botble\Theme\Facades\Theme;
 use Botble\Theme\Supports\ThemeSupport;
 use Illuminate\Support\Arr;
+use Botble\Blog\Models\Post;
+use Botble\Base\Forms\Fields\SelectField;
+
 
 app()->booted(function (): void {
     ThemeSupport::registerGoogleMapsShortcode();
@@ -812,5 +815,49 @@ app()->booted(function (): void {
                     ->label(__('Background color'))
                     ->toArray(),
             );
+    });
+
+
+    Shortcode::register('blog-post-featured', __('Blog post featured'), __('Blog post featured'), function (ShortcodeCompiler $shortcode): ?string {
+        return Theme::partial('shortcodes.blog-post-featured.index', compact('shortcode'));
+    });
+    Shortcode::setAdminConfig('blog-post-featured', function (array $attributes) {
+        $posts = Post::pluck('name', 'id')->toArray();
+        return ShortcodeForm::createFromArray($attributes)
+            ->withLazyLoading()
+            ->add(
+                'title',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Title'))
+                    ->toArray()
+            )
+            ->add(
+                'post_1',
+                SelectField::class,
+                [
+                    'label' => __('Post 1'),
+                    'choices' => $posts,
+                ]
+            )
+
+            ->add(
+                'post_2',
+                SelectField::class,
+                [
+                    'label' => __('Post 2'),
+                    'choices' => $posts,
+                ]
+            )
+
+            ->add(
+                'post_3',
+                SelectField::class,
+                [
+                    'label' => __('Post 3'),
+                    'choices' => $posts,
+                ]
+            );
+
     });
 });

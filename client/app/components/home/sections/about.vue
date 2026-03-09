@@ -9,39 +9,62 @@
               class="absolute inset-0 w-full h-full object-cover"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCHUdoQzkyJyHSuXCOsT2GfJBZBTxu_AKMayMBmdyMmf2HtkGIzPZFlr7NsdSHCnLnGkbrlABQa5pFNooQ_JdErsHBcWrQoXXCF_XeG_WGk0fph97Qn9kOOcw4VJKC_NtJTX-HXKa55iyxHkbM8J51M6_pEJi1XnRJeCp3LbnDHyauKU26GhzW64f7LZbAuKAJI4sLMiBTjIbObnmGu6nCJw9aPBNtuhCwvKE5rFtQmn7vokbgG9aqLnf3_GcUj78lAT7g_g_ZQaU"
             />
-            <div class="absolute inset-0 from-primary/80 to-transparent mix-blend-multiply" />
-            <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 glass-panel-darker p-4 sm:p-6 rounded-2xl">
+            <div
+              class="absolute inset-0 from-primary/80 to-transparent mix-blend-multiply"
+            />
+            <div
+              class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 glass-panel-darker p-4 sm:p-6 rounded-2xl"
+            >
               <div class="flex items-center gap-4 mb-4">
                 <div class="p-2.5 sm:p-3 bg-blue-100 rounded-full text-primary">
                   <UIcon name="i-lucide-users" class="size-5 sm:size-6" />
                 </div>
                 <div>
-                  <h4 class="font-bold text-sm sm:text-base text-slate-800">{{ $t('about.creativeTeam') }}</h4>
-                  <p class="text-sm text-slate-600">{{ $t('about.creativeTeamDesc') }}</p>
+                  <h4 class="font-bold text-sm sm:text-base text-slate-800">
+                    {{ $t("about.creativeTeam") }}
+                  </h4>
+                  <p class="text-sm text-slate-600">
+                    {{ $t("about.creativeTeamDesc") }}
+                  </p>
                 </div>
               </div>
               <div class="flex items-center gap-4">
-                <div class="p-2.5 sm:p-3 bg-yellow-100 rounded-full text-secondary">
+                <div
+                  class="p-2.5 sm:p-3 bg-yellow-100 rounded-full text-secondary"
+                >
                   <UIcon name="i-lucide-sun" class="size-5 sm:size-6" />
                 </div>
                 <div>
-                  <h4 class="font-bold text-slate-800">{{ $t('about.vision') }}</h4>
-                  <p class="text-sm text-slate-600">{{ $t('about.visionDesc') }}</p>
+                  <h4 class="font-bold text-slate-800">
+                    {{ $t("about.vision") }}
+                  </h4>
+                  <p class="text-sm text-slate-600">
+                    {{ $t("about.visionDesc") }}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <div class="p-6 sm:p-10 lg:p-16 flex flex-col justify-center relative">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
-            <span class="text-secondary font-semibold tracking-wide uppercase text-sm mb-4 block">{{ $t('about.subtitle') }}</span>
-            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-              {{ $t('about.title') }}
+          <div
+            class="p-6 sm:p-10 lg:p-16 flex flex-col justify-center relative"
+          >
+            <div
+              class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"
+            />
+            <span
+              class="text-secondary font-semibold tracking-wide uppercase text-sm mb-4 block"
+              >{{ $t("about.subtitle") }}</span
+            >
+            <h2
+              class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6"
+            >
+              {{ $t("about.title") }}
             </h2>
             <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-              {{ $t('about.description1') }}
+              {{ $t("about.description1") }}
             </p>
             <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-              {{ $t('about.description2') }}
+              {{ $t("about.description2") }}
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
               <UButton
@@ -51,7 +74,7 @@
                 trailing-icon="i-lucide-arrow-right"
                 class="rounded-xl font-semibold w-full sm:w-auto btn-primary-elevated"
               >
-                {{ $t('about.learnMore') }}
+                {{ $t("about.learnMore") }}
               </UButton>
               <div class="flex flex-wrap items-center gap-4 px-2 sm:px-4 py-2">
                 <div class="flex -space-x-4">
@@ -71,7 +94,10 @@
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr9zEGg0hz9OBsBr5iRGQAmVFOxoZBu5wrrw0irWCDKJrlaTHMelMPnx7MytRdWT3dGk8gVCJhLpF9GH-Cv_AFx2bFltEdEAvHQtQxC0Lqkms1_e0HJABJtMdO7ooFhgID5qMl4xrPQL6lBrst8XbG47FwKYfZoaVz59e36oZnc4cjvY6jHFJtYTxEKlvGqDqhxfLQXxiASRhhZq0nzk_AhuOYqDt6Ii4Z4hECPxQDDd8Mhlp4zcbyRhCYS2uuAcGIs-B0wNCRMhE"
                   />
                 </div>
-                <span class="text-sm font-medium text-slate-600 dark:text-slate-300">{{ $t('about.experts') }}</span>
+                <span
+                  class="text-sm font-medium text-slate-600 dark:text-slate-300"
+                  >{{ $t("about.experts") }}</span
+                >
               </div>
             </div>
           </div>

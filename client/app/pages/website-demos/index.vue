@@ -40,7 +40,22 @@ body {
         class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400"
       >
         <a class="hover:text-primary" href="#">Trang chủ</a>
-        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="material-symbols-outlined text-[14px]"
+          ><span class="material-symbols-outlined text-sm"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14" />
+              <path d="M13 5l7 7-7 7" /></svg></span
+        ></span>
         <span class="text-primary font-medium">Phần mềm demo</span>
       </div>
     </div>
@@ -72,7 +87,7 @@ body {
             <path d="M19 12H5" />
             <path d="M11 19l-7-7 7-7" />
           </svg>
-      </span>
+        </span>
       </a>
       <a
         class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-medium shadow-lg shadow-blue-500/30"
