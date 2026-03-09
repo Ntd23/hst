@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Api\CommonController;
+use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\Pages\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,8 @@ Route::prefix('pages')->group(function () {
     Route::get('home/meta',              [HomeController::class, 'getMeta']);   // ?locale=vi
    Route::get('home/section/simple-slider', [HomeController::class,'getSectionSimpleSlider']);
    Route::get('home/section/services', [HomeController::class,'getSectionServices']);
+});
 
+Route::prefix('blog')->group(function () {
+    Route::get('/',[BlogController::class, 'getBlogs']);
 });

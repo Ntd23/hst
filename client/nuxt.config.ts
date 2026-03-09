@@ -23,7 +23,7 @@ export default defineNuxtConfig({
       allowedHosts: ['hst.test'],
     },
   },
-  modules: ['@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n'],
+  modules: ['@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n', '@pinia/nuxt'],
   i18n: {
     locales: [
       { code: 'vi', language: 'vi-VN', name: 'Tiếng Việt', file: 'vi.json' },
