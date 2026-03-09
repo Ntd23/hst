@@ -1,6 +1,7 @@
 ﻿<template>
-  <header class="relative h-screen min-h-[560px] max-h-[960px] overflow-hidden bg-slate-950">
-
+  <header
+    class="relative h-screen min-h-[560px] max-h-[960px] overflow-hidden bg-slate-950"
+  >
     <!-- ====== Background images — crossfade ====== -->
     <div class="absolute inset-0">
       <div
@@ -24,21 +25,33 @@
       </div>
 
       <!-- Base overlay -->
-      <div class="absolute inset-0 z-[3] bg-gradient-to-b from-slate-950/50 via-slate-950/25 to-slate-950/60" />
+      <div
+        class="absolute inset-0 z-[3] bg-gradient-to-b from-slate-950/50 via-slate-950/25 to-slate-950/60"
+      />
     </div>
 
     <!-- ====== Center content ====== -->
-    <div class="relative z-10 h-full flex items-center justify-center px-5 sm:px-8">
+    <div
+      class="relative z-10 h-full flex items-center justify-center px-5 sm:px-8"
+    >
       <div class="text-center max-w-3xl mx-auto">
-
         <!-- Accent line + subtitle -->
         <Transition name="hero-text" mode="out-in">
-          <div :key="'sub-' + activeSlide" class="flex items-center justify-center gap-3 mb-5 sm:mb-6">
-            <span class="h-px w-6 sm:w-8 bg-gradient-to-r from-transparent to-white/40" />
-            <span class="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/70">
-              {{ currentItem?.data_count_description || '' }}
+          <div
+            :key="'sub-' + activeSlide"
+            class="flex items-center justify-center gap-3 mb-5 sm:mb-6"
+          >
+            <span
+              class="h-px w-6 sm:w-8 bg-gradient-to-r from-transparent to-white/40"
+            />
+            <span
+              class="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/70"
+            >
+              {{ currentItem?.data_count_description || "" }}
             </span>
-            <span class="h-px w-6 sm:w-8 bg-gradient-to-l from-transparent to-white/40" />
+            <span
+              class="h-px w-6 sm:w-8 bg-gradient-to-l from-transparent to-white/40"
+            />
           </div>
         </Transition>
 
@@ -47,7 +60,8 @@
           :key="'t-' + activeSlide"
           class="hero-title text-[1.75rem] sm:text-[2.25rem] md:text-[3rem] lg:text-[3.75rem] font-black leading-[1.1] tracking-tight uppercase mb-4 sm:mb-5 whitespace-nowrap"
         >
-          <span>{{ typedText }}</span><span v-if="isTyping" class="typewriter-cursor">|</span>
+          <span>{{ typedText }}</span
+          ><span v-if="isTyping" class="typewriter-cursor">|</span>
         </h1>
 
         <!-- Description -->
@@ -64,11 +78,19 @@
         <!-- CTA Button -->
         <Transition name="hero-text" mode="out-in">
           <div :key="'cta-' + activeSlide">
-            <NuxtLink v-if="currentItem?.button_label" :to="currentItem.link || '#'">
+            <NuxtLink
+              v-if="currentItem?.button_label"
+              :to="currentItem.link || '#'"
+            >
               <button class="hero-cta-btn group">
-                <span class="uppercase tracking-wider">{{ currentItem.button_label }}</span>
+                <span class="uppercase tracking-wider">{{
+                  currentItem.button_label
+                }}</span>
                 <span class="hero-cta-icon">
-                  <UIcon name="i-heroicons-arrow-right-20-solid" class="w-4 h-4" />
+                  <UIcon
+                    name="i-heroicons-arrow-right-20-solid"
+                    class="w-4 h-4"
+                  />
                 </span>
               </button>
             </NuxtLink>
@@ -78,7 +100,10 @@
     </div>
 
     <!-- ====== Bottom progress bar ====== -->
-    <div v-if="sliderItems.length > 1" class="absolute bottom-0 left-0 right-0 z-20 h-[3px] bg-white/[0.06]">
+    <div
+      v-if="sliderItems.length > 1"
+      class="absolute bottom-0 left-0 right-0 z-20 h-[3px] bg-white/[0.06]"
+    >
       <div
         :key="'bar-' + activeSlide"
         class="h-full bg-gradient-to-r from-primary to-primary/50 origin-left animate-slide-progress"
@@ -89,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-const { locale } = useI18n()
+const { locale } = useI18n();
 
 const { data: heroData } = await usePageSection<any>('home', 'simple-slider')
 
@@ -97,69 +122,75 @@ const sliderData = computed(() => heroData.value?.data || heroData.value || {})
 const sliderItems = computed(() => sliderData.value?.items ?? [])
 const currentItem = computed(() => sliderItems.value[activeSlide.value] ?? null)
 
-const activeSlide = ref(0)
-const slideInterval = 6000
-let timer: ReturnType<typeof setInterval> | null = null
+const activeSlide = ref(0);
+const slideInterval = 6000;
+let timer: ReturnType<typeof setInterval> | null = null;
 
 // ===== Typewriter =====
-const typedText = ref('')
-const isTyping = ref(false)
-let typeTimer: ReturnType<typeof setTimeout> | null = null
+const typedText = ref("");
+const isTyping = ref(false);
+let typeTimer: ReturnType<typeof setTimeout> | null = null;
 
 const typeTitle = (text: string) => {
-  if (typeTimer) clearTimeout(typeTimer)
-  typedText.value = ''
-  isTyping.value = true
-  let i = 0
-  const speed = 45 // ms per character
+  if (typeTimer) clearTimeout(typeTimer);
+  typedText.value = "";
+  isTyping.value = true;
+  let i = 0;
+  const speed = 45; // ms per character
 
   const tick = () => {
     if (i < text.length) {
-      typedText.value = text.slice(0, i + 1)
-      i++
-      typeTimer = setTimeout(tick, speed)
+      typedText.value = text.slice(0, i + 1);
+      i++;
+      typeTimer = setTimeout(tick, speed);
     } else {
       // Cursor blinks briefly then disappears
-      setTimeout(() => { isTyping.value = false }, 800)
+      setTimeout(() => {
+        isTyping.value = false;
+      }, 800);
     }
-  }
-  tick()
-}
+  };
+  tick();
+};
 
 // Re-type whenever slide changes
-watch(() => currentItem.value?.title, (newTitle) => {
-  typeTitle(newTitle || 'HISOTECH')
-}, { immediate: true })
+watch(
+  () => currentItem.value?.title,
+  (newTitle) => {
+    typeTitle(newTitle || "HISOTECH");
+  },
+  { immediate: true }
+);
 
 // ===== Slide navigation =====
 const goToSlide = (index: number) => {
-  activeSlide.value = index
-  resetTimer()
-}
+  activeSlide.value = index;
+  resetTimer();
+};
 
 const nextSlide = () => {
   if (sliderItems.value.length > 1)
-    activeSlide.value = (activeSlide.value + 1) % sliderItems.value.length
-}
+    activeSlide.value = (activeSlide.value + 1) % sliderItems.value.length;
+};
 
 const resetTimer = () => {
-  if (timer) clearInterval(timer)
-  timer = setInterval(nextSlide, slideInterval)
-}
+  if (timer) clearInterval(timer);
+  timer = setInterval(nextSlide, slideInterval);
+};
 
 onMounted(() => {
-  resetTimer()
-})
+  resetTimer();
+});
 onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
-  if (typeTimer) clearTimeout(typeTimer)
-})
+  if (timer) clearInterval(timer);
+  if (typeTimer) clearTimeout(typeTimer);
+});
 </script>
 
 <style scoped>
 /* ===== Title ===== */
 .hero-title {
-  font-family: 'Monda', sans-serif;
+  font-family: "Monda", sans-serif;
   color: white;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3);
 }
@@ -222,8 +253,12 @@ onBeforeUnmount(() => {
 }
 
 @keyframes border-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .hero-cta-icon {
@@ -264,14 +299,22 @@ onBeforeUnmount(() => {
 }
 
 @keyframes slowZoom {
-  from { transform: scale(1); }
-  to   { transform: scale(1.06); }
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
 }
 
 /* ===== Progress bar ===== */
 @keyframes slideProgress {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .animate-slide-progress {
@@ -304,6 +347,8 @@ onBeforeUnmount(() => {
 }
 
 @keyframes blink {
-  50% { opacity: 0; }
+  50% {
+    opacity: 0;
+  }
 }
 </style>

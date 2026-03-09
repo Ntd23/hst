@@ -20,7 +20,7 @@
     class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1"
   >
     <div class="relative overflow-hidden h-56">
-      <img
+      <NuxtImg
         alt="Real Estate Website Demo"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         :src="image"

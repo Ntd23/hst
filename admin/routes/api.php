@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Api\CommonController;
+use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\Pages\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,6 @@ Route::prefix('pages')->group(function () {
    Route::get('home/section/faqs', [HomeController::class,'getSectionFaqs']);
    Route::get('home/section/blog-posts', [HomeController::class,'getSectionBlogPosts']);
 
+Route::prefix('blog')->group(function () {
+    Route::get('/',[BlogController::class, 'getBlogs']);
 });
