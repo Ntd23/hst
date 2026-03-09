@@ -230,8 +230,6 @@
 </template>
 
 <script setup lang="ts">
-import { useHeader } from "~/composables/common/useHeader";
-
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
 const activeDropdown = ref<string | number | null>(null);
@@ -244,10 +242,10 @@ const availableLocales = computed(
 const { t } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 
-const { data: headerResponse } = await useHeader();
-const headerData = computed(
-  () => headerResponse.value?.data || headerResponse.value || null
-);
+// Pinia-backed header — SSR awaits data, client caches across pages
+await useHeader();
+const commonStore = useCommonStore();
+const headerData = computed(() => commonStore.headerData);
 
 const switchLocale = (code: string) => {
   const path = switchLocalePath(code as "vi" | "en");
@@ -256,19 +254,9 @@ const switchLocale = (code: string) => {
   }
 };
 
-const navItems = computed(() => [
-  { label: t("nav.home"), to: "#" },
-  { label: t("nav.products"), to: "products" },
-  { label: t("nav.software"), to: "#" },
-  { label: t("nav.about"), to: "#" },
-  { label: t("nav.news"), to: "#" },
-]);
-
+// Menu items from API (no static fallback needed)
 const computedNavItems = computed(() => {
-  if (headerData.value?.main_menu?.items) {
-    return headerData.value.main_menu.items;
-  }
-  return navItems.value;
+  return headerData.value?.main_menu?.items ?? [];
 });
 
 const handleScroll = () => {

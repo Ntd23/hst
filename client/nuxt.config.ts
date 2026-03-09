@@ -17,13 +17,13 @@ export default defineNuxtConfig({
       link: [],
     },
   },
-  css: ['./app/assets/css/main.css'],
+  css: ['~/assets/css/main.css'],
   vite: {
     server: {
       allowedHosts: ['hst.test'],
     },
   },
-  modules: ['@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n', '@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/ui', '@vueuse/motion/nuxt', '@nuxt/image', '@nuxtjs/i18n'],
   i18n: {
     locales: [
       { code: 'vi', language: 'vi-VN', name: 'Tiếng Việt', file: 'vi.json' },
@@ -34,8 +34,10 @@ export default defineNuxtConfig({
     langDir: 'locales',
     detectBrowserLanguage: false,
   },
+  imports: {
+    dirs: ['composables/**', 'stores'],
+  },
   routeRules: {},
-  srcDir: 'app/',
   runtimeConfig: {
     apiBaseUrl: 'http://127.0.0.1:8000/api',
     public: {

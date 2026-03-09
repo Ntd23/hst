@@ -1,0 +1,221 @@
+# 🚀 Deploy HST lên Virtualmin (Apache + Laravel + Nuxt 3 SSR)
+
+## Kiến trúc
+
+```mermaid
+graph LR
+    Client["Browser<br/>hst.yourdomain.com"] --> Apache["Apache (port 80/443)"]
+    Apache -->|"/admin, /api, /storage, /vendor"| PHP["PHP-FPM<br/>(Laravel)"]
+    Apache -->|"/"| PM2["PM2 → Nuxt 3 SSR<br/>(port 3000)"]
+```
+
+> [!IMPORTANT]
+> - Production **KHÔNG** dùng `php artisan serve`. Laravel chạy qua **PHP-FPM** trực tiếp.
+> - Nuxt 3 chạy ở chế độ **SSR** → data fetch từ API mỗi request → **admin cập nhật content thì user reload là thấy**, không cần build lại.
+> - `npm run build` chỉ chạy **1 lần khi deploy** hoặc **khi thay đổi code frontend**.
+
+---
+
+## 1️⃣ Tạo Virtual Server trong Virtualmin
+
+1. Virtualmin → **Create Virtual Server**
+2. Domain: `hst.yourdomain.com`
+3. Enable **Apache website**
+
+---
+
+## 2️⃣ Upload code
+
+```bash
+# Cấu trúc trên server
+/home/hst/
+├── admin/          # Laravel
+│   ├── public/
+├── client/         # Nuxt 3
+│   ├── .output/    # Nuxt build output (tạo sau khi build)
+```
+
+```bash
+ssh user@your-server-ip
+cd /home/hst
+git clone <your-repo> admin
+git clone <your-repo> client
+```
+
+---
+
+## 3️⃣ Setup Laravel
+
+```bash
+cd /home/hst/admin
+composer install --no-dev --optimize-autoloader
+cp .env.example .env
+nano .env
+```
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://hst.yourdomain.com
+DB_DATABASE=hst_db
+DB_USERNAME=hst_user
+DB_PASSWORD=your_password
+```
+
+```bash
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+chown -R www-data:www-data /home/hst/admin
+chmod -R 775 /home/hst/admin/storage /home/hst/admin/bootstrap/cache
+```
+
+---
+
+## 4️⃣ Setup Nuxt 3 (SSR)
+
+```bash
+cd /home/hst/client
+npm install
+
+# Build 1 lần duy nhất (chỉ build lại khi thay đổi CODE, không phải content)
+npm run build
+```
+
+### Chạy bằng PM2
+
+```bash
+npm install -g pm2
+
+# Start Nuxt 3 SSR server
+pm2 start .output/server/index.mjs --name "hst-client"
+
+# Auto-restart khi reboot
+pm2 save
+pm2 startup
+```
+
+> [!TIP]
+> **Vì SSR**: Nuxt gọi API Laravel mỗi request → admin cập nhật nội dung → user reload trang là thấy ngay. **Không cần build lại, không cần restart PM2.**
+
+---
+
+## 5️⃣ Cấu hình Apache
+
+### Enable modules
+
+```bash
+sudo a2enmod proxy proxy_http proxy_wstunnel rewrite
+```
+
+### Virtual Host
+
+```bash
+sudo nano /etc/apache2/sites-available/hst.yourdomain.com.conf
+```
+
+```apache
+<VirtualHost *:80>
+    ServerName hst.yourdomain.com
+
+    DocumentRoot /home/hst/admin/public
+
+    <Directory /home/hst/admin/public>
+        AllowOverride All
+        Require all granted
+        Options -Indexes -MultiViews
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^ index.php [L]
+    </Directory>
+
+    # Laravel paths - KHÔNG proxy (PHP-FPM xử lý trực tiếp)
+    ProxyPassMatch "^/(admin|api|storage|vendor|build|favicon\.ico)(/.*)?" "!"
+
+    # Tất cả còn lại → Nuxt 3 SSR
+    ProxyPreserveHost On
+    ProxyPass        /       http://127.0.0.1:3000/
+    ProxyPassReverse /       http://127.0.0.1:3000/
+
+    ErrorLog  /home/hst/logs/error.log
+    CustomLog /home/hst/logs/access.log combined
+</VirtualHost>
+```
+
+| Request | Xử lý bởi | Cách thức |
+|---|---|---|
+| `/admin/*` | **Laravel (PHP-FPM)** | Apache serve trực tiếp |
+| `/api/*` | **Laravel (PHP-FPM)** | Apache serve trực tiếp |
+| `/storage/*` | **Laravel** | Symlink trong `public/` |
+| `/*` (còn lại) | **Nuxt 3 SSR (PM2)** | Proxy tới `127.0.0.1:3000` |
+
+```bash
+sudo systemctl restart apache2
+```
+
+---
+
+## 6️⃣ SSL (Let's Encrypt)
+
+Trong Virtualmin: **Server Configuration** → **SSL Certificate** → **Let's Encrypt** → **Request Certificate**
+
+Hoặc:
+
+```bash
+sudo apt install certbot python3-certbot-apache
+sudo certbot --apache -d hst.yourdomain.com
+```
+
+---
+
+## 7️⃣ Database
+
+Virtualmin → **Edit Databases** → **Create Database**, hoặc:
+
+```bash
+mysql -u root -p -e "
+CREATE DATABASE hst_db;
+CREATE USER 'hst_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON hst_db.* TO 'hst_user'@'localhost';
+FLUSH PRIVILEGES;"
+```
+
+---
+
+## ⚠️ Lỗi thường gặp
+
+| Lỗi | Giải pháp |
+|---|---|
+| **403 Forbidden** | `chown -R www-data:www-data /home/hst/admin` |
+| **502 Bad Gateway** | `pm2 restart hst-client` |
+| **500 Server Error** | `php artisan config:clear && php artisan key:generate` |
+| **Content không cập nhật** | Do cache — `php artisan cache:clear` ở Laravel |
+
+---
+
+## 8️⃣ Quy trình bảo trì & Cập nhật Code
+
+### Khi thay đổi code Frontend (Vue/Nuxt)
+*(Ví dụ: Sửa UI, thêm file `.vue`, đổi logic trong composables...)*
+Vì Nuxt 3 cần đóng gói các component Vue thành Javascript tối ưu hóa cho SSR, mỗi khi code frontend thay đổi bạn **bắt buộc phải build lại** dự án:
+
+```bash
+cd /home/hst/client
+git pull origin main       # Kéo code mới nhất từ git
+npm install                # (Tùy chọn) Chạy nếu có thêm thư viện mới trong package.json
+npm run build              # Build lại ứng dụng Vue/Nuxt
+pm2 restart hst-client     # Khởi động lại tiến trình SSR để code mới có hiệu lực
+```
+
+### Tóm tắt các trường hợp khác:
+
+| Thay đổi | Cần làm |
+|---|---|
+| Admin sửa nội dung, thông tin (Bài viết, Ảnh...) | **Không cần làm gì** — do SSR nên user F5 là thấy nội dung mới. |
+| Thay đổi code **backend API** (Laravel) | `cd admin` → `git pull` → `php artisan config:cache` |
+| Thêm database migration mới (Laravel) | `cd admin` → `git pull` → PagesTemplatesContactTemplate`php artisan migrate` |
