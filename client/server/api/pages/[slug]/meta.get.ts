@@ -1,10 +1,11 @@
 import { apiFetch } from '~~/server/utils/apiFetch'
+import { getLocale } from '~~/server/utils/getLocale'
 
 export default defineEventHandler(async (event): Promise<any> => {
-  const query = getQuery(event)
-  const locale = (query.locale as string) || getCookie(event, 'i18n_redirected') || 'vi'
+  const { slug } = getRouterParams(event)
+  const locale = getLocale(event)
 
-  return apiFetch<any>('/pages/home/section/simple-slider', {
+  return apiFetch<any>(`/pages/${slug}/meta`, {
     query: { locale },
     headers: { 'X-Locale': locale },
   })

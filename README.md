@@ -30,6 +30,8 @@ Tìm và bỏ dấu `#` ở 2 dòng sau:
 ```apache
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
 
