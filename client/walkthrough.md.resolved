@@ -1,0 +1,174 @@
+# HST Client Walkthrough (Updated)
+
+Tai lieu nay mo ta luong chay that cua frontend Nuxt theo code hien tai.
+Muc tieu: nguoi moi vao project doc xong co the hieu cach route, fetch data, va mo rong trang moi ma khong doan.
+
+## 1) Kien truc tong quan
+
+- Frontend: Nuxt (SSR + CSR).
+- Backend: Laravel API (hien tai chu yeu co `common/header` va `pages/home/*`).
+- FE khong goi Laravel truc tiep tu component. FE goi qua Nitro server API trong `server/api/*`.
+
+Luong tong quat:
+
+1. Request vao Nuxt route.
+2. Layout load global data (header) qua store.
+3. Page load du lieu rieng.
+4. SSR render HTML.
+5. Client hydrate va dieu huong tiep theo theo SPA.
+
+## 2) Routing hien tai
+
+### 2.1 Trang tinh
+
+- `app/pages/index.vue`: Trang chu.
+- `app/pages/website-demos/index.vue`
+- `app/pages/website-demo/index.vue`
+
+### 2.2 Dynamic route catch-all
+
+- `app/pages/[...slug].vue`
+
+File nay la router dong cho cac URL khac route tinh.
+No khong dung `/api/pages/resolve` nua.
+Thay vao do, no resolve theo menu tu Laravel:
+
+1. Fetch `common/header`.
+2. Flatten `main_menu.items` + children.
+3. Match URL hien tai voi `item.url`.
+4. Neu khong match -> 404.
+
+Guard 404 som cho system prefix:
+
+- `/api`
+- `/admin`
+- `/storage`
+- `/_nuxt`
+- `/__nuxt`
+- `/build`
+- `/vendor`
+
+## 3) Cach dynamic page duoc map
+
+Trong `app/pages/[...slug].vue`, thu tu map component:
+
+1. Map theo `menu class`:
+   - `page-contact` -> `ContactPage`
+   - `contact` -> `ContactPage`
+2. Map theo `reference_id`:
+   - `13` -> `app/pages/website-demo/index.vue`
+   - `21` -> `app/pages/website-demos/index.vue`
+3. Map theo alias URL:
+   - `/contact`
+   - `/lien-he`
+   - `/lien-he-voi-chung-toi`
+   -> `ContactPage`
+4. Neu khong roi vao case nao -> `MenuFallbackPage`.
+
+Component lien quan:
+
+- `app/components/pages/contact-page.vue`
+- `app/components/pages/menu-fallback.vue`
+
+## 4) Vi sao co luc thay loading bar, co luc khong
+
+Global loading bar nam o:
+
+- `app/app.vue` (`<NuxtLoadingIndicator .../>`)
+
+No chi hien khi dieu huong co do tre du de thay.
+Neu route resolve rat nhanh (vi data da cache), bar co the khong kip hien.
+
+Vi du:
+
+- Click contact: thuong nhanh do `headerData` da cache trong store.
+- Click home: thuong co them request section/meta nen de thay loading hon.
+
+## 5) Global data (Header) va cache
+
+Store:
+
+- `app/stores/common.ts`
+
+Ham `fetchHeader(locale)` co cache logic:
+
+- Neu da co `headerData` cung locale -> return ngay, khong goi API lai.
+
+Composable:
+
+- `app/composables/common/useHeader.ts`
+
+Su dung `useAsyncData` de SSR doi co header truoc khi render.
+Khi doi locale, store reset va fetch lai.
+
+## 6) Page store dung de resolve route theo menu
+
+File:
+
+- `app/stores/page.ts`
+
+`resolvePage(slug, locale)` hien tai:
+
+1. Fetch header trong common store.
+2. Flatten menu.
+3. Tim item co `item.url` trung voi `slug`.
+4. Gan vao `currentPage`.
+
+Store nay da bo logic goi `/api/pages/resolve`.
+
+## 7) Server API bridge (Nuxt -> Laravel)
+
+### 7.1 Header
+
+- `server/api/common/header.get.ts`
+- Forward toi Laravel: `/common/header`
+
+### 7.2 Home page APIs
+
+- `server/api/pages/home/meta.get.ts` -> `/pages/home/meta`
+- `server/api/pages/home/section/[section].get.ts` -> `/pages/home/section/{section}`
+
+### 7.3 Generic slug APIs (Nuxt co, backend co the chua co)
+
+- `server/api/pages/[slug]/meta.get.ts` -> `/pages/{slug}/meta`
+- `server/api/pages/[slug]/section/[section].get.ts` -> `/pages/{slug}/section/{section}`
+
+Luu y:
+
+- Theo backend Laravel hien tai (`admin/routes/api.php`), route dong `{slug}` chua duoc expose.
+- Vi vay cac endpoint dang `/pages/{slug}/...` co the 404 voi slug khac `home`.
+- Dynamic route FE hien tai giai quyet bang menu mapping (khong phu thuoc `pages/resolve`).
+
+## 8) Them 1 dynamic page moi (khong doi backend)
+
+Quy trinh de an toan:
+
+1. Tao component page moi trong `app/components/pages/`, vi du `about-page.vue`.
+2. Mo `app/pages/[...slug].vue`.
+3. Them map:
+   - Uu tien map theo `menu class` (on dinh nhat): vi du `page-about`.
+   - Neu can, map them theo `reference_id`.
+   - Neu can nua, them alias URL.
+4. Test dieu huong tu menu.
+5. Neu khong map thi route se roi vao `MenuFallbackPage`.
+
+Khuyen nghi:
+
+- Uu tien map bang `menu class` trong Laravel admin de khong phu thuoc slug.
+- Chi dung alias URL cho truong hop tam thoi.
+
+## 9) Quy uoc coding
+
+1. Goi section data qua composable:
+   - `usePageSection('home', 'section-name')`
+2. Trong server API, dung `apiFetch` + `getLocale(event)`.
+3. Khi doc response section, unwrap an toan:
+   - `raw?.data || raw || null`
+4. Data dung chung giua nhieu page dat trong Pinia store.
+5. Khong tai tao logic resolve slug o tung component; tap trung o `[...slug].vue`.
+
+## 10) Tinh trang hien tai can nho
+
+- `pages/resolve` khong ton tai tren backend.
+- Dynamic slug hien tai la menu-driven routing.
+- Contact page da duoc them de lam mau cho dynamic page.
