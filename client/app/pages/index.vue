@@ -7,6 +7,7 @@
   <div class="home">
     <!-- Above the fold: load immediately -->
     <HomeSectionsSimpleSlider />
+    <HomeSectionsSiteStatistics />
     <HomeSectionsServices />
 
     <!-- Below the fold: lazy hydration — only hydrate when scrolled into view -->

@@ -1,5 +1,5 @@
 ﻿<template>
-  <section class="relative py-16">
+  <section class="relative py-10">
     <UContainer>
       <div
         v-motion

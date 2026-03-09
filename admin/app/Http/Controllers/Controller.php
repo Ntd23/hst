@@ -16,6 +16,12 @@ class Controller extends BaseController
      */
     protected function getApiLocale(\Illuminate\Http\Request $request): string
     {
-        return $request->input('locale', app()->getLocale());
+        $locale = $request->input('locale', app()->currentLocale());
+        app()->setLocale($locale);
+
+        // Cập nhật session ngôn ngữ cho Laravel và Botble
+        \Botble\Language\Facades\Language::setLocale($locale);
+
+        return $locale;
     }
 }
