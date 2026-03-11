@@ -60,8 +60,6 @@
       </div>
     </div>
 
-    <div class="h-24"></div>
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
       <CommonsBlogItem
         v-for="item in blogs"
@@ -101,7 +99,7 @@ onMounted(async () => {
 
   blogs.value = items.map((item: any, index: number) => ({
     id: index + 1,
-    title: item.name,
+    title: item.title,
     image: item.image,
   }));
 });

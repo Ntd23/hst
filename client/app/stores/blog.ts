@@ -12,11 +12,23 @@ export const useBlogStore = defineStore('blog', {
             try {
                 const data = await $fetch('/api/pages/blog')
                 this.posts = data as any[]
+
             } catch (error) {
                 console.error(error)
             } finally {
                 this.loading = false
             }
-        }
+        },
+        async fetchPosts1() {
+            this.loading = true
+            try {
+                const data = await $fetch('/api/pages/blog')
+                this.posts = data as any[]
+            } catch (error) {
+                console.error(error)
+            } finally {
+                this.loading = false
+            }
+        },
     }
 })

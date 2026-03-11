@@ -1,4 +1,10 @@
+import { customRoutes } from './app/router/routes'
 export default defineNuxtConfig({
+  hooks: {
+    'pages:extend'(pages) {
+      pages.push(...customRoutes)
+    }
+  },
   compatibilityDate: '2025-07-15',
   devServer: {
     host: '127.0.0.1',

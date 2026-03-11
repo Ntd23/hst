@@ -11,13 +11,14 @@ class BlogController extends Controller{
     public function getBlogs()
     {
         try {
-            $attrs = $this->parseAttributes();
+            $attrs = $this->parseAttributes('Blog');
+
             foreach ($attrs as $key => $value) {
-                $post[$key]['title'] = $value['title'] ?? null;
+                $method = 'get' . str_replace(' ', '', ucwords(str_replace('-', ' ', $key)));
+                $post[$key]['items'] = $this->$method($value);
+                $post[$key]['items'] = $this->$method($value);
             }
-            $post['blog-posts']['items'] = $this->getPosts($attrs['blog-posts']);
-            $post['blog-post-featured']['items'] = $this->getPostsFeatured($attrs['blog-post-featured']);
-            
+
             return response()->json([
                 'ok' => true,
                 'data' => $post
@@ -36,8 +37,8 @@ class BlogController extends Controller{
         
     // }
 
-    public function parseAttributes(){
-        $page = Page::where('name', 'Blog')->first();
+    public function parseAttributes($name){
+        $page = Page::where('name', $name)->first();
         preg_match_all('/\[([a-zA-Z0-9\-]+)(.*?)\]/', $page->content, $shortcodes, PREG_SET_ORDER);
         $result = [];
         foreach ($shortcodes as $shortcode) {
@@ -55,7 +56,7 @@ class BlogController extends Controller{
     
 
     // lấy dữ liêu post từ DB
-    private function getPosts($data)
+    private function getBlogPosts($data)
 {
     $limit = $data['limit'] ?? 6;
     $categoryIds = explode(',', $data['category_ids'] ?? '');
@@ -80,7 +81,7 @@ class BlogController extends Controller{
         ->toArray();
 }
 
-    private function getPostsFeatured($data)
+    private function getBlogPostFeatured($data)
     {
         $postIds = collect($data)
         ->filter(fn($value, $key) => str_starts_with($key, 'post_'))
