@@ -9,7 +9,7 @@ export default defineEventHandler(async (event): Promise<any> => {
     'Pragma': 'no-cache',
   })
 
-  return apiFetch<any>('/common/header', {
+  return apiFetch<any>(event, '/common/header', {
     query: { locale },
     headers: { 'X-Locale': locale },
   })

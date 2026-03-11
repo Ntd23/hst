@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Api\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
-use Botble\Media\Facades\RvMedia;
-use Botble\Page\Models\Page;
 use Botble\SimpleSlider\Models\SimpleSlider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -20,50 +17,7 @@ class HomeController extends Controller
      */
     public function getMeta(Request $request)
     {
-        $locale = $this->getApiLocale($request);
-        $cacheKey = "api:pages:home:meta:{$locale}";
-
-        $payload = Cache::remember($cacheKey, 300, function () use ($locale) {
-            $seoTitle = theme_option('seo_title', theme_option('site_title', config('app.name')));
-            $seoDescription = theme_option('seo_description', '');
-            $seoImage = theme_option('seo_image', '');
-            $seoIndex = (bool) theme_option('seo_index', true);
-            $ogImage = null;
-
-            $page = $this->getHomepage();
-            if ($page) {
-                $meta = $page->getMetaData('seo_meta', true);
-                if (!empty($meta['seo_title'])) {
-                    $seoTitle = $meta['seo_title'];
-                }
-                if (!empty($meta['seo_description'])) {
-                    $seoDescription = $meta['seo_description'];
-                }
-                if (!empty($meta['seo_image'])) {
-                    $ogImage = $this->imageUrl($meta['seo_image']);
-                }
-                if (!empty($meta['index'])) {
-                    $seoIndex = $meta['index'] === 'index';
-                }
-            }
-
-            if (!$ogImage && $seoImage) {
-                $ogImage = $this->imageUrl($seoImage);
-            }
-
-            return [
-                'locale' => $locale,
-                'seo_title' => $seoTitle,
-                'seo_description' => $seoDescription,
-                'og_image' => $ogImage,
-                'seo_index' => $seoIndex,
-                'favicon' => theme_option('favicon')
-                    ? $this->imageUrl(theme_option('favicon'))
-                    : null,
-            ];
-        });
-
-        return response()->json($payload, 200, [], JSON_UNESCAPED_UNICODE);
+        return $this->metaResponse($request, 'homepage_id', 'home');
     }
 
     /**

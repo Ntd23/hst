@@ -2,7 +2,7 @@ import { apiFetch } from '~~/server/utils/apiFetch'
 
 export default defineEventHandler(async (event) => {
   try {
-    const data = await apiFetch('/pages/home/section/simple-slider', {
+    const data = await apiFetch(event, '/pages/home/section/simple-slider', {
       query: { locale: 'vi' }
     })
     return { success: true, data }
