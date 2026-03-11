@@ -52,7 +52,7 @@ Guard 404 som cho system prefix:
 
 Trong `app/pages/[...slug].vue`, thu tu map component:
 
-1. Map theo `menu class`:
+1. Map theo `css_class`:
    - `page-contact` -> `ContactPage`
    - `contact` -> `ContactPage`
 2. Map theo `reference_id`:
@@ -146,7 +146,7 @@ Quy trinh de an toan:
 1. Tao component page moi trong `app/components/pages/`, vi du `about-page.vue`.
 2. Mo `app/pages/[...slug].vue`.
 3. Them map:
-   - Uu tien map theo `menu class` (on dinh nhat): vi du `page-about`.
+   - Uu tien map theo `css_class` (on dinh nhat): vi du `page-about`.
    - Neu can, map them theo `reference_id`.
    - Neu can nua, them alias URL.
 4. Test dieu huong tu menu.
@@ -154,7 +154,7 @@ Quy trinh de an toan:
 
 Khuyen nghi:
 
-- Uu tien map bang `menu class` trong Laravel admin de khong phu thuoc slug.
+- Uu tien map bang `css_class` trong Laravel admin de khong phu thuoc slug.
 - Chi dung alias URL cho truong hop tam thoi.
 
 ## 9) Quy uoc coding
