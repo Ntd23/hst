@@ -110,6 +110,33 @@ trait ShortcodeApiTrait
         return $tabs;
     }
 
+    /**
+     * Lấy data shortcode (attributes + content) từ content.
+     *
+     * @return array|null ['attrs' => array, 'content' => ?string]
+     */
+    protected function getShortcodeData(string $content, string $shortcodeName): ?array
+    {
+        $name = preg_quote($shortcodeName, '/');
+        $pattern = '/\[' . $name . '(?:\s+([^\]]*))?\](?:([\s\S]*?)\[\/' . $name . '\])?/i';
+
+        if (!preg_match($pattern, $content, $matches)) {
+            return null;
+        }
+
+        $attrs = [];
+        if (!empty($matches[1])) {
+            $attrs = $this->parseShortcodeAttributeString($matches[1]);
+        }
+
+        $inner = $matches[2] ?? null;
+
+        return [
+            'attrs' => $attrs,
+            'content' => $inner,
+        ];
+    }
+
     // ──────────────────────────────────────────────
     //  PAGE & CONTENT
     // ──────────────────────────────────────────────
@@ -133,9 +160,9 @@ trait ShortcodeApiTrait
     /**
      * Shortcut: lấy homepage (dùng cho HomeController).
      */
-    protected function getHomepage(): ?Page
+    protected function getPageById(string $pageId): ?Page
     {
-        return $this->getPageByThemeOption('homepage_id');
+        return $this->getPageByThemeOption($pageId);
     }
 
     /**
@@ -156,6 +183,113 @@ trait ShortcodeApiTrait
         }
 
         return $this->getShortcodeAttributes($content, $shortcodeName);
+    }
+
+    /**
+     * Tìm shortcode trong bất kỳ page publish nào (không cần theme_option page_id).
+     *
+     * @return array|null  attributes hoặc null
+     */
+    protected function getShortcodeFromAnyPage(string $shortcodeName, string $locale): ?array
+    {
+        $page = $this->getPageByShortcode($shortcodeName, $locale);
+        if (!$page) {
+            return null;
+        }
+
+        $content = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
+        if (!$content) {
+            return null;
+        }
+
+        return $this->getShortcodeAttributes($content, $shortcodeName);
+    }
+
+    /**
+     * Lấy data shortcode (attributes + content) từ bất kỳ page publish.
+     *
+     * @return array|null ['attrs' => array, 'content' => ?string]
+     */
+    protected function getShortcodeDataFromAnyPage(string $shortcodeName, string $locale): ?array
+    {
+        $like = "%[{$shortcodeName}%";
+
+        $pages = Page::query()
+            ->with('translations')
+            ->wherePublished()
+            ->where('content', 'like', $like)
+            ->get();
+
+        $data = $this->findShortcodeDataInPages($pages, $shortcodeName, $locale);
+        if ($data) {
+            return $data;
+        }
+
+        $pages = Page::query()
+            ->with('translations')
+            ->wherePublished()
+            ->get();
+
+        return $this->findShortcodeDataInPages($pages, $shortcodeName, $locale);
+    }
+
+    /**
+     * Tìm page chứa shortcode bất kỳ (không cần theme_option page_id).
+     */
+    protected function getPageByShortcode(string $shortcodeName, string $locale): ?Page
+    {
+        $like = "%[{$shortcodeName}%";
+
+        $pages = Page::query()
+            ->with('translations')
+            ->wherePublished()
+            ->where('content', 'like', $like)
+            ->get();
+
+        $page = $this->findPageByShortcodeInPages($pages, $shortcodeName, $locale);
+        if ($page) {
+            return $page;
+        }
+
+        $pages = Page::query()
+            ->with('translations')
+            ->wherePublished()
+            ->get();
+
+        return $this->findPageByShortcodeInPages($pages, $shortcodeName, $locale);
+    }
+
+    private function findPageByShortcodeInPages($pages, string $shortcodeName, string $locale): ?Page
+    {
+        foreach ($pages as $page) {
+            $content = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
+            if (!$content) {
+                continue;
+            }
+
+            if ($this->getShortcodeAttributes($content, $shortcodeName)) {
+                return $page;
+            }
+        }
+
+        return null;
+    }
+
+    private function findShortcodeDataInPages($pages, string $shortcodeName, string $locale): ?array
+    {
+        foreach ($pages as $page) {
+            $content = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
+            if (!$content) {
+                continue;
+            }
+
+            $data = $this->getShortcodeData($content, $shortcodeName);
+            if ($data) {
+                return $data;
+            }
+        }
+
+        return null;
     }
 
     // ──────────────────────────────────────────────
@@ -220,6 +354,88 @@ trait ShortcodeApiTrait
     // ──────────────────────────────────────────────
 
     /**
+     * Wrapper chuẩn cho meta page:
+     *   - Lấy locale
+     *   - Cache
+     *   - Merge SEO meta từ theme option + page meta
+     *   - Trả JSON
+     */
+    protected function metaResponse(Request $request, string $pageOptionKey, string $cacheKeyPrefix): JsonResponse
+    {
+        $locale = $this->getApiLocale($request);
+        $cacheKey = "api:pages:{$cacheKeyPrefix}:meta:{$locale}";
+
+        $payload = Cache::remember($cacheKey, 300, function () use ($locale, $pageOptionKey) {
+            $page = $this->getPageByThemeOption($pageOptionKey);
+
+            return $this->buildMetaPayload($page, $locale);
+        });
+
+        return response()->json($payload, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Wrapper chuẩn cho meta page theo shortcode:
+     *   - Lấy locale
+     *   - Cache
+     *   - Merge SEO meta từ theme option + page meta
+     *   - Trả JSON
+     */
+    protected function metaResponseFromShortcode(Request $request, string $shortcodeName, string $cacheKeyPrefix): JsonResponse
+    {
+        $locale = $this->getApiLocale($request);
+        $cacheKey = "api:pages:{$cacheKeyPrefix}:meta:{$locale}";
+
+        $payload = Cache::remember($cacheKey, 300, function () use ($locale, $shortcodeName) {
+            $page = $this->getPageByShortcode($shortcodeName, $locale);
+
+            return $this->buildMetaPayload($page, $locale);
+        });
+
+        return response()->json($payload, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    private function buildMetaPayload(?Page $page, string $locale): array
+    {
+        $seoTitle = theme_option('seo_title', theme_option('site_title', config('app.name')));
+        $seoDescription = theme_option('seo_description', '');
+        $seoImage = theme_option('seo_image', '');
+        $seoIndex = (bool) theme_option('seo_index', true);
+        $ogImage = null;
+
+        if ($page) {
+            $meta = $page->getMetaData('seo_meta', true);
+            if (!empty($meta['seo_title'])) {
+                $seoTitle = $meta['seo_title'];
+            }
+            if (!empty($meta['seo_description'])) {
+                $seoDescription = $meta['seo_description'];
+            }
+            if (!empty($meta['seo_image'])) {
+                $ogImage = $this->imageUrl($meta['seo_image']);
+            }
+            if (!empty($meta['index'])) {
+                $seoIndex = $meta['index'] === 'index';
+            }
+        }
+
+        if (!$ogImage && $seoImage) {
+            $ogImage = $this->imageUrl($seoImage);
+        }
+
+        return [
+            'locale' => $locale,
+            'seo_title' => $seoTitle,
+            'seo_description' => $seoDescription,
+            'og_image' => $ogImage,
+            'seo_index' => $seoIndex,
+            'favicon' => theme_option('favicon')
+                ? $this->imageUrl(theme_option('favicon'))
+                : null,
+        ];
+    }
+
+    /**
      * Wrapper chuẩn cho mọi section API:
      *   - Lấy locale
      *   - Cache
@@ -230,10 +446,19 @@ trait ShortcodeApiTrait
      * @param callable $callback     fn(string $locale): ?array → trả mảng data hoặc null
      * @param int      $cacheTtl     Thời gian cache (giây), mặc định 300
      */
-    protected function sectionResponse(Request $request, string $sectionName, callable $callback, int $cacheTtl = 300): JsonResponse
+     protected function sectionResponse(
+         Request $request,
+         string $sectionName,
+         callable $callback,
+         int $cacheTtl = 300,
+         ?string $cacheKeySuffix = null
+     ): JsonResponse
     {
         $locale = $this->getApiLocale($request);
         $cacheKey = "api:pages:{$sectionName}:{$locale}";
+        if ($cacheKeySuffix) {
+            $cacheKey .= ':' . $cacheKeySuffix;
+        }
 
         $payload = Cache::remember($cacheKey, $cacheTtl, fn() => $callback($locale));
 

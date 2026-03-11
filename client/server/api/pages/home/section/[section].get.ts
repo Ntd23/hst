@@ -5,7 +5,7 @@ export default defineEventHandler(async (event): Promise<any> => {
   const { section } = getRouterParams(event)
   const locale = getLocale(event)
 
-  return apiFetch<any>(`/pages/home/section/${section}`, {
+  return apiFetch<any>(event, `/pages/home/section/${section}`, {
     query: { locale },
     headers: { 'X-Locale': locale },
   })
