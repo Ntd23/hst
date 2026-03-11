@@ -60,19 +60,20 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-      <CommonsBlogItem
-        v-for="item in blogs"
-        :key="item.id"
-        :title="item.title"
-        :image="item.image"
-      />
-    </div>
+    <component
+      v-for="(data, name, index) in blogs"
+      :key="index"
+      :is="blogs.name"
+      :data="data"
+    />
   </main>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useBlogStore } from "../../stores/blog";
+import { resolveComponent } from "vue";
+
+// const ShortcodeBlogPosts = resolveComponent("ShortcodeBlogPosts");
 
 const blogs_featured = [
   {
@@ -95,12 +96,32 @@ const blogStore = useBlogStore();
 onMounted(async () => {
   await blogStore.fetchPosts();
 
-  const items = blogStore.posts.data["blog-posts"]["items"];
+  const items = blogStore.posts.data;
 
-  blogs.value = items.map((item: any, index: number) => ({
-    id: index + 1,
-    title: item.title,
-    image: item.image,
+  function toComponentName(key: string) {
+    return (
+      "Shortcode" +
+      key
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join("")
+    );
+  }
+
+  blogs.value = Object.entries(items).map(([key, value]: any) => ({
+    name: toComponentName(key),
+    data: value.items,
   }));
+  blogs.value = blogs.value.map((item) => ({
+    ...item,
+    name: resolveComponent(item.name),
+  }));
+  console.log(blogs.value);
+
+  // blogs.value = items.map((item: any, index: number) => ({
+  //   id: index + 1,
+  //   title: item.title,
+  //   image: item.image,
+  // }));
 });
 </script>
