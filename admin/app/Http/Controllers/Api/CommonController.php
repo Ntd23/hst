@@ -157,7 +157,7 @@ class CommonController extends Controller
                     'title' => (string) $n->title,
                     'url' => $this->normalizeUrl((string) ($n->url ?? ''), $absolute),
                     'target' => $n->target ?: '_self',
-                    'class' => $n->css_class ?: '',
+                    'css_class' => $n->css_class ?: '',
                     'icon' => $n->icon_font ?: '',
                     'position' => (int) $n->position,
                     'has_children' => count($children) > 0,

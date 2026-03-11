@@ -18,7 +18,7 @@ export default defineEventHandler(async (event): Promise<any> => {
 
   console.log('--- ENTERED section.get.ts ---', slug, section, locale)
   try {
-    const res = await apiFetch<any>(`/pages/${slug}/section/${section}`, {
+    const res = await apiFetch<any>(event, `/pages/${slug}/section/${section}`, {
       query: { locale },
       headers: { 'X-Locale': locale },
     })

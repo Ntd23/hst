@@ -22,7 +22,7 @@ type MenuItem = {
   id?: number | string
   title?: string
   url?: string
-  class?: string | null
+  css_class?: string | null
   reference_id?: number | string | null
   reference_type?: string | null
   children?: MenuItem[]
@@ -105,8 +105,8 @@ const componentByReferenceId: Record<string, Component> = {
   '21': WebsiteDemosPage,
 }
 
-const componentByMenuClass: Record<string, Component> = {
-  // If you set menu item class in Laravel admin, map it here.
+const componentByMenuCssClass: Record<string, Component> = {
+  // If you set menu item css_class in Laravel admin, map it here.
   'page-contact': ContactPage,
   contact: ContactPage,
 }
@@ -118,9 +118,9 @@ const contactPathAliases = new Set([
 ])
 
 const resolvedComponent = computed<Component>(() => {
-  const menuClass = matchedMenuItem.value?.class?.trim().toLowerCase()
-  if (menuClass) {
-    const component = componentByMenuClass[menuClass]
+  const menuCssClass = matchedMenuItem.value?.css_class?.trim().toLowerCase()
+  if (menuCssClass) {
+    const component = componentByMenuCssClass[menuCssClass]
     if (component) return component
   }
 
