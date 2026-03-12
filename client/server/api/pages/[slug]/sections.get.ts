@@ -5,17 +5,21 @@ export default defineEventHandler(async (event): Promise<any> => {
   const { slug } = getRouterParams(event)
   const locale = getLocale(event)
 
+  if (!slug) {
+    return { error: 'Missing slug param' }
+  }
+
   try {
-    return await apiFetch<any>(event, `/pages/${slug}/meta`, {
+    const res = await apiFetch<any>(event, `/pages/${slug}/sections`, {
       query: { locale },
       headers: { 'X-Locale': locale },
     })
+    return res
   } catch (err: any) {
     const status = err?.response?.status || err?.status || err?.statusCode
-    if (status === 404) return null
-    
-    // Log other errors to console but still avoid crashing SSR if possible
-    console.error(`[meta.get.ts] Error fetching meta for slug ${slug}:`, err.message)
-    return null
+    if (status !== 404) {
+      console.error(`[sections.get.ts] Error fetching sections for slug ${slug}:`, err.message)
+    }
+    return { data: { sections: [] } }
   }
 })
