@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <header
     class="relative h-screen min-h-[560px] max-h-[960px] overflow-hidden bg-slate-950"
   >
@@ -114,11 +114,11 @@
 </template>
 
 <script setup lang="ts">
-const { locale } = useI18n();
+const props = defineProps<{
+  data?: any
+}>()
 
-const { data: heroData } = await usePageSection<any>('home', 'simple-slider')
-
-const sliderData = computed(() => heroData.value?.data || heroData.value || {})
+const sliderData = computed(() => props.data)
 const sliderItems = computed(() => sliderData.value?.items ?? [])
 const currentItem = computed(() => sliderItems.value[activeSlide.value] ?? null)
 

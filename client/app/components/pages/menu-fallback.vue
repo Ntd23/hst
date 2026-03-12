@@ -1,41 +1,56 @@
 <template>
-  <main class="relative overflow-hidden py-16 sm:py-24">
-    <div class="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-cyan-50" />
-    <UContainer class="relative z-10">
-      <div class="mx-auto max-w-3xl rounded-3xl border border-sky-100 bg-white/90 p-8 shadow-sm sm:p-10">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-          Laravel Menu Route
-        </p>
-        <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
-          {{ menuTitle }}
-        </h1>
-        <p class="mt-3 text-sm text-slate-500">
-          URL: {{ resolvedPath }}
-        </p>
-        <p class="mt-5 leading-relaxed text-slate-700">
-          This route is resolved from Laravel menu data. Backend does not expose page content by slug yet, so this
-          page is rendered as a fallback.
-        </p>
+  <main class="relative overflow-hidden w-full">
+    <template v-if="pageSections.length > 0">
+      <template v-for="(section, index) in pageSections" :key="index">
+        <component
+          :is="getSectionComponent(section.shortcode)"
+          :data="section.content"
+          v-bind="index >= 3 ? { 'hydrate-on-visible': true } : {}"
+        />
+      </template>
+    </template>
+    <template v-else-if="!pending">
+      <div class="py-16 sm:py-24 relative w-full">
+        <div class="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-cyan-50" />
+        <UContainer class="relative z-10 w-full">
+          <div class="mx-auto max-w-3xl rounded-3xl border border-sky-100 bg-white/90 p-8 shadow-sm sm:p-10">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Laravel Menu Route
+            </p>
+            <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+              {{ menuTitle }}
+            </h1>
+            <p class="mt-3 text-sm text-slate-500">
+              URL: {{ resolvedPath }}
+            </p>
+            <p class="mt-5 leading-relaxed text-slate-700">
+              This route is resolved from Laravel menu data. Backend does not expose page content by slug yet, so this
+              page is rendered as a fallback.
+            </p>
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <UButton to="/" color="primary" variant="solid">
-            Back to Home
-          </UButton>
-          <UButton
-            v-if="menuItem?.url"
-            :to="menuItem.url"
-            color="neutral"
-            variant="outline"
-          >
-            Reload This URL
-          </UButton>
-        </div>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <UButton to="/" color="primary" variant="solid">
+                Back to Home
+              </UButton>
+              <UButton
+                v-if="menuItem?.url"
+                :to="menuItem.url"
+                color="neutral"
+                variant="outline"
+              >
+                Reload This URL
+              </UButton>
+            </div>
+          </div>
+        </UContainer>
       </div>
-    </UContainer>
+    </template>
   </main>
 </template>
 
 <script setup lang="ts">
+import { resolveComponent as builtinResolveComponent } from 'vue'
+
 type MenuItem = {
   id?: number | string
   title?: string
@@ -48,4 +63,26 @@ const props = defineProps<{
 }>()
 
 const menuTitle = computed(() => props.menuItem?.title || 'Content In Progress')
+
+const slug = computed(() => {
+  let p = props.resolvedPath || ''
+  if (p.startsWith('/')) p = p.slice(1)
+  return p || 'home'
+})
+
+const { data: pageData, pending } = await usePageSections<any>(slug.value)
+const pageSections = computed(() => pageData.value?.sections || [])
+
+const getSectionComponent = (shortcode: string) => {
+  if (shortcode === 'simple-slider') return builtinResolveComponent('HomeSectionsSimpleSlider');
+  if (shortcode === 'site-statistics') return builtinResolveComponent('HomeSectionsSiteStatistics');
+  if (shortcode === 'services') return builtinResolveComponent('HomeSectionsServices');
+  if (shortcode === 'include-webdemo') return builtinResolveComponent('HomeSectionsProducts');
+  if (shortcode === 'about-us-information') return builtinResolveComponent('HomeSectionsAbout');
+  if (shortcode === 'team') return builtinResolveComponent('HomeSectionsTeam');
+  if (shortcode === 'faqs') return builtinResolveComponent('HomeSectionsFaq');
+  if (shortcode === 'contact-block') return builtinResolveComponent('HomeSectionsConsult');
+  if (shortcode === 'blog-posts') return builtinResolveComponent('HomeSectionsNews');
+  return 'div';
+}
 </script>
