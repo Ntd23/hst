@@ -87,11 +87,11 @@
 </template>
 
 <script setup lang="ts">
-const { locale } = useI18n()
+const props = defineProps<{
+  data?: any
+}>()
 
-const { data: rawData } = await usePageSection<any>('home', 'site-statistics')
-
-const sectionData = computed(() => rawData.value?.data || rawData.value || null)
+const sectionData = computed(() => props.data)
 const tabs = computed<any[]>(() => sectionData.value?.tabs ?? [])
 
 // ===== Count-up animation =====
