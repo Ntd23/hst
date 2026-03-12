@@ -104,6 +104,7 @@ class PageController extends Controller
                 $sections[] = [
                     'shortcode' => $shortcodeName,
                     'content' => $sectionData,
+                    'method' =>$method
                 ];
             }
 
@@ -504,6 +505,17 @@ class PageController extends Controller
             ]
         );
     }
+
+    // private function getBlogPostFeatured(){
+    //     return [
+    //         'locale' => '12321',
+    //         'data' => [
+    //             'address' => '34234324',
+    //             'width' =>  '100%',
+    //             'height' => '500',
+    //         ],
+    //     ];
+    // }
 
     // --- CONTACT SHORTCODES ---
 
