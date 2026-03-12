@@ -1,25 +1,22 @@
-﻿<template>
+<template>
   <section class="py-16 bg-white/30 dark:bg-slate-900/30">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
         <div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-6 sm:mb-8">
-            {{ $t('faq.title') }}
+          <h2 v-if="sectionData.title" class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-6 sm:mb-8" v-html="sectionData.title">
           </h2>
-          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-6 sm:mb-8">
-            {{ $t('faq.description') }}
+          <p v-if="sectionData.description" class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-6 sm:mb-8" v-html="sectionData.description">
           </p>
           <div class="space-y-3">
             <details
-              v-for="i in 3"
-              :key="i"
+              v-for="item in faqs"
+              :key="item.id || item.question"
               class="group faq-item rounded-xl overflow-hidden border border-slate-200/60 dark:border-slate-700/50 bg-white/70 dark:bg-slate-800/50 backdrop-blur-sm transition-all duration-300 open:border-primary/40 open:shadow-md open:shadow-primary/5"
             >
               <summary
                 class="flex justify-between items-center gap-4 p-4 sm:p-5 cursor-pointer list-none select-none"
               >
-                <span class="font-semibold text-slate-800 dark:text-white transition-colors group-open:text-primary">
-                  {{ $t(`faq.items.q${i}`) }}
+                <span class="font-semibold text-slate-800 dark:text-white transition-colors group-open:text-primary" v-html="item.question">
                 </span>
                 <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-700 group-open:bg-primary/10 dark:group-open:bg-primary/20 transition-colors duration-300">
                   <UIcon
@@ -28,27 +25,26 @@
                   />
                 </div>
               </summary>
-              <div class="px-5 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/50 pt-4 mx-4">
-                {{ $t(`faq.items.a${i}`) }}
+              <div class="px-5 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/50 pt-4 mx-4" v-html="item.answer">
               </div>
             </details>
           </div>
         </div>
         <div class="relative flex items-center">
           <div class="relative w-full glass-panel p-2 rounded-3xl overflow-hidden">
-            <img
-              alt="Expert Consulting"
+            <NuxtImg
+              v-if="sectionData.image"
+              :alt="sectionData.title || 'FAQ'"
               class="w-full h-full object-cover rounded-2xl"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqvzINf3veSzH3fh7k50f1N-hUx1nKoR0pUvyF2K-P0K3wFI40RJbAy5SSygEZ4A00xEoH974VCuJIbBjSR8Fqkm3yKreWjGxXWFo3uirIEE1e73dwaClQtCw6OmDVDAbX0tUJpi8duC5Bn99LrOTW-4YSkwqch87vp5GFsxWqzJ7F18N1hvgMJ2fqdZXW0TDdTCfRRkKifxcf4jAdL_u4JoAxzHihZPVQDV6SNR9XDmu0nLMfsh-PnNUNQVZbQPB1bZkObYbB61c"
+              :src="sectionData.image"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-2xl" />
-            <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 text-white">
+            <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 text-white" v-if="sectionData.floating_block">
               <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center mb-3 sm:mb-4">
-                <UIcon name="i-lucide-message-circle" class="size-5 sm:size-6 text-white" />
+                <i :class="(sectionData.floating_block.icon || 'ti ti-24-hours') + ' text-xl text-white'" />
               </div>
-              <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ $t('faq.needConsulting') }}</h3>
-              <p class="text-sm text-slate-200 mb-0">
-                {{ $t('faq.consultingDesc') }}
+              <h3 class="text-xl sm:text-2xl font-bold mb-2" v-html="sectionData.floating_block.title"></h3>
+              <p class="text-sm text-slate-200 mb-0" v-html="sectionData.floating_block.description">
               </p>
             </div>
           </div>
@@ -60,6 +56,15 @@
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  data?: any
+}>()
+
+const sectionData = computed(() => props.data || {})
+const faqs = computed(() => props.data?.items || [])
+</script>
 
 <style scoped>
 details > summary {
