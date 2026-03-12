@@ -5,20 +5,10 @@
       <div class="grid grid-cols-12 gap-10 items-center">
         <!-- LEFT CONTENT -->
         <div class="col-span-12 lg:col-span-6 space-y-6">
-          <p
-            class="text-green-700 font-semibold uppercase text-sm tracking-wide"
-          >
-            Space & Spaceflight
-          </p>
-
           <h1 class="text-4xl lg:text-4xl font-extrabold leading-tight">
             6-Million-Year-Old Meteorite Strike Created a Massive Field of
             Natural Glass in Brazil
           </h1>
-
-          <p class="text-gray-600 text-lg">
-            The crater left behind from the impact has yet to be found.
-          </p>
 
           <div class="text-sm text-gray-500 space-y-1 uppercase">
             <p>Hisotech Group • Ngày đăng: 30-4-2026</p>
@@ -78,23 +68,30 @@
           :key="item.id"
           :title="item.title"
           :image="item.image"
+          :slug="item.slug"
         />
       </aside>
     </div>
   </main>
 </template>
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 const blogs_featured = [
   {
     id: 1,
     title:
       "Google’s Chatbot Told Man to Give It an Android Body Before Encouraging Suicide, Lawsuit Alleges",
     image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
+    slug: "12312312312321",
   },
   {
     id: 2,
     title: "The Plague That Changed the Course of Game of Thrones’ History",
     image: "https://images.unsplash.com/photo-1520975916090-3105956dac38",
+    slug: "12312312312321",
   },
 ];
+
+const route = useRoute();
+const slug = route.params.slug;
 </script>

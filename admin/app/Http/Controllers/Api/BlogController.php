@@ -4,7 +4,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Botble\Blog\Models\Post;
 use Botble\Page\Models\Page;
+use Botble\Slug\Models\Slug;
 use Botble\Media\Facades\RvMedia;
+
 
 
 class BlogController extends Controller{
@@ -16,7 +18,7 @@ class BlogController extends Controller{
             foreach ($attrs as $key => $value) {
                 $method = 'get' . str_replace(' ', '', ucwords(str_replace('-', ' ', $key)));
                 $post[$key]['items'] = $this->$method($value);
-                $post[$key]['items'] = $this->$method($value);
+                $post[$key]['title'] = $value['title'];
             }
 
             return response()->json([
@@ -33,9 +35,25 @@ class BlogController extends Controller{
         }
     }
 
-    // public function findPost(){
-        
-    // }
+    public function getPost(){
+        try {
+            $postFeatured = $this->getPostFeatured(2);
+            $post = $this->findPostSlug("su-hop-tac-giua-hisotechgroup-va-asean-business-ky-ket-hop-dong-chien-luoc1");
+            
+            $data["postFeatured"] = $postFeatured;
+            $data["post"] = $post;
+
+            return response()->json([
+                'ok' => true,
+                'data' => $data
+            ], 200);
+        } catch (\Throwable $th) {
+             return response()->json([
+                'ok' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function parseAttributes($name){
         $page = Page::where('name', $name)->first();
@@ -53,33 +71,38 @@ class BlogController extends Controller{
         }
         return $result;
     }
+
+
+
     
 
     // lấy dữ liêu post từ DB
+    
     private function getBlogPosts($data)
-{
-    $limit = $data['limit'] ?? 6;
-    $categoryIds = explode(',', $data['category_ids'] ?? '');
+    {
+        $limit = $data['limit'] ?? 6;
+        $categoryIds = explode(',', $data['category_ids'] ?? '');
 
-    return Post::select('id','name', 'content', 'image', 'created_at')
-        ->when(!empty($categoryIds), function ($query) use ($categoryIds) {
-            $query->whereHas('categories', function ($q) use ($categoryIds) {
-                $q->whereIn('categories.id', $categoryIds);
-            });
-        })
-        ->limit($limit)
-        ->get()
-        ->map(function ($post) {
-            return [
-                'id' => $post->id,
-                'title' => $post->name,
-                'content' => $post->content,
-                'image' => \RvMedia::getImageUrl($post->image),
-                'created_at' => $post->created_at,
-            ];
-        })
-        ->toArray();
-}
+        return Post::select('id','name', 'content', 'image', 'created_at')
+            ->when(!empty($categoryIds), function ($query) use ($categoryIds) {
+                $query->whereHas('categories', function ($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                });
+            })
+            ->limit($limit)
+            ->get()
+            ->map(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'name' => $post->name,
+                    'content' => $post->content,
+                    'image' => \RvMedia::getImageUrl($post->image),
+                    'created_at' => $post->created_at,
+                    'slug' => $post->slug,
+                ];
+            })
+            ->toArray();
+    }
 
     private function getBlogPostFeatured($data)
     {
@@ -87,10 +110,19 @@ class BlogController extends Controller{
         ->filter(fn($value, $key) => str_starts_with($key, 'post_'))
         ->values()
         ->toArray();
-
         $posts = Post::select('id','name', 'content', 'image', 'created_at')
         ->whereIn('id', $postIds)
         ->get()
+        ->map(function ($post) {
+            return [
+                'id' => $post->id,
+                'name' => $post->name,
+                'content' => $post->content,
+                'image' => \RvMedia::getImageUrl($post->image),
+                'created_at' => $post->created_at,
+                'slug' => $post->slug,
+            ];
+        })
         ->keyBy('id');
 
         $result = [];
@@ -102,4 +134,50 @@ class BlogController extends Controller{
         }
         return $result;
     }
+    
+
+    private function getPostFeatured($limit = 2)
+    {
+        return Post::select('id','name', 'content', 'image', 'created_at')
+            ->where("is_featured", 1)
+            ->latest()
+            ->limit($limit)
+            ->get()
+            ->map(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'name' => $post->name,
+                    'content' => $post->content,
+                    'image' => \RvMedia::getImageUrl($post->image),
+                    'created_at' => $post->created_at,
+                    'slug' => $post->slug,
+                ];
+            })
+            ->toArray();
+        
+    }
+
+    private function findPostSlug($slug)
+    {
+        $post = Post::
+            join('slugs', function ($join) {
+                $join->on('slugs.reference_id', '=', 'posts.id')
+                    ->where('slugs.reference_type', Post::class);
+            })
+            ->where('slugs.key', $slug)
+            ->first();
+
+        if (!$post) {
+            return null;
+        }
+        return [
+            'id' => $post->id,
+            'name' => $post->name,
+            'content' => $post->content,
+            'image' => \RvMedia::getImageUrl($post->image),
+            'created_at' => $post->created_at,
+            'slug' => $post->slug,
+        ];
+    }
+
 }
