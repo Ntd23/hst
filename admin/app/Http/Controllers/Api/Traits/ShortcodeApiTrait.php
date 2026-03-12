@@ -516,7 +516,7 @@ trait ShortcodeApiTrait
     {
         return [
             'style' => $attrs['style'] ?? 'style-1',
-            'title' => $attrs['title'] ?? null,
+            // 'title' => $attrs['title'] ?? null,
             'subtitle' => $attrs['subtitle'] ?? null,
             'description' => $attrs['description'] ?? null,
             'button' => [
