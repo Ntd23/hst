@@ -1,13 +1,13 @@
 <template>
   <main class="relative overflow-hidden w-full">
     <template v-if="pageSections.length > 0">
-      <template v-for="(section, index) in pageSections" :key="index">
-        <component
-          :is="getSectionComponent(section.shortcode)"
-          :data="section.content"
-          v-bind="index >= 3 ? { 'hydrate-on-visible': true } : {}"
-        />
-      </template>
+      <component
+        v-for="(section, index) in pageSections"
+        :key="index"
+        :is="getSectionComponent(section.shortcode)"
+        :data="section.content"
+        v-bind="index >= 3 ? { 'hydrate-on-visible': true } : {}"
+      />
     </template>
     <template v-else-if="!pending">
       <div class="py-16 sm:py-24 relative w-full">
@@ -67,22 +67,25 @@ const menuTitle = computed(() => props.menuItem?.title || 'Content In Progress')
 const slug = computed(() => {
   let p = props.resolvedPath || ''
   if (p.startsWith('/')) p = p.slice(1)
-  return p || 'home'
+  if (p.endsWith('/')) p = p.slice(0, -1)
+  
+  if (!p) return 'homepage'
+  return p
 })
 
 const { data: pageData, pending } = await usePageSections<any>(slug.value)
 const pageSections = computed(() => pageData.value?.sections || [])
 
 const getSectionComponent = (shortcode: string) => {
-  if (shortcode === 'simple-slider') return builtinResolveComponent('HomeSectionsSimpleSlider');
-  if (shortcode === 'site-statistics') return builtinResolveComponent('HomeSectionsSiteStatistics');
-  if (shortcode === 'services') return builtinResolveComponent('HomeSectionsServices');
-  if (shortcode === 'include-webdemo') return builtinResolveComponent('HomeSectionsProducts');
-  if (shortcode === 'about-us-information') return builtinResolveComponent('HomeSectionsAbout');
-  if (shortcode === 'team') return builtinResolveComponent('HomeSectionsTeam');
-  if (shortcode === 'faqs') return builtinResolveComponent('HomeSectionsFaq');
-  if (shortcode === 'contact-block') return builtinResolveComponent('HomeSectionsConsult');
-  if (shortcode === 'blog-posts') return builtinResolveComponent('HomeSectionsNews');
+  if (shortcode === 'simple-slider') return builtinResolveComponent('ShortcodeSimpleSlider');
+  if (shortcode === 'site-statistics') return builtinResolveComponent('ShortcodeSiteStatistics');
+  if (shortcode === 'services') return builtinResolveComponent('ShortcodeServices');
+  if (shortcode === 'include-webdemo') return builtinResolveComponent('ShortcodeProducts');
+  if (shortcode === 'about-us-information') return builtinResolveComponent('ShortcodeAbout');
+  if (shortcode === 'team') return builtinResolveComponent('ShortcodeTeam');
+  if (shortcode === 'faqs') return builtinResolveComponent('ShortcodeFaq');
+  if (shortcode === 'contact-block') return builtinResolveComponent('ShortcodeConsult');
+  if (shortcode === 'blog-posts') return builtinResolveComponent('ShortcodeNews');
   return 'div';
 }
 </script>
