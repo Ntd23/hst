@@ -104,6 +104,7 @@ class PageController extends Controller
                 $sections[] = [
                     'shortcode' => $shortcodeName,
                     'content' => $sectionData,
+                    'method'=> $method
                 ];
             }
 

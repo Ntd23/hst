@@ -91,7 +91,7 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data)
+const sectionData = computed(() => props.data?.data || props.data)
 const tabs = computed<any[]>(() => sectionData.value?.tabs ?? [])
 
 // ===== Count-up animation =====
