@@ -47,6 +47,40 @@ trait ShortcodeApiTrait
     }
 
     /**
+     * Parse TẤT CẢ shortcodes từ content → mảng ['shortcode-name' => [attrs], ...]
+     * Dùng cho pattern dynamic dispatch (giống BlogController).
+     *
+     * @return array<string, array>
+     */
+    protected function getAllShortcodeAttributes(string $content): array
+    {
+        // Cho phép shortcode có tham số, không có tham số, và có nội dung lồng nhau
+        preg_match_all('/\[([a-zA-Z0-9\-_]+)(?:\s+([^\]]*?))?\](?:(.*?)\[\/\1\])?/s', $content, $matches, PREG_SET_ORDER);
+
+        $result = [];
+        foreach ($matches as $match) {
+            $name = $match[1];
+            $attrString = $match[2] ?? '';
+            $innerContent = $match[3] ?? '';
+            
+            $attrs = $this->parseShortcodeAttributeString($attrString);
+            
+            // Nếu có nội dung lồng nhau, thêm vào attributes
+            if ($innerContent !== '') {
+                $attrs['content'] = trim($innerContent);
+            }
+            
+            // Trả về mảng tuần tự để giữ thứ tự shortcode và không bị ghi đè trùng tên
+            $result[] = [
+                'name' => $name,
+                'attrs' => $attrs,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * Parse attribute string thành mảng key-value
      * Sử dụng cùng regex pattern mà Botble's ShortcodeCompiler dùng.
      */

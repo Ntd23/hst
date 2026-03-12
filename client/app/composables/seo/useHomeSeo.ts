@@ -10,7 +10,7 @@ const homeSeoDefaults: PageSeoInput = {
 export const useHomeSeo = () => {
   const { locale } = useI18n()
 
-  const { data } = useFetch<any>('/api/pages/home/meta', {
+  const { data } = useFetch<any>('/api/pages/homepage/meta', {
     key: `seo-home-${locale.value}`,
     query: computed(() => ({ locale: locale.value })),
   })
