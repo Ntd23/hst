@@ -1,4 +1,4 @@
-import type { PageSeoInput } from '~/composables/usePageSeo'
+import type { PageSeoInput } from '~/composables/seo/usePageSeo'
 
 const homeSeoDefaults: PageSeoInput = {
   title: 'HISOTECH - Giải pháp chuyển đổi số cho doanh nghiệp',
