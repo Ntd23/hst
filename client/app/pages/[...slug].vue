@@ -1,147 +1,100 @@
 <template>
-  <div v-if="pending" class="flex min-h-[60vh] items-center justify-center">
-    <UIcon name="i-lucide-loader-2" class="size-8 animate-spin text-primary" />
-  </div>
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <!-- HERO SECTION -->
+    <div class="bg-[#dfe8ea] p-10">
+      <div class="grid grid-cols-12 gap-10 items-center">
+        <!-- LEFT CONTENT -->
+        <div class="col-span-12 lg:col-span-6 space-y-6">
+          <h1 class="text-4xl lg:text-4xl font-extrabold leading-tight">
+            6-Million-Year-Old Meteorite Strike Created a Massive Field of
+            Natural Glass in Brazil
+          </h1>
 
-  <component
-    v-else
-    :is="resolvedComponent"
-    :menu-item="matchedMenuItem"
-    :resolved-path="resolvedPath"
-  />
+          <div class="text-sm text-gray-500 space-y-1 uppercase">
+            <p>Hisotech Group • Ngày đăng: 30-4-2026</p>
+          </div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="col-span-12 lg:col-span-6">
+          <img
+            src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa"
+            class="w-full h-[400px] object-cover shadow-lg"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT SECTION -->
+    <div class="grid grid-cols-12 gap-12 mt-16">
+      <!-- ARTICLE BODY -->
+      <article
+        class="col-span-12 lg:col-span-8 space-y-6 text-lg leading-relaxed pe-5"
+      >
+        <p>
+          Scientists uncovered a vast field of tektites in Brazil—a rare type of
+          natural glass forged in the aftermath of meteorite impacts.
+        </p>
+
+        <p>
+          The field stretches across 500 miles (800 kilometers) and dates back
+          to a massive impact that took place around 6.3 million years ago. An
+          international team of researchers collected around 500 of the newly
+          discovered specimens.
+        </p>
+
+        <p>
+          The findings are detailed in a study published in Geology and help
+          fill in the gaps of South America's ancient impact history. The
+          researchers, however, are still searching for the crater.
+        </p>
+
+        <h2 class="text-2xl font-bold text-green-700 pt-6">
+          Extraterrestrial debris
+        </h2>
+
+        <p>
+          There are nearly 200 known impact craters on Earth, and yet only five
+          tektite fields had been discovered prior to the one in Brazil. That's
+          because a more complex process is required for melted glass to form.
+        </p>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="col-span-12 lg:col-span-4 p-5">
+        <CommonsBlogItem
+          class="mb-2"
+          v-for="item in blogs_featured"
+          :key="item.id"
+          :title="item.title"
+          :image="item.image"
+          :slug="item.slug"
+        />
+      </aside>
+    </div>
+  </main>
 </template>
-
 <script setup lang="ts">
-import type { Component } from 'vue'
-import ContactPage from '~/components/pages/contact-page.vue'
-import MenuFallbackPage from '~/components/pages/menu-fallback.vue'
-import WebsiteDemoPage from '~/pages/website-demo/index.vue'
-import WebsiteDemosPage from '~/pages/website-demos/index.vue'
+import { useRoute } from "vue-router";
+definePageMeta({ name: 'detail-slug-catchall' })
 
-type MenuItem = {
-  id?: number | string
-  title?: string
-  url?: string
-  css_class?: string | null
-  reference_id?: number | string | null
-  reference_type?: string | null
-  children?: MenuItem[]
-}
-
-const route = useRoute()
-const { locale } = useI18n()
-const commonStore = useCommonStore()
-
-const reservedPrefixes = new Set([
-  'api',
-  'admin',
-  'storage',
-  '_nuxt',
-  '__nuxt',
-  'build',
-  'vendor',
-])
-
-const normalizePath = (value: string | undefined | null): string => {
-  if (!value) return '/'
-
-  let path = value.trim()
-  if (/^https?:\/\//i.test(path)) {
-    try {
-      path = new URL(path).pathname || '/'
-    } catch {
-      path = '/'
-    }
-  }
-
-  if (!path.startsWith('/')) path = `/${path}`
-  path = path.replace(/\/{2,}/g, '/')
-  if (path.length > 1) path = path.replace(/\/+$/, '')
-  return path.toLowerCase()
-}
-
-const stripLocalePrefix = (path: string, currentLocale: string): string => {
-  const normalized = normalizePath(path)
-  const localePrefix = `/${currentLocale.toLowerCase()}`
-
-  if (normalized === localePrefix) return '/'
-  if (normalized.startsWith(`${localePrefix}/`)) return normalized.slice(localePrefix.length)
-  return normalized
-}
-
-const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
-  return items.flatMap((item) => [item, ...flattenMenuItems(item.children ?? [])])
-}
-
-const resolvedPath = computed(() => stripLocalePrefix(route.path, locale.value))
-const firstSegment = computed(() => resolvedPath.value.split('/').filter(Boolean)[0] ?? '')
-
-if (firstSegment.value && reservedPrefixes.has(firstSegment.value)) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Not found',
-  })
-}
-
-const { data: matchedMenuItem, pending } = await useAsyncData<MenuItem | null>(
-  `menu-route-${locale.value}-${resolvedPath.value}`,
-  async () => {
-    await commonStore.fetchHeader(locale.value)
-    const menuItems = flattenMenuItems(commonStore.headerData?.main_menu?.items ?? [])
-    return menuItems.find((item) => normalizePath(item.url) === resolvedPath.value) ?? null
+const blogs_featured = [
+  {
+    id: 1,
+    title:
+      "Google’s Chatbot Told Man to Give It an Android Body Before Encouraging Suicide, Lawsuit Alleges",
+    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
+    slug: "12312312312321",
   },
-)
+  {
+    id: 2,
+    title: "The Plague That Changed the Course of Game of Thrones’ History",
+    image: "https://images.unsplash.com/photo-1520975916090-3105956dac38",
+    slug: "12312312312321",
+  },
+];
 
-if (!matchedMenuItem.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Page not found',
-  })
-}
-
-const componentByReferenceId: Record<string, Component> = {
-  // Keep this map synced with Laravel Botble Page reference IDs.
-  '13': WebsiteDemoPage,
-  '21': WebsiteDemosPage,
-}
-
-const componentByMenuCssClass: Record<string, Component> = {
-  // If you set menu item css_class in Laravel admin, map it here.
-  'page-contact': ContactPage,
-  contact: ContactPage,
-}
-
-const contactPathAliases = new Set([
-  '/contact',
-  '/lien-he',
-  '/lien-he-voi-chung-toi',
-])
-
-const resolvedComponent = computed<Component>(() => {
-  const menuCssClass = matchedMenuItem.value?.css_class?.trim().toLowerCase()
-  if (menuCssClass) {
-    const component = componentByMenuCssClass[menuCssClass]
-    if (component) return component
-  }
-
-  const referenceId = matchedMenuItem.value?.reference_id
-  if (referenceId !== null && referenceId !== undefined) {
-    const component = componentByReferenceId[String(referenceId)]
-    if (component) return component
-  }
-
-  if (contactPathAliases.has(resolvedPath.value)) {
-    return ContactPage
-  }
-
-  return MenuFallbackPage
-})
-
-const pageTitle = computed(() => matchedMenuItem.value?.title || 'HISOTECH')
-usePageSeo(computed(() => ({
-  title: `${pageTitle.value} | HISOTECH`,
-  description: `Menu route: ${resolvedPath.value}`,
-  favicon: commonStore.headerData?.logo?.favicon,
-  robots: 'index,follow',
-})))
+const route = useRoute();
+const slugArray = route.params.slug;
+const slug = Array.isArray(slugArray) ? slugArray.join('/') : (slugArray || '');
 </script>

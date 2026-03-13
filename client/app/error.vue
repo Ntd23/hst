@@ -1,7 +1,8 @@
 <template>
   <div class="error-page">
-    <h1>{{ error.statusCode }}</h1>
-    <p>{{ error.message }}</p>
+    <h1 class="text-9xl font-extrabold text-[#7CB342]">{{ error?.statusCode || 404 }}</h1>
+    <h2 class="mt-4 text-2xl font-semibold text-gray-800 uppercase tracking-widest">
+      {{ error?.statusMessage || 'Page Not Found' }}</h2>
     <button @click="handleError">Về trang chủ</button>
   </div>
 </template>
