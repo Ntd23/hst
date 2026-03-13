@@ -29,7 +29,7 @@
           </NuxtLink>
           <div class="flex items-center gap-2 text-gray-500 text-sm">
             <UIcon name="solar:calendar-broken" class="size-5" />
-            <span>08/03/2026</span>
+            <span>{{ props.data.post_1.created_at }}</span>
           </div>
         </div>
       </div>

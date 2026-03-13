@@ -1,4 +1,4 @@
-export function useShortcodeComponents() {
+export function getShortcodeComponents() {
 
     const modules = import.meta.glob('@/components/shortcode/*.vue', {
         eager: true
