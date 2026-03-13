@@ -15,7 +15,6 @@ export default defineEventHandler(async (event): Promise<any> => {
   if (!slug || !section) {
     return { error: 'Missing params', params, contextParams: event.context.params }
   }
-
   console.log('--- ENTERED section.get.ts ---', slug, section, locale)
   try {
     const res = await apiFetch<any>(event, `/pages/${slug}/section/${section}`, {

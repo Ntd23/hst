@@ -102,8 +102,8 @@ class PageController extends Controller
                 }
                 
                 $sections[] = [
-                    'shortcode' => $shortcodeName,
-                    'content' => $sectionData,
+                    'shortcode' => $content,
+                    'content' => $allShortcodes,
                     'method' =>$method
                 ];
             }
@@ -200,7 +200,6 @@ class PageController extends Controller
         return [
             'locale' => $locale,
             'data' => array_merge(
-                $this->commonSectionAttributes($attrs),
                 ['tabs' => $tabs]
             ),
         ];
