@@ -1,100 +1,58 @@
 <template>
-  <main class="max-w-7xl mx-auto px-6 py-12">
-    <!-- HERO SECTION -->
-    <div class="bg-[#dfe8ea] p-10">
-      <div class="grid grid-cols-12 gap-10 items-center">
-        <!-- LEFT CONTENT -->
-        <div class="col-span-12 lg:col-span-6 space-y-6">
-          <h1 class="text-4xl lg:text-4xl font-extrabold leading-tight">
-            6-Million-Year-Old Meteorite Strike Created a Massive Field of
-            Natural Glass in Brazil
-          </h1>
-
-          <div class="text-sm text-gray-500 space-y-1 uppercase">
-            <p>Hisotech Group • Ngày đăng: 30-4-2026</p>
-          </div>
-        </div>
-
-        <!-- RIGHT IMAGE -->
-        <div class="col-span-12 lg:col-span-6">
-          <img
-            src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa"
-            class="w-full h-[400px] object-cover shadow-lg"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTENT SECTION -->
-    <div class="grid grid-cols-12 gap-12 mt-16">
-      <!-- ARTICLE BODY -->
-      <article
-        class="col-span-12 lg:col-span-8 space-y-6 text-lg leading-relaxed pe-5"
-      >
-        <p>
-          Scientists uncovered a vast field of tektites in Brazil—a rare type of
-          natural glass forged in the aftermath of meteorite impacts.
-        </p>
-
-        <p>
-          The field stretches across 500 miles (800 kilometers) and dates back
-          to a massive impact that took place around 6.3 million years ago. An
-          international team of researchers collected around 500 of the newly
-          discovered specimens.
-        </p>
-
-        <p>
-          The findings are detailed in a study published in Geology and help
-          fill in the gaps of South America's ancient impact history. The
-          researchers, however, are still searching for the crater.
-        </p>
-
-        <h2 class="text-2xl font-bold text-green-700 pt-6">
-          Extraterrestrial debris
-        </h2>
-
-        <p>
-          There are nearly 200 known impact craters on Earth, and yet only five
-          tektite fields had been discovered prior to the one in Brazil. That's
-          because a more complex process is required for melted glass to form.
-        </p>
-      </article>
-
-      <!-- SIDEBAR -->
-      <aside class="col-span-12 lg:col-span-4 p-5">
-        <CommonsBlogItem
-          class="mb-2"
-          v-for="item in blogs_featured"
-          :key="item.id"
-          :title="item.title"
-          :image="item.image"
-          :slug="item.slug"
-        />
-      </aside>
-    </div>
-  </main>
+  <div v-if="detailComponent" class="detail-page-wrapper">
+    <component :is="detailComponent" :slug="slug" :prefix="prefix" />
+  </div>
+  <div v-else class="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
+    <h1 class="text-3xl font-bold text-slate-800 mb-2">Trang không tồn tại</h1>
+    <p class="text-slate-500 mb-6">Xin lỗi, chúng tôi không tìm thấy nội dung chi tiết cho đường dẫn: <span class="font-mono text-primary bg-primary/10 px-2 py-1 rounded">/{{ slug }}</span></p>
+    <UButton to="/" color="primary" variant="solid">Về trang chủ</UButton>
+  </div>
 </template>
-<script setup lang="ts">
-import { useRoute } from "vue-router";
-definePageMeta({ name: 'detail-slug-catchall' })
 
-const blogs_featured = [
-  {
-    id: 1,
-    title:
-      "Google’s Chatbot Told Man to Give It an Android Body Before Encouraging Suicide, Lawsuit Alleges",
-    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
-    slug: "12312312312321",
-  },
-  {
-    id: 2,
-    title: "The Plague That Changed the Course of Game of Thrones’ History",
-    image: "https://images.unsplash.com/photo-1520975916090-3105956dac38",
-    slug: "12312312312321",
-  },
-];
+<script setup lang="ts">
+import { computed, defineAsyncComponent, shallowRef, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+
+definePageMeta({ name: 'detail-slug-catchall' })
 
 const route = useRoute();
 const slugArray = route.params.slug;
-const slug = Array.isArray(slugArray) ? slugArray.join('/') : (slugArray || '');
+
+// Ensure it's treated as an array to extract prefix
+const slugs = Array.isArray(slugArray) ? slugArray : [slugArray || ''];
+const slug = slugs.join('/');
+
+// Lấy phần đầu tiên của URL (vd: "blog" trong "blog/chi-tiet-1")
+const prefix = computed(() => slugs.length > 0 ? slugs[0]?.toLowerCase() : '');
+
+// Ánh xạ file tự động. Mapping 'blog' -> 'BlogDetail.vue', 'service' -> 'ServiceDetail.vue'
+const detailComponent = shallowRef<any>(null);
+
+watchEffect(() => {
+  if (!prefix.value) {
+     detailComponent.value = null;
+     return;
+  }
+  
+  // Viết hoa chữ cái đầu tiên để map với tên File Component (blog -> BlogDetail)
+  const componentName = prefix.value.charAt(0).toUpperCase() + prefix.value.slice(1) + 'Detail';
+  
+  try {
+    // Dynamic import component từ thư mục details
+    detailComponent.value = defineAsyncComponent({
+      loader: () => import(`~/components/pages/details/${componentName}.vue`),
+      // Optional: loading or error fallback can be added here
+    });
+  } catch (e) {
+    console.error(`Không tìm thấy giao diện chi tiết cho loại: ${prefix.value}`, e);
+    detailComponent.value = null; // show 404
+  }
+});
+
+// SEO tự động cho trang chi tiết
+const titleSlug = slug ? slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ') : 'Detail Page';
+usePageSeo(computed(() => ({
+  title: `${titleSlug} | HISOTECH`,
+  description: `Nội dung chi tiết của ${titleSlug}`
+})))
 </script>

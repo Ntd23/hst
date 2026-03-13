@@ -1,15 +1,22 @@
 <template>
   <section class="relative py-10">
-    <UContainer>
+    <div class="absolute inset-0"></div>
+    <UContainer class="relative z-10">
       <div
         v-motion
         :initial="{ opacity: 0, y: 30 }"
         :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
         class="text-center mb-10 sm:mb-16"
       >
-        <span class="text-secondary font-semibold tracking-wide uppercase text-sm" v-if="sectionData.subtitle" v-html="sectionData.subtitle"></span>
-        <h2 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white" v-if="sectionData.title" v-html="sectionData.title">
+        <span class="text-secondary font-semibold tracking-wide uppercase text-sm" v-if="sectionData?.subtitle" v-html="sectionData.subtitle"></span>
+        <h2 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white" v-if="sectionData?.title" v-html="sectionData.title">
         </h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto" v-if="sectionData?.description" v-html="sectionData.description"></p>
+        <div class="mt-6" v-if="sectionData?.button?.label && sectionData?.button?.url">
+          <UButton :to="sectionData.button.url" color="primary" variant="solid">
+            {{ sectionData.button.label }}
+          </UButton>
+        </div>
       </div>
 
       <!-- Bento Grid: phone=1col, tablet=2col, desktop=5col bento -->
@@ -40,7 +47,7 @@
             </p>
             <ULink
               class="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary transition-colors"
-              to="#"
+              :to="services[0].slug ? '/' + services[0].slug : '#'"
             >
               Khám phá ngay
               <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
@@ -76,7 +83,7 @@
               </p>
               <ULink
                 class="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary transition-colors"
-                to="#"
+                :to="service.slug ? '/' + service.slug : '#'"
               >
                 Khám phá ngay
                 <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
