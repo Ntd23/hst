@@ -17,7 +17,7 @@ export async function apiFetch<T>(
   event: H3Event,
   path: string,
   opts: Parameters<typeof $fetch<T>>[1] = {}
-) {
+): Promise<T> {
   const config = useRuntimeConfig()
 
   const query = getQuery(event)
