@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\Api\BlogController;
-use App\Http\Controllers\Api\Pages\PageController;
+use App\Http\Controllers\Api\Pages\ShortcodeController;
 use App\Http\Controllers\Api\Pages\ContactController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +15,8 @@ Route::prefix('common')->group(function () {
 // -------------------Pages (Dynamic by Slug)
 Route::prefix('pages')->group(function () {
     // Universal dynamic endpoints
-    Route::get('{slug}/meta',     [PageController::class, 'getMeta']);       // ?locale=vi
-    Route::get('{slug}/sections', [PageController::class, 'getSections']);   // ?locale=vi → trả tất cả sections
+    Route::get('{slug}/meta',     [ShortcodeController::class, 'getMeta']);       // ?locale=vi
+    Route::get('{slug}/sections', [ShortcodeController::class, 'getSections']);   // ?locale=vi → trả tất cả sections
     
     // Specific Post Actions
     Route::post('contact/section/form', [ContactController::class, 'submitSectionFormContact']);
