@@ -12,7 +12,7 @@ class ShortcodeManager
 
    public function getShortcode($content, $locale){
 
-        $allShortcodes = $content ? $this->parser->getAllShortcodeAttributes($content) : [];
+        $allShortcodes = $content['shortcode'] ? $this->parser->getAllShortcodeAttributes($content['shortcode']) : [];
         $sections = [];
         foreach ($allShortcodes as $item) {
 
@@ -44,6 +44,7 @@ class ShortcodeManager
 
         return [
                 'locale' => $locale,
+                'page' => $content['page'],
                 'sections' => $sections,
             ];
     }

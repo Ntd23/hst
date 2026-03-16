@@ -28,6 +28,7 @@ use Botble\Theme\Facades\Theme;
 use Botble\Theme\Supports\ThemeSupport;
 use Illuminate\Support\Arr;
 use Botble\Blog\Models\Post;
+use Botble\Blog\Models\Category;
 use Botble\Base\Forms\Fields\SelectField;
 
 
@@ -857,6 +858,78 @@ app()->booted(function (): void {
                     'label' => __('Post 3'),
                     'choices' => $posts,
                 ]
+            );
+
+    });
+    Shortcode::register('posts-blog', __('Posts blog'), __('Posts blog'), function (ShortcodeCompiler $shortcode): ?string {
+        return Theme::partial('shortcodes.blog-post-featured.index', compact('shortcode'));
+    });
+    Shortcode::setAdminConfig('posts-blog', function (array $attributes) {
+
+        $categories = Category::pluck('name', 'id')->toArray();
+
+        return ShortcodeForm::createFromArray($attributes)
+            ->withLazyLoading()
+
+            ->add(
+                'title',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Title'))
+                    ->toArray()
+            )
+
+            ->add(
+                'limit',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Limit'))
+                    ->value(6)
+                    ->toArray()
+            )
+
+            ->add(
+                'category_ids',
+                SelectField::class,
+                [
+                    'label' => __('Categories'),
+                    'choices' => $categories,
+                    'attr' => [
+                        'multiple' => true,
+                        'name' => 'category_ids[]',
+                        'class' => 'select-search-full',
+                    ],
+                ]
+            );
+    });
+
+
+    //web demo
+    Shortcode::register('web-demos', __('Web Demo'), __('Web Demo'), function (ShortcodeCompiler $shortcode): ?string {
+        return Theme::partial('shortcodes.blog-post-featured.index', compact('shortcode'));
+    });
+    Shortcode::setAdminConfig('web-demos', function (array $attributes) {
+
+        $categories = Category::pluck('name', 'id')->toArray();
+
+        return ShortcodeForm::createFromArray($attributes)
+            ->withLazyLoading()
+
+            ->add(
+                'title',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Title'))
+                    ->toArray()
+            )
+
+            ->add(
+                'limit',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Limit'))
+                    ->value(6)
+                    ->toArray()
             );
 
     });
