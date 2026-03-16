@@ -6,6 +6,7 @@
 <template>
   <div class="home">
     <CommonsPageRenderer slug="homepage" />
+    <NuxtPage/>
   </div>
 </template>
 
