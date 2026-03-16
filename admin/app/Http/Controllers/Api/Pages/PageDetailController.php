@@ -20,7 +20,7 @@ class PageDetailController extends Controller
         $locale = $this->getApiLocale($request);
         $cacheKey = "api:entity:{$slug}:{$locale}";
 
-        $payload = Cache::remember($cacheKey, 300, function () use ($slug, $locale) {
+        $payload = Cache::remember($cacheKey, 1, function () use ($slug, $locale) {
             $slugRecord = Slug::query()
                 ->where('key', $slug)
                 ->first();
@@ -109,6 +109,22 @@ class PageDetailController extends Controller
         $description = $this->getTranslatedValue($post, 'description', $locale) ?: $post->description;
         $content = $this->getTranslatedValue($post, 'content', $locale) ?: $post->content;
 
+        $post_new = Post::with('translations')
+            ->whereKeyNot($post->id)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($post) use ($locale) {
+                return [
+                    'id' => $post->id,
+                    'name' => $this->getTranslatedValue($post, 'name', $locale),
+                    'image' => \RvMedia::getImageUrl($post->image),
+                    'slug' => $post->slug,
+                    'published_at' => $post->created_at->format('Y-m-d'),
+                ];
+        });
+        // $posts = $this->getTranslatedValue($post_new, 'name', $locale) ?: $post_new;
+
         $meta = method_exists($post, 'getMetaData')
             ? $post->getMetaData('seo_meta', true)
             : [];
@@ -118,6 +134,7 @@ class PageDetailController extends Controller
             'slug' => $slug,
             'data' => [
                 'id' => $post->id,
+                'posts' => $post_new,
                 'name' => $name,
                 'description' => $description,
                 'content' => $content,

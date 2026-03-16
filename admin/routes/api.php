@@ -25,6 +25,6 @@ Route::prefix('pages')->group(function () {
     //Pages Details
     Route::get('{slug}/details', [PageDetailController::class, 'getDetails']);   // ?locale=vi → trả tất cả sections
 });
-Route::prefix('blog')->group(function () {
-    Route::get('/',[BlogController::class, 'getBlogs']);
-});
+// Route::prefix('blog')->group(function () {
+//     Route::get('/',[BlogController::class, 'getBlogs']);
+// });

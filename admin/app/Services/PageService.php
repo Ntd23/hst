@@ -16,9 +16,10 @@ class PageService
 
         // lấy thông tin page.
         $page = $pageSlug->reference; 
+        $page->makeHidden('content');
         $page->loadMissing('translations');
-
-        $content = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
+        $content['page'] = $page;
+        $content['shortcode'] = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
         $isBlogPage = (string) $page->id === (string) theme_option('blog_page_id');
         if (!$content && !$isBlogPage) {
             return null;
