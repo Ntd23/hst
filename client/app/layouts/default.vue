@@ -1,6 +1,6 @@
 <style scoped>
 .header-top {
-  height: 70px;
+  height: 100px;
 }
 </style>
 <template>

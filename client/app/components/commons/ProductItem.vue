@@ -19,7 +19,9 @@
   <div
     class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1"
   >
-    <div class="relative overflow-hidden h-56">
+    <div
+      class="relative overflow-hidden h-56 shadow-[0_10px_20px_rgba(0,0,0,0.07)]"
+    >
       <NuxtImg
         alt="Real Estate Website Demo"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -55,7 +57,11 @@
           class="flex items-center space-x-1 text-primary hover:text-primary-dark font-medium transition-colors bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-lg"
           href="#"
         >
-          <span class="text-xs uppercase tracking-wide">Chi tiết</span>
+          <span
+            class="text-xs uppercase tracking-wide cursor-pointer transition-colors duration-300 hover:text-blue-600"
+          >
+            Chi tiết
+          </span>
           <span class="material-symbols-outlined text-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,9 +80,7 @@
           </span>
         </a>
         <div class="flex items-center text-xs text-slate-400">
-          <span class="material-symbols-outlined text-sm mr-1"
-            >calendar_today</span
-          >
+          <UIcon name="solar:calendar-broken" class="size-5" />
           17-04-2025
         </div>
       </div>
