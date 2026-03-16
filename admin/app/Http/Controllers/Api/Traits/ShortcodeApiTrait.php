@@ -62,14 +62,14 @@ trait ShortcodeApiTrait
             $name = $match[1];
             $attrString = $match[2] ?? '';
             $innerContent = $match[3] ?? '';
-            
+
             $attrs = $this->parseShortcodeAttributeString($attrString);
-            
+
             // Nếu có nội dung lồng nhau, thêm vào attributes
             if ($innerContent !== '') {
                 $attrs['content'] = trim($innerContent);
             }
-            
+
             // Trả về mảng tuần tự để giữ thứ tự shortcode và không bị ghi đè trùng tên
             $result[] = [
                 'name' => $name,
@@ -96,13 +96,17 @@ trait ShortcodeApiTrait
             foreach ($match as $item) {
                 if (!empty($item[1])) {
                     $attributes[strtolower($item[1])] = stripcslashes($item[2]);
-                } elseif (!empty($item[3])) {
+                }
+                elseif (!empty($item[3])) {
                     $attributes[strtolower($item[3])] = stripcslashes($item[4]);
-                } elseif (!empty($item[5])) {
+                }
+                elseif (!empty($item[5])) {
                     $attributes[strtolower($item[5])] = stripcslashes($item[6]);
-                } elseif (isset($item[7]) && strlen($item[7])) {
+                }
+                elseif (isset($item[7]) && strlen($item[7])) {
                     $attributes[] = stripcslashes($item[7]);
-                } elseif (isset($item[8])) {
+                }
+                elseif (isset($item[8])) {
                     $attributes[] = stripcslashes($item[8]);
                 }
             }
@@ -123,7 +127,7 @@ trait ShortcodeApiTrait
      */
     protected function parseShortcodeTabs(array $attrs, array $fields, array $imageFields = []): array
     {
-        $quantity = isset($attrs['quantity']) ? (int) $attrs['quantity'] : 0;
+        $quantity = isset($attrs['quantity']) ? (int)$attrs['quantity'] : 0;
         $tabs = [];
 
         for ($i = 1; $i <= $quantity; $i++) {
@@ -348,8 +352,8 @@ trait ShortcodeApiTrait
                 ->where('lang_code', $langCode)
                 ->first();
 
-            if ($translated && isset($translated->{$column})) {
-                return $translated->{$column};
+            if ($translated && isset($translated->{ $column})) {
+                return $translated->{ $column};
             }
         }
 
@@ -380,7 +384,7 @@ trait ShortcodeApiTrait
      */
     protected function imageUrl(?string $path): ?string
     {
-        return $path ? RvMedia::getImageUrl($path) : null;
+        return $path ?RvMedia::getImageUrl($path) : null;
     }
 
     // ──────────────────────────────────────────────
@@ -434,7 +438,7 @@ trait ShortcodeApiTrait
         $seoTitle = theme_option('seo_title', theme_option('site_title', config('app.name')));
         $seoDescription = theme_option('seo_description', '');
         $seoImage = theme_option('seo_image', '');
-        $seoIndex = (bool) theme_option('seo_index', true);
+        $seoIndex = (bool)theme_option('seo_index', true);
         $ogImage = null;
 
         if ($page) {
@@ -464,11 +468,71 @@ trait ShortcodeApiTrait
             'og_image' => $ogImage,
             'seo_index' => $seoIndex,
             'favicon' => theme_option('favicon')
-                ? $this->imageUrl(theme_option('favicon'))
-                : null,
+            ? $this->imageUrl(theme_option('favicon'))
+            : null,
         ];
     }
 
+    /**
+     * Build SEO meta payload cho các model không phải Page
+     * (Team, Post, Category, Tag, Portfolio, Service, Gallery...).
+     */
+    protected function buildGenericMetaPayload($model, string $locale): array
+    {
+        // Fallback từ theme option
+        $seoTitle = theme_option('seo_title', theme_option('site_title', config('app.name')));
+        $seoDescription = theme_option('seo_description', '');
+        $seoImage = theme_option('seo_image', '');
+        $seoIndex = (bool)theme_option('seo_index', true);
+        $ogImage = null;
+
+        // Lấy SEO meta từ model nếu hỗ trợ getMetaData
+        if (method_exists($model, 'getMetaData')) {
+            $meta = $model->getMetaData('seo_meta', true);
+            if (!empty($meta['seo_title']))
+                $seoTitle = $meta['seo_title'];
+            if (!empty($meta['seo_description']))
+                $seoDescription = $meta['seo_description'];
+            if (!empty($meta['seo_image']))
+                $ogImage = $this->imageUrl($meta['seo_image']);
+            if (!empty($meta['index']))
+                $seoIndex = $meta['index'] === 'index';
+        }
+
+        // Fallback title từ name/title của model
+        if ($seoTitle === theme_option('seo_title', theme_option('site_title', config('app.name')))) {
+            $modelName = $this->getTranslatedValue($model, 'name', $locale)
+                ?? ($model->name ?? ($model->title ?? null));
+            if ($modelName) {
+                $seoTitle = $modelName;
+            }
+        }
+
+        // Fallback description  
+        if (!$seoDescription) {
+            $seoDescription = $this->getTranslatedValue($model, 'description', $locale)
+                ?? ($model->description ?? null);
+        }
+
+        // Fallback og:image từ model->image
+        if (!$ogImage) {
+            $ogImage = isset($model->image) ? $this->imageUrl($model->image) : null;
+        }
+        if (!$ogImage && $seoImage) {
+            $ogImage = $this->imageUrl($seoImage);
+        }
+
+        return [
+            'locale' => $locale,
+            'seo_title' => $seoTitle,
+            'seo_description' => $seoDescription,
+            'og_image' => $ogImage,
+            'seo_index' => $seoIndex,
+            'favicon' => theme_option('favicon')
+            ? $this->imageUrl(theme_option('favicon'))
+            : null,
+        ];
+    }
     /**
      * Wrapper chuẩn cho mọi section API:
      *   - Lấy locale
@@ -480,13 +544,13 @@ trait ShortcodeApiTrait
      * @param callable $callback     fn(string $locale): ?array → trả mảng data hoặc null
      * @param int      $cacheTtl     Thời gian cache (giây), mặc định 300
      */
-     protected function sectionResponse(
-         Request $request,
-         string $sectionName,
-         callable $callback,
-         int $cacheTtl = 300,
-         ?string $cacheKeySuffix = null
-     ): JsonResponse
+    protected function sectionResponse(
+        Request $request,
+        string $sectionName,
+        callable $callback,
+        int $cacheTtl = 300,
+        ?string $cacheKeySuffix = null
+        ): JsonResponse
     {
         $locale = $this->getApiLocale($request);
         $cacheKey = "api:pages:{$sectionName}:{$locale}";
