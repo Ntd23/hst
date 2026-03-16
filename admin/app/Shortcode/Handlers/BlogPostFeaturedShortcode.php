@@ -25,11 +25,11 @@ class BlogPostFeaturedShortcode implements ShortcodeInterface
         $posts = Post::select('id','name', 'content', 'image', 'created_at')
         ->whereIn('id', $postIds)
         ->get()
-        ->map(function ($post) {
+        ->map(function ($post ) use ($locale) {
             return [
                 'id' => $post->id,
-                'name' => $post->name,
-                'content' => $post->content,
+                'name' => $this->getTranslatedValue($post, 'name', $locale),
+                'content' => $this->getTranslatedValue($post, 'content', $locale),
                 'image' => \RvMedia::getImageUrl($post->image),
                 'created_at' => $post->created_at,
                 'slug' => $post->slug,

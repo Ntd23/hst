@@ -392,29 +392,30 @@ class HookServiceProvider extends ServiceProvider
 
             return $html;
         }, 15);
+
+
         //web demo
+        // add_shortcode(
+        //     'include-webdemo',
+        //     'Include WebDemo',
+        //     'Hiển thị view webdemohomepage từ thư mục resources/views/client/',
+        //     function (Shortcode $shortcode) {
+        //         return view('client.webdemohomepage')->render();
+        //     }
+        // );
 
-        add_shortcode(
-            'include-webdemo',
-            'Include WebDemo',
-            'Hiển thị view webdemohomepage từ thư mục resources/views/client/',
-            function (Shortcode $shortcode) {
-                return view('client.webdemohomepage')->render();
-            }
-        );
+        // define('PAGE_FILTER_CUSTOM_RENDER_CONTENT', 'page_filter_custom_render_content');
 
-        define('PAGE_FILTER_CUSTOM_RENDER_CONTENT', 'page_filter_custom_render_content');
+        // add_filter(PAGE_FILTER_CUSTOM_RENDER_CONTENT, function ($content) {
+        //     $content = preg_replace('/<p>\s*(\[[^\]]+\])\s*<\/p>/i', '$1', $content);
+        //     $content = preg_replace('/<shortcode>\s*(\[.*?\])\s*<\/shortcode>/i', '$1', $content);
+        //     return do_shortcode($content);
+        // }, 120);
 
-        add_filter(PAGE_FILTER_CUSTOM_RENDER_CONTENT, function ($content) {
-            $content = preg_replace('/<p>\s*(\[[^\]]+\])\s*<\/p>/i', '$1', $content);
-            $content = preg_replace('/<shortcode>\s*(\[.*?\])\s*<\/shortcode>/i', '$1', $content);
-            return do_shortcode($content);
-        }, 120);
-
-        shortcode()->setPreviewImage(
-            'include-webdemo',
-            asset('vendor/core/packages/shortcode/images/placeholder-code.jpg')
-        );
+        // shortcode()->setPreviewImage(
+        //     'include-webdemo',
+        //     asset('vendor/core/packages/shortcode/images/placeholder-code.jpg')
+        // );
         //end web demo
         if (! BaseHelper::hasDemoModeEnabled()) {
             if (config('packages.theme.general.enable_custom_html_shortcode')) {
