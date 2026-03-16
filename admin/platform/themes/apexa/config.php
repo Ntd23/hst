@@ -48,7 +48,7 @@ return [
             $theme->asset()->container('footer')->usePath()->add('jquery-parallax-scroll-js', 'plugins/jquery/jquery.parallaxScroll.min.js');
             $theme->asset()->container('footer')->usePath()->add('jquery-appear-js', 'plugins/jquery/jquery.appear.js');
             $theme->asset()->container('footer')->usePath()->add('jquery-odometer-js', 'plugins/odometer/jquery.odometer.min.js');
-            $theme->asset()->container('footer')->usePath()->add('jquery-magnific-popup-js', 'plugins/magnific-popup/jquery.magnific-popup.min.js');
+            // $theme->asset()->container('footer')->usePath()->add('jquery-magnific-popup-js', 'plugins/magnific-popup/jquery.magnific-popup.min.js');
             $theme->asset()->container('footer')->usePath()->add('bootstrap-js', 'plugins/bootstrap/bootstrap.bundle.min.js');
             $theme->asset()->container('footer')->usePath()->add('swiper-js', 'plugins/swiper/swiper-bundle.js');
             $theme->asset()->container('footer')->usePath()->add('aos-js', 'plugins/aos/aos.js');
@@ -73,13 +73,14 @@ return [
             $theme->asset()->usePath()->add('magnific-popup-css', 'plugins/magnific-popup/magnific-popup.css');
             $theme->asset()->usePath()->add('swiper-css', 'plugins/swiper/swiper-bundle.css');
             $theme->asset()->usePath()->add('aos-css', 'plugins/aos/aos.css');
-            $theme->asset()->usePath()->add('animate-css', 'css/animate.min.css');
-            $theme->asset()->usePath()->add('fontawesome-all-css', 'css/fontawesome-all.min.css');
-            $theme->asset()->usePath()->add('flaticon-css', 'css/flaticon.css');
-            $theme->asset()->usePath()->add('default-css', 'css/default.css');
+            $theme->asset()->usePath()->add('main-css', 'css/all.css', [], [], $version);
+            // $theme->asset()->usePath()->add('animate-css', 'css/animate.min.css');
+            // $theme->asset()->usePath()->add('fontawesome-all-css', 'css/fontawesome-all.min.css');
+            // $theme->asset()->usePath()->add('flaticon-css', 'css/flaticon.css');
+            // $theme->asset()->usePath()->add('default-css', 'css/default.css');
 
             if (is_plugin_active('ecommerce')) {
-                $theme->asset()->usePath()->add('ecommerce-css', 'css/ecommerce.css');
+                // $theme->asset()->usePath()->add('ecommerce-css', 'css/ecommerce.css');
             }
 
             $theme->asset()->usePath()->add('style', 'css/style.css', [], [], $version);
