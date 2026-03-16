@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\Pages\ShortcodeController;
 use App\Http\Controllers\Api\Pages\ContactController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Pages\PageDetailController;
 
 // -------------------Menu 
 Route::prefix('common')->group(function () {
@@ -20,6 +21,9 @@ Route::prefix('pages')->group(function () {
     
     // Specific Post Actions
     Route::post('contact/section/form', [ContactController::class, 'submitSectionFormContact']);
+
+    //Pages Details
+    Route::get('{slug}/details', [PageDetailController::class, 'getDetails']);   // ?locale=vi → trả tất cả sections
 });
 Route::prefix('blog')->group(function () {
     Route::get('/',[BlogController::class, 'getBlogs']);

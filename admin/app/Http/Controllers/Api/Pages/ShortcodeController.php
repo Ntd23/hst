@@ -8,6 +8,7 @@ use App\Services\ShortcodeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+use Botble\Slug\Models\Slug;
 
 
 

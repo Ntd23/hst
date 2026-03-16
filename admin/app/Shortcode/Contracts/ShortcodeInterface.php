@@ -5,5 +5,5 @@ interface ShortcodeInterface
 {
     public static function shortcode(): string;
 
-    public function handle(array $attrs, string $locale): array;
+    public function handle(array $attrs, string $locale): array|string|null;
 }
