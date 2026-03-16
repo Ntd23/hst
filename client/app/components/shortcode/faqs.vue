@@ -63,6 +63,7 @@ const props = defineProps<{
 }>()
 
 const sectionData = computed(() => props.data || {})
+console.log(sectionData.value)
 const faqs = computed(() => props.data?.items || [])
 </script>
 

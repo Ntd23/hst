@@ -10,13 +10,12 @@ class PageService
         $pageSlug = Slug::where('key', $slug)
             ->where('reference_type', Page::class)
             ->first();
-
         if (!$pageSlug || !$pageSlug->reference) {
             return null;
         }
 
         // lấy thông tin page.
-        $page = $pageSlug->reference;
+        $page = $pageSlug->reference; 
         $page->loadMissing('translations');
 
         $content = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;

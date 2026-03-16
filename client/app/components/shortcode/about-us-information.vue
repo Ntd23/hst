@@ -19,7 +19,7 @@
             >
               <div v-for="(tab, idx) in tabs.slice(0, 2)" :key="idx" class="flex items-center gap-4 mb-4 last:mb-0">
                 <div :class="['p-2.5 sm:p-3 rounded-full', idx === 0 ? 'bg-blue-100 text-primary' : 'bg-yellow-100 text-secondary']">
-                  <UIcon :name="tab.icon || 'i-lucide-check-circle'" class="size-5 sm:size-6" />
+                  <UIcon :name="'i-lucide-check-circle'" class="size-5 sm:size-6" />
                 </div>
                 <div>
                   <h4 class="font-bold text-sm sm:text-base text-slate-800" v-html="tab.title">
@@ -91,5 +91,6 @@ const props = defineProps<{
 }>()
 
 const sectionData = computed(() => props.data?.data || props.data || {})
+console.log(sectionData.value)
 const tabs = computed(() => sectionData.value?.tabs || [])
 </script>
