@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Botble\Blog\Models\Post;
 use Botble\Page\Models\Page;
@@ -9,7 +9,140 @@ use Botble\Media\Facades\RvMedia;
 
 
 
-class BlogController extends Controller{
+class BlogController extends Controller
+{
+    /**
+     * Tận dụng Trait để dùng getTranslatedValue, getLangCode, imageUrl, getSlug
+     */
+    use \App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+
+    public function getListing(Request $request)
+    {
+        try {
+            $locale = $this->getApiLocale($request);
+            $limit = $request->query('limit', 6);
+            $search = $request->query('q');
+            $categorySlug = $request->query('category');
+            $tagSlug = $request->query('tag');
+
+            // 1. Query Posts with Filters
+            $query = Post::query()
+                ->with(['slugable', 'translations', 'categories', 'author'])
+                ->wherePublished()
+                ->latest();
+
+            if ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            }
+
+            if ($categorySlug) {
+                $query->whereHas('categories.slugable', function ($q) use ($categorySlug) {
+                    $q->where('slugs.key', $categorySlug);
+                });
+            }
+
+            if ($tagSlug) {
+                $query->whereHas('tags.slugable', function ($q) use ($tagSlug) {
+                    $q->where('slugs.key', $tagSlug);
+                });
+            }
+
+            $posts = $query->paginate($limit);
+
+            $mappedPosts = collect($posts->items())->map(function ($post) use ($locale) {
+                $slug = $this->getSlug($post);
+                return [
+                    'id'          => $post->id,
+                    'name'        => $this->getTranslatedValue($post, 'name', $locale),
+                    'description' => $this->getTranslatedValue($post, 'description', $locale),
+                    'image'       => $this->imageUrl($post->image),
+                    'url'         => $slug ? '/' . $slug : null,
+                    'slug'        => $slug,
+                    'created_at'  => $post->created_at?->toIso8601String(),
+                    'author'      => $post->author?->name ?? null,
+                    'categories'  => $post->categories->map(fn($cat) => [
+                        'id'   => $cat->id,
+                        'name' => $cat->name,
+                    ])->values()->toArray(),
+                ];
+            });
+
+            // 2. Categories with Post Counts
+            $categories = \Botble\Blog\Models\Category::query()
+                ->withCount(['posts' => function($q) {
+                    $q->wherePublished();
+                }])
+                ->wherePublished()
+                ->limit(10)
+                ->get()
+                ->map(function ($cat) {
+                    return [
+                        'id' => $cat->id,
+                        'name' => $cat->name,
+                        'slug' => $cat->slug,
+                        'posts_count' => $cat->posts_count,
+                    ];
+                });
+
+            // 3. Tags
+            $tags = \Botble\Blog\Models\Tag::query()
+                ->wherePublished()
+                ->limit(20)
+                ->get()
+                ->map(function ($tag) {
+                    return [
+                        'id' => $tag->id,
+                        'name' => $tag->name,
+                        'slug' => $tag->slug,
+                    ];
+                });
+
+            // 4. Recent Posts
+            $recentPosts = Post::query()
+                ->with(['slugable', 'translations'])
+                ->wherePublished()
+                ->latest()
+                ->limit(4)
+                ->get()
+                ->map(function ($post) use ($locale) {
+                    $slug = $this->getSlug($post);
+                    return [
+                        'id'         => $post->id,
+                        'name'       => $this->getTranslatedValue($post, 'name', $locale),
+                        'image'      => $this->imageUrl($post->image),
+                        'url'        => $slug ? '/' . $slug : null,
+                        'slug'       => $slug,
+                        'created_at' => $post->created_at?->toIso8601String(),
+                    ];
+                });
+
+            return response()->json([
+                'ok' => true,
+                'data' => [
+                    'posts' => [
+                        'items' => $mappedPosts,
+                        'current_page' => $posts->currentPage(),
+                        'last_page'    => $posts->lastPage(),
+                        'total'        => $posts->total(),
+                        'per_page'     => $posts->perPage(),
+                    ],
+                    'sidebar' => [
+                        'categories'   => $categories,
+                        'tags'         => $tags,
+                        'recent_posts' => $recentPosts,
+                    ]
+                ]
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => $e->getMessage(),
+                'line' => $e->getLine()
+            ], 500);
+        }
+    }
+
     public function getBlogs()
     {
         try {

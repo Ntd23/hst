@@ -1,41 +1,52 @@
 <?php
+
 namespace App\Shortcode\Core;
 
 class ShortcodeParser
 {
+    /**
+     * Parse tất cả shortcodes từ content string → mảng [['name' => ..., 'attrs' => ...], ...]
+     */
     public function getAllShortcodeAttributes(string $content): array
     {
-        // Cho phép shortcode có tham số, không có tham số, và có nội dung lồng nhau
-        preg_match_all('/\[([a-zA-Z0-9\-_]+)(?:\s+([^\]]*?))?\](?:(.*?)\[\/\1\])?/s', $content, $matches, PREG_SET_ORDER);
+        preg_match_all(
+            '/\[([a-zA-Z0-9\-_]+)(?:\s+([^\]]*?))?\](?:(.*?)\[\/\1\])?/s',
+            $content,
+            $matches,
+            PREG_SET_ORDER
+        );
 
         $result = [];
+
         foreach ($matches as $match) {
-            $name = $match[1];
-            $attrString = $match[2] ?? '';
+            $name         = $match[1];
+            $attrString   = $match[2] ?? '';
             $innerContent = $match[3] ?? '';
-            
+
             $attrs = $this->parseShortcodeAttributeString($attrString);
-            
-            // Nếu có nội dung lồng nhau, thêm vào attributes
+
             if ($innerContent !== '') {
                 $attrs['content'] = trim($innerContent);
             }
-            
-            // Trả về mảng tuần tự để giữ thứ tự shortcode và không bị ghi đè trùng tên
+
             $result[] = [
-                'name' => $name,
+                'name'  => $name,
                 'attrs' => $attrs,
             ];
         }
+
         return $result;
     }
 
+    /**
+     * Parse attribute string thành mảng key-value.
+     * Pattern giống ShortcodeCompiler::parseAttributes().
+     */
     public function parseShortcodeAttributeString(string $text): array
     {
         $text = htmlspecialchars_decode($text, ENT_QUOTES);
         $attributes = [];
 
-        // Pattern giống hệt ShortcodeCompiler::parseAttributes()
         $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
 
         if (preg_match_all($pattern, preg_replace('/[\x{00a0}\x{200b}]+/u', ' ', $text), $match, PREG_SET_ORDER)) {
