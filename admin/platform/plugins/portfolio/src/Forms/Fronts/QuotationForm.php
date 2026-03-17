@@ -41,6 +41,7 @@ class QuotationForm extends FormFront
 
     public function setup(): void
     {
+        
         $customFields = CustomField::query()
             ->wherePublished()->with('options')
             ->orderBy('order')

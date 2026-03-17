@@ -214,7 +214,6 @@ const props = defineProps<{
 
 const { Shortcodes, mapSectionsToShortcodes } = useMappedShortcodes();
 const { data: pageData, pending } = await usePageDetail<any>(props.slug);
-console.log(pageData.value);
 
 const post = ref({
   name: pageData.value?.name,

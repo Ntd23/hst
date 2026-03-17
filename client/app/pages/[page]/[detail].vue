@@ -12,13 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useMappedDetailPage } from '~/composables/useMappedDetailPage'
+import { computed } from "vue";
+import { useMappedDetailPage } from "~/composables/useMappedDetailPage";
 
-const route = useRoute()
+const route = useRoute();
 
-const page = computed(() => String(route.params.page || ''))
-const detail = computed(() => String(route.params.detail || ''))
+const page = computed(() => String(route.params.page || ""));
+const detail = computed(() => String(route.params.detail || ""));
 
-const { detailComponent } = useMappedDetailPage(page)
+const { detailComponent } = useMappedDetailPage(page);
+console.log("đây là test 2", detailComponent);
 </script>
