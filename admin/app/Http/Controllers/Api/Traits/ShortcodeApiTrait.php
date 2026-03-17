@@ -387,6 +387,18 @@ trait ShortcodeApiTrait
         return $path ?RvMedia::getImageUrl($path) : null;
     }
 
+    /**
+     * Lấy slug từ model (ưu tiên slugable relation).
+     */
+    protected function getSlug($model): ?string
+    {
+        if ($model->relationLoaded('slugable') && $model->slugable) {
+            return $model->slugable->key;
+        }
+
+        return $model->slug ?? null;
+    }
+
     // ──────────────────────────────────────────────
     //  RESPONSE HELPERS
     // ──────────────────────────────────────────────
@@ -435,41 +447,46 @@ trait ShortcodeApiTrait
 
     private function buildMetaPayload(?Page $page, string $locale): array
     {
-        $seoTitle = theme_option('seo_title', theme_option('site_title', config('app.name')));
-        $seoDescription = theme_option('seo_description', '');
-        $seoImage = theme_option('seo_image', '');
-        $seoIndex = (bool)theme_option('seo_index', true);
+        $seoTitle = null;
+        $seoDescription = null;
+        $seoIndex = true;
         $ogImage = null;
 
         if ($page) {
-            $meta = $page->getMetaData('seo_meta', true);
-            if (!empty($meta['seo_title'])) {
-                $seoTitle = $meta['seo_title'];
+            if (method_exists($page, 'getMetaData')) {
+                $meta = $page->getMetaData('seo_meta', true);
+                if (!empty($meta['seo_title'])) {
+                    $seoTitle = $meta['seo_title'];
+                }
+                if (!empty($meta['seo_description'])) {
+                    $seoDescription = $meta['seo_description'];
+                }
+                if (!empty($meta['seo_image'])) {
+                    $ogImage = $this->imageUrl($meta['seo_image']);
+                }
+                if (isset($meta['index'])) {
+                    $seoIndex = $meta['index'] === 'index';
+                }
             }
-            if (!empty($meta['seo_description'])) {
-                $seoDescription = $meta['seo_description'];
-            }
-            if (!empty($meta['seo_image'])) {
-                $ogImage = $this->imageUrl($meta['seo_image']);
-            }
-            if (!empty($meta['index'])) {
-                $seoIndex = $meta['index'] === 'index';
-            }
-        }
 
-        if (!$ogImage && $seoImage) {
-            $ogImage = $this->imageUrl($seoImage);
+            if (!$seoTitle) {
+                $seoTitle = $this->getTranslatedValue($page, 'name', $locale) ?: current(explode('(', $page->name));
+            }
+            if (!$seoDescription) {
+                $seoDescription = $this->getTranslatedValue($page, 'description', $locale) ?: $page->description;
+            }
+            if (!$ogImage && isset($page->image)) {
+                $ogImage = $this->imageUrl($page->image);
+            }
         }
 
         return [
-            'locale' => $locale,
-            'seo_title' => $seoTitle,
-            'seo_description' => $seoDescription,
-            'og_image' => $ogImage,
-            'seo_index' => $seoIndex,
-            'favicon' => theme_option('favicon')
-            ? $this->imageUrl(theme_option('favicon'))
-            : null,
+            'locale'          => $locale,
+            'seo_title'       => $seoTitle ?: theme_option('seo_title', theme_option('site_title', config('app.name'))),
+            'seo_description' => $seoDescription ?: theme_option('seo_description', ''),
+            'og_image'        => $ogImage ?: ($this->imageUrl(theme_option('seo_image')) ?: null),
+            'seo_index'       => $seoIndex,
+            'favicon'         => theme_option('favicon') ? $this->imageUrl(theme_option('favicon')) : null,
         ];
     }
 

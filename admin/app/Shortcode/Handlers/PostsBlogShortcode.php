@@ -1,13 +1,16 @@
 <?php 
 namespace App\Shortcode\Handlers;
 
-use App\shortcode\Contracts\ShortcodeInterface;
+use App\Shortcode\Contracts\ShortcodeInterface;
+use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
 
 use Illuminate\Support\Facades\DB;
 use Botble\Media\Facades\RvMedia;
 
 class PostsBlogShortcode implements ShortcodeInterface
 {
+    use ShortcodeApiTrait;
+
     public static function shortcode(): string
     {
         return 'posts-post';
@@ -39,15 +42,16 @@ class PostsBlogShortcode implements ShortcodeInterface
         }
 
         $items = $posts->map(function ($post) use ($locale) {
+            $slug = $this->getSlug($post);
             return [
                 'id' => $post->id,
                 'name' => $this->getTranslatedValue($post, 'name', $locale),
                 'description' => $this->getTranslatedValue($post, 'description', $locale),
                 'image' => $this->imageUrl($post->image),
-                'url' => $post->url ?? null,
+                'url' => $slug ? '/' . $slug : null,
                 'created_at' => $post->created_at?->toIso8601String(),
                 'author' => $post->author?->name ?? null,
-                'slug' => $post->slug,
+                'slug' => $slug,
                 'categories' => $post->categories->map(fn($cat) => [
                     'id' => $cat->id,
                     'name' => $cat->name,
