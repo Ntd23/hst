@@ -19,17 +19,15 @@
       />
     </div>
     <div v-else class="">
-      <!-- <h1 class="text-2xl font-bold text-gray-800">Page Content Not Found</h1>
-      <p class="text-gray-500 mt-2">The requested slug "{{ slug }}" returned no sections from the API.</p> -->
-      <main class="pt-5 pb-20 px-4 sm:px-6 lg:px-8 mx-auto">
-        <div class="mb-8 pl-1">
-          <h1
-            class="text-4xl md:text-5xl font-bold text-primary mt-6 mb-2 tracking-tight"
-          >
-            Chi tiết bài viết
-          </h1>
-        </div>
+      <!-- Breadcrumb -->
+      <CommonsAppBreadcrumb
+        title="Chi tiết bài viết"
+        :items="[
+          { label: post.name }
+        ]"
+      />
 
+      <div class="pt-5 pb-20 px-4 sm:px-6 lg:px-8 mx-auto">
         <div
           class="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center p-5 mb-10 shadow-md blog-hero"
         >
@@ -83,15 +81,14 @@
                 <div class="flex items-center gap-2">
                   <span class="text-sm font-semibold text-slate-700">Thẻ:</span>
                   <a
+                    v-for="tag in tags"
+                    :key="tag.id"
                     class="px-3 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-primary hover:text-white transition-colors text-sm"
                     href="#"
-                    >Truyền thông</a
-                  >
+                  >{{ tag.name }}</a>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-sm font-semibold text-slate-700"
-                    >Chia sẻ:</span
-                  >
+                  <span class="text-sm font-semibold text-slate-700">Chia sẻ:</span>
                   <div class="flex gap-2">
                     <button
                       class="w-8 h-8 rounded-full bg-slate-100 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-colors text-slate-500"
@@ -131,8 +128,7 @@
                 <div>
                   <span
                     class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >Tác giả</span
-                  >
+                  >Tác giả</span>
                   <h4 class="text-lg font-bold text-primary">HisoTech Group</h4>
                   <p class="text-sm text-slate-600 mt-1">
                     Chuyên gia tư vấn giải pháp chuyển đổi số toàn diện cho
@@ -151,10 +147,10 @@
               </h3>
               <div class="space-y-5">
                 <NuxtLink
-                  v-for="post in post_new"
-                  :key="post.index"
+                  v-for="p in post_new"
+                  :key="p.id"
                   class="group flex gap-4 items-start"
-                  :to="`/blog/${post.slug}`"
+                  :to="`/blog/${p.slug}`"
                 >
                   <div
                     class="w-20 h-20 rounded-lg overflow-hidden shrink-0 relative"
@@ -162,20 +158,20 @@
                     <img
                       alt="Post"
                       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      :src="post.image"
+                      :src="p.image"
                     />
                   </div>
                   <div>
                     <h4
                       class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors line-clamp-2 leading-snug"
                     >
-                      {{ post.name }}
+                      {{ p.name }}
                     </h4>
                     <div
                       class="flex items-center gap-1 mt-2 text-xs text-slate-400"
                     >
                       <UIcon name="solar:calendar-broken" class="size-5" />
-                      <span>{{ post.published_at }}</span>
+                      <span>{{ p.published_at }}</span>
                     </div>
                   </div>
                 </NuxtLink>
@@ -190,16 +186,15 @@
               <div class="flex flex-wrap gap-2">
                 <a
                   v-for="tag in tags"
-                  :key="tag.index"
+                  :key="tag.id"
                   class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-primary hover:text-white transition-colors"
                   href="#"
-                  >{{ tag.name }}</a
-                >
+                >{{ tag.name }}</a>
               </div>
             </div>
           </aside>
         </div>
-      </main>
+      </div>
     </div>
   </main>
 </template>

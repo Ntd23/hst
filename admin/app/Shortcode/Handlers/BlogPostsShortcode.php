@@ -1,23 +1,25 @@
-<?php 
+<?php
+
 namespace App\Shortcode\Handlers;
 
-use App\shortcode\Contracts\ShortcodeInterface;
-
-use Illuminate\Support\Facades\DB;
-use Botble\Media\Facades\RvMedia;
+use App\Shortcode\Contracts\ShortcodeInterface;
+use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+use Botble\Blog\Models\Post;
 
 class BlogPostsShortcode implements ShortcodeInterface
 {
+    use ShortcodeApiTrait;
+
     public static function shortcode(): string
     {
         return 'blog-posts';
     }
 
-    public function handle(array $attrs, string $locale): array
+    public function handle(array $attrs, string $locale): ?array
     {
-        $limit = isset($attrs['limit']) ? (int) $attrs['limit'] : 4;
+        $limit = isset($attrs['limit']) ? (int)$attrs['limit'] : 4;
 
-        $query = \Botble\Blog\Models\Post::query()
+        $query = Post::query()
             ->with(['slugable', 'translations', 'categories'])
             ->wherePublished()
             ->latest();
@@ -39,58 +41,26 @@ class BlogPostsShortcode implements ShortcodeInterface
         }
 
         $items = $posts->map(function ($post) use ($locale) {
+            $slug = $this->getSlug($post);
             return [
-                'id' => $post->id,
-                'name' => $this->getTranslatedValue($post, 'name', $locale),
+                'id'          => $post->id,
+                'name'        => $this->getTranslatedValue($post, 'name', $locale),
                 'description' => $this->getTranslatedValue($post, 'description', $locale),
-                'image' => $this->imageUrl($post->image),
-                'url' => $post->url ?? null,
-                'created_at' => $post->created_at?->toIso8601String(),
-                'author' => $post->author?->name ?? null,
-                'categories' => $post->categories->map(fn($cat) => [
-                    'id' => $cat->id,
+                'image'       => $this->imageUrl($post->image),
+                'url'         => $slug ? '/' . $slug : null,
+                'slug'        => $slug,
+                'created_at'  => $post->created_at?->toIso8601String(),
+                'author'      => $post->author?->name ?? null,
+                'categories'  => $post->categories->map(fn($cat) => [
+                    'id'   => $cat->id,
                     'name' => $cat->name,
                 ])->values()->toArray(),
             ];
         })->values()->toArray();
 
-        return array_merge(
-            ['locale' => $locale],
-            [
-                'items' => $items,
-            ]
-        );
-    }
-    protected function getTranslatedValue($model, string $column, string $locale): ?string
-    {
-        if ($model->relationLoaded('translations')) {
-            $langCode = $this->getLangCode($locale);
-
-            $translated = $model->translations
-                ->where('lang_code', $langCode)
-                ->first();
-
-            if ($translated && isset($translated->{$column})) {
-                return $translated->{$column};
-            }
-        }
-
-        return $model->getAttributes()[$column] ?? null;
-    }
-    protected function getLangCode(string $locale): string
-    {
-        static $map = null;
-        if ($map === null) {
-            $map = DB::table('languages')
-                ->pluck('lang_code', 'lang_locale')
-                ->toArray();
-        }
-
-        return $map[$locale] ?? $locale;
-    }
-
-     protected function imageUrl(?string $path): ?string
-    {
-        return $path ? RvMedia::getImageUrl($path) : null;
+        return [
+            'locale' => $locale,
+            'items'  => $items,
+        ];
     }
 }

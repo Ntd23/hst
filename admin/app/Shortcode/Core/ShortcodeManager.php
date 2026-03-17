@@ -1,8 +1,6 @@
 <?php
+
 namespace App\Shortcode\Core;
-
-use App\Shortcode\Core\ShortcodeParser;
-
 
 class ShortcodeManager
 {
@@ -10,42 +8,47 @@ class ShortcodeManager
         protected ShortcodeParser $parser
     ) {}
 
-   public function getShortcode($content, $locale){
+    /**
+     * Parse shortcode string → dispatch handler classes → trả mảng sections.
+     *
+     * @param  string $shortcodeContent  Raw shortcode content string
+     * @param  string $locale
+     * @return array  Mảng sections [['shortcode' => name, 'content' => data, 'handler' => class], ...]
+     */
+    public function getShortcode(string $shortcodeContent, string $locale): array
+    {
+        $allShortcodes = $this->parser->getAllShortcodeAttributes($shortcodeContent);
 
-        $allShortcodes = $content['shortcode'] ? $this->parser->getAllShortcodeAttributes($content['shortcode']) : [];
         $sections = [];
+
         foreach ($allShortcodes as $item) {
-
             $shortcodeName = $item['name'];
-            $attrs = $item['attrs'];
+            $attrs         = $item['attrs'];
+            $handlerClass  = $this->resolveHandler($shortcodeName);
 
-            $class = 'App\\Shortcode\\Handlers\\' .
-                str_replace(' ', '', ucwords(str_replace('-', ' ', $shortcodeName))) .
-                'Shortcode';
-
-            $sectionData = null;
-
-            if (class_exists($class)) {
-                $handler = app($class);
-                $sectionData = $handler->handle($attrs, $locale);
-            } else {
-                $sectionData = [
-                    'locale' => $locale,
-                    'data' => null
-                ];
-            }
+            $sectionData = class_exists($handlerClass)
+                ? app($handlerClass)->handle($attrs, $locale)
+                : ['locale' => $locale, 'data' => null];
 
             $sections[] = [
                 'shortcode' => $shortcodeName,
-                'content' => $sectionData,
-                'handler' => $class
+                'content'   => $sectionData,
+                'handler'   => $handlerClass,
             ];
         }
 
-        return [
-                'locale' => $locale,
-                'page' => $content['page'],
-                'sections' => $sections,
-            ];
+        return $sections;
+    }
+
+    /**
+     * Convert shortcode name (kebab-case) → Handler class name.
+     *
+     * Ví dụ: 'simple-slider' → 'App\Shortcode\Handlers\SimpleSliderShortcode'
+     */
+    protected function resolveHandler(string $shortcodeName): string
+    {
+        return 'App\\Shortcode\\Handlers\\'
+            . str_replace(' ', '', ucwords(str_replace('-', ' ', $shortcodeName)))
+            . 'Shortcode';
     }
 }
