@@ -22,19 +22,23 @@ class BlogPostFeaturedShortcode implements ShortcodeInterface
         ->values()
         ->toArray();
 
-        $posts = Post::select('id','name', 'content', 'image', 'created_at')
-        ->whereIn('id', $postIds)
-        ->get()
-        ->map(function ($post ) use ($locale) {
-            return [
-                'id' => $post->id,
-                'name' => $this->getTranslatedValue($post, 'name', $locale),
-                'content' => $this->getTranslatedValue($post, 'content', $locale),
-                'image' => \RvMedia::getImageUrl($post->image),
-                'created_at' => $post->created_at,
-                'slug' => $post->slug,
-            ];
-        })
+        $posts = Post::query()
+            ->with(['slugable', 'translations'])
+            ->select('id', 'name', 'content', 'image', 'created_at')
+            ->whereIn('id', $postIds)
+            ->get()
+            ->map(function ($post) use ($locale) {
+                $slug = $this->getSlug($post);
+                return [
+                    'id'         => $post->id,
+                    'name'       => $this->getTranslatedValue($post, 'name', $locale),
+                    'content'    => $this->getTranslatedValue($post, 'content', $locale),
+                    'image'      => RvMedia::getImageUrl($post->image),
+                    'created_at' => $post->created_at,
+                    'url'        => $slug ? '/' . $slug : null,
+                    'slug'       => $slug,
+                ];
+            })
         ->keyBy('id');
 
         $result = [];

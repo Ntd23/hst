@@ -32,13 +32,14 @@ class ServicesShortcode implements ShortcodeInterface
         }
 
         $items = $services->map(function ($service) use ($locale) {
+            $slug = $this->getSlug($service);
             return [
                 'id' => $service->id,
                 'locale' => $locale,
                 'name' => (string) $this->getTranslatedValue($service, 'name', $locale),
                 'description' => (string) $this->getTranslatedValue($service, 'description', $locale),
                 'image' => $this->imageUrl($service->image),
-                'slug' => $service->slug,
+                'slug' => $slug,
                 'icon' => $service->getMetaData('icon', true) ?: null,
                 'icon_image' => $this->imageUrl($service->getMetaData('icon_image', true) ?: null),
             ];

@@ -1,10 +1,8 @@
 <style scoped>
-.home {
-  margin-top: -70px;
-}
+
 </style>
 <template>
-  <div class="home">
+  <div class="-mt-[100px]">
     <CommonsPageRenderer slug="homepage" />
     <NuxtPage/>
   </div>

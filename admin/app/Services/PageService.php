@@ -1,60 +1,68 @@
-<?php 
+<?php
+
 namespace App\Services;
+
+use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
 use Botble\Page\Models\Page;
 use Botble\Slug\Models\Slug;
-use Illuminate\Support\Facades\DB;
 
 class PageService
 {
-    public function getPage($slug, $locale){
-        $pageSlug = Slug::where('key', $slug)
+    use ShortcodeApiTrait;
+
+    /**
+     * Tìm Slug record theo key (dùng chung cho meta, sections, details).
+     */
+    public function resolveSlug(string $slug): ?Slug
+    {
+        return Slug::where('key', $slug)->first();
+    }
+
+    /**
+     * Tìm Slug record chỉ cho Page.
+     */
+    public function resolvePageSlug(string $slug): ?Slug
+    {
+        return Slug::where('key', $slug)
             ->where('reference_type', Page::class)
             ->first();
+    }
+
+    /**
+     * Lấy thông tin page + shortcode content (dùng cho getSections).
+     */
+    public function getPage(string $slug, string $locale): ?array
+    {
+        $pageSlug = $this->resolvePageSlug($slug);
         if (!$pageSlug || !$pageSlug->reference) {
             return null;
         }
 
-        // lấy thông tin page.
-        $page = $pageSlug->reference; 
-        $page->makeHidden('content');
+        $page = $pageSlug->reference;
+
+        // Load translations TRƯỚC khi đọc content
         $page->loadMissing('translations');
-        $content['page'] = $page;
-        $content['shortcode'] = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
-        $isBlogPage = (string) $page->id === (string) theme_option('blog_page_id');
-        if (!$content && !$isBlogPage) {
+
+        // Đọc content TRƯỚC khi makeHidden (makeHidden có thể chặn accessor trên một số model)
+        $shortcode = $this->getTranslatedValue($page, 'content', $locale) ?: $page->content;
+        // Sau khi đọc xong thì ẩn content khỏi JSON trả về (tránh gửi raw content lớn)
+        $page->makeHidden('content');
+
+        // Trang Blog trong Botble thường có content rỗng — Botble dùng loop.blade.php để render.
+        // Với API, ta inject virtual shortcode [blog-posts] để ShortcodeManager dispatch BlogPostsShortcode.
+        $isBlogPage = (string)$page->id === (string)theme_option('blog_page_id');
+
+        if (!$shortcode && !$isBlogPage) {
             return null;
         }
-        return $content;
-    }
 
-
-    protected function getTranslatedValue($model, string $column, string $locale): ?string
-    {
-        if ($model->relationLoaded('translations')) {
-            $langCode = $this->getLangCode($locale);
-
-            $translated = $model->translations
-                ->where('lang_code', $langCode)
-                ->first();
-
-            if ($translated && isset($translated->{$column})) {
-                return $translated->{$column};
-            }
+        if ($isBlogPage && !str_contains((string)$shortcode, '[blog-posts')) {
+            $shortcode .= ' [blog-posts limit="10"][/blog-posts]';
         }
 
-        return $model->getAttributes()[$column] ?? null;
-    }
-
-     protected function getLangCode(string $locale): string
-    {
-        static $map = null;
-        if ($map === null) {
-            $map = DB::table('languages')
-                ->pluck('lang_code', 'lang_locale')
-                ->toArray();
-        }
-
-        return $map[$locale] ?? $locale;
+        return [
+            'page'      => $page,
+            'shortcode' => $shortcode,
+        ];
     }
 }
-
