@@ -53,9 +53,9 @@
       <div
         class="flex justify-between items-center border-t border-slate-200 dark:border-slate-700 pt-4"
       >
-        <a
+        <NuxtLink
+          :to="slug"
           class="flex items-center space-x-1 text-primary hover:text-primary-dark font-medium transition-colors bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-lg"
-          href="#"
         >
           <span
             class="text-xs uppercase tracking-wide cursor-pointer transition-colors duration-300 hover:text-blue-600"
@@ -78,7 +78,7 @@
               <path d="M13 5l7 7-7 7" />
             </svg>
           </span>
-        </a>
+        </NuxtLink>
         <div class="flex items-center text-xs text-slate-400">
           <UIcon name="solar:calendar-broken" class="size-5" />
           17-04-2025
@@ -92,5 +92,6 @@
 defineProps<{
   title: string;
   image: string;
+  slug: string;
 }>();
 </script>
