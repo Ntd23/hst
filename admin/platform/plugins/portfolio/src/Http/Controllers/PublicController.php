@@ -29,6 +29,7 @@ class PublicController extends BaseController
 {
     public function services(): Response
     {
+        
         SeoHelper::setTitle(__('Services'));
 
         $services = Service::query()
