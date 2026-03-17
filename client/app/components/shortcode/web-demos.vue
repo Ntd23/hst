@@ -6,6 +6,7 @@
         :key="web.index"
         :title="web.name"
         :image="web.img_full"
+        :slug="route.fullPath + '/' + web.slug"
       />
     </div>
   </div>
@@ -18,5 +19,7 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+const route = useRoute();
+
 const webs = props.data?.items || [];
 </script>
