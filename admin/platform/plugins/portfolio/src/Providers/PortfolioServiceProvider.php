@@ -67,7 +67,7 @@ class PortfolioServiceProvider extends ServiceProvider
                     'parent_id' => 'cms-core-portfolio',
                     'name' => 'plugins/portfolio::portfolio.website.name',
                     'permissions' => ['portfolio.projects.index'],
-                    'url' => route('portfolio.websites.index'),
+                    'url' => route('portfolio.demo-websites.index'),
                 ])
                 ->registerItem([
                     'id' => 'cms-core-portfolio-service-categories',

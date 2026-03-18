@@ -8,6 +8,7 @@ use Botble\Portfolio\Http\Controllers\PublicController;
 use Botble\Portfolio\Http\Controllers\QuotationRequestController;
 use Botble\Portfolio\Http\Controllers\ServiceCategoryController;
 use Botble\Portfolio\Http\Controllers\ServiceController;
+use Botble\Portfolio\Http\Controllers\DemoWebsitesController;
 use Botble\Portfolio\Models\Package;
 use Botble\Portfolio\Models\Project;
 use Botble\Portfolio\Models\Service;
@@ -40,6 +41,10 @@ AdminHelper::registerRoutes(function (): void {
 
         Route::group(['prefix' => 'quotation-requests', 'as' => 'quotation-requests.'], function (): void {
             Route::resource('', QuotationRequestController::class)->parameters(['' => 'quotation-request'])->only(['index', 'edit', 'update', 'destroy']);
+        });
+
+        Route::group(['prefix' => 'demo-websites', 'as' => 'demo-websites.'], function (): void {
+            Route::resource('', DemoWebsitesController::class)->parameters(['' => 'demo-websites']);
         });
     });
 });
