@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <main class="relative overflow-hidden w-full pb-16 bg-slate-50 min-h-screen">
     <!-- Breadcrumb -->
     <CommonsAppBreadcrumb
@@ -205,18 +205,16 @@ const selectedCategory = ref(route.query.category as string || '')
 const selectedTag = ref(route.query.tag as string || '')
 
 // Fetch Data từ Backend
-const { data: apiResponse, pending, error, refresh } = await useFetch<any>('/api/blog/listing', {
-  baseURL: useRuntimeConfig().public.apiBase,
-  query: computed(() => ({
-    locale: locale.value,
+const { data: apiResponse, pending, error, refresh } = await useBlogListing<any>(
+  computed(() => ({
     limit,
     page: currentPage.value,
     q: searchQuery.value || undefined,
     category: selectedCategory.value || undefined,
     tag: selectedTag.value || undefined,
   })),
-  watch: false // Tự điều khiển refresh để tránh dội API
-})
+  { watch: false } // Tự điều khiển refresh để tránh đổi API
+)
 
 // Bóc tách dữ liệu
 const posts = computed(() => apiResponse.value?.data?.posts?.items ?? [])

@@ -4,7 +4,7 @@
  */
 export function usePageDetail<T = any>(pageSlug: string) {
   const { locale } = useI18n()
-  console.log(pageSlug)
+  
   return useFetch<T>(`/api/pages/${pageSlug}/details`, {
     key: `details-${pageSlug}-${locale.value}`,
     query: computed(() => ({ locale: locale.value })),

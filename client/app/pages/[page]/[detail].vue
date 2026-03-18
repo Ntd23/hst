@@ -24,6 +24,7 @@ const page = computed(() => String(route.params.page || ""));
 const detail = computed(() => String(route.params.detail || ""));
 
 const { detailComponent } = useMappedDetailPage(page)
+console.log(detailComponent.value);
 
 // Load SEO metadata dynamically based on the detail slug
 useEntitySeo(detail.value);
