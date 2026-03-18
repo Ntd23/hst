@@ -3,9 +3,6 @@ import { getDetailComponents } from '~/utils/getDetailComponents'
 
 export function useMappedDetailPage(page: MaybeRef<string>) {
   const components = getDetailComponents()
-  console.log("đây là components", components);
-
-
   const detailComponent = computed(() => {
     const key = unref(page)
 
@@ -15,13 +12,7 @@ export function useMappedDetailPage(page: MaybeRef<string>) {
       .toLowerCase()
       .replace(/s$/, '')
 
-
     const comp = components[normalized]
-    console.log("đây là normalized", normalized);
-
-    console.log("đây là comp", comp);
-
-
     return comp ? markRaw(comp) : null
   })
 

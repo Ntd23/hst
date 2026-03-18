@@ -65,4 +65,13 @@ class PageService
             'shortcode' => $shortcode,
         ];
     }
+
+
+    /**
+     * Tìm Slug record theo key (dùng chung cho meta, sections, details).
+     */
+    public function resolveSlugWebDemo(string $slug): ?Slug
+    {
+        return Slug::where('key', $slug)->first();
+    }
 }

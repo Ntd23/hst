@@ -12,6 +12,8 @@ use Botble\Portfolio\Models\Service;
 use Botble\Slug\Models\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use App\Models\DemoWebsite;
+
 
 class PageDetailController extends Controller
 {
@@ -42,6 +44,7 @@ class PageDetailController extends Controller
                 Page::class    => $this->resolvePage($slugRecord, $locale, $slug),
                 Post::class    => $this->resolvePost($slugRecord, $locale, $slug),
                 Service::class => $this->resolveService($slugRecord, $locale, $slug),
+                DemoWebsite::class => $this->resolveDemoWebsite($slugRecord, $locale, $slug),
                 default        => [
                     'type'           => 'unknown',
                     'slug'           => $slug,
@@ -58,6 +61,30 @@ class PageDetailController extends Controller
     // ──────────────────────────────────────────────
     //  RESOLVERS
     // ──────────────────────────────────────────────
+
+    protected function resolveDemoWebsite(Slug $slugRecord, string $locale, string $slug): array
+    {
+        $demoWeb = $slugRecord->reference;
+         if (!$demoWeb) {
+            return $this->notFoundPayload($slug);
+        }
+        $demoWeb->loadMissing(['translations']);
+        $name        = $this->getTranslatedValue($demoWeb, 'name', $locale) ?: $demoWeb->name;
+        $description = $this->getTranslatedValue($demoWeb, 'description', $locale) ?: $demoWeb->description;
+        return [
+            'type' => 'blog',
+            'slug' => $slug,
+            'data' => [
+                'id'           => $post->id,
+                'name'         => $name,
+                'description'  => $description,
+                'img_feautrer'        => $this->imageUrl($demoWeb->img_feautrer ?? null),
+                'url_client' => $demoWeb->url_client,
+                'url_admin' => $demoWeb->url_admin,
+            ],
+            'seo' => $this->buildSeo($meta, $name, $description, $post->image ?? null),
+        ];
+    }
 
     protected function resolvePage(Slug $slugRecord, string $locale, string $slug): array
     {
