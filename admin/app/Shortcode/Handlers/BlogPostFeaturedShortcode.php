@@ -35,7 +35,7 @@ class BlogPostFeaturedShortcode implements ShortcodeInterface
                     'content'    => $this->getTranslatedValue($post, 'content', $locale),
                     'image'      => RvMedia::getImageUrl($post->image),
                     'created_at' => $post->created_at,
-                    'url'        => $slug ? '/' . $slug : null,
+                    'url'        => $slug ? '/blog/' . $slug : null,
                     'slug'       => $slug,
                 ];
             })
