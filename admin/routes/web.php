@@ -5,14 +5,14 @@ use App\Http\Controllers\Client\ClDemoWebsiteController;
 use App\Http\Middleware\MarketingLocaleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin/portfolio/website-demos')->group(function () {
-    Route::get('/', [DemoWebsiteController::class, 'index'])->name('portfolio.websites.index');
-    Route::get('create', [DemoWebsiteController::class, 'create'])->name('portfolio.websites.create');
-    Route::post('store', [DemoWebsiteController::class, 'store'])->name('portfolio.websites.store');
-    Route::get('edit/{id}', [DemoWebsiteController::class, 'edit'])->name('portfolio.websites.edit');
-    Route::put('update/{id}', [DemoWebsiteController::class, 'update'])->name('portfolio.websites.update');
-    Route::delete('destroy/{id}', [DemoWebsiteController::class, 'destroy'])->name('portfolio.websites.destroy');
-});
+// Route::prefix('admin/portfolio/website-demos')->group(function () {
+//     Route::get('/', [DemoWebsiteController::class, 'index'])->name('portfolio.websites.index');
+//     Route::get('create', [DemoWebsiteController::class, 'create'])->name('portfolio.websites.create');
+//     Route::post('store', [DemoWebsiteController::class, 'store'])->name('portfolio.websites.store');
+//     Route::get('edit/{id}', [DemoWebsiteController::class, 'edit'])->name('portfolio.websites.edit');
+//     Route::put('update/{id}', [DemoWebsiteController::class, 'update'])->name('portfolio.websites.update');
+//     Route::delete('destroy/{id}', [DemoWebsiteController::class, 'destroy'])->name('portfolio.websites.destroy');
+// });
 
 // Route::prefix('website-demos')->group(function () {
 //     Route::get('{slug}', [ClDemoWebsiteController::class, 'show'])->name('websites.show');
