@@ -47,7 +47,7 @@
             </p>
             <ULink
               class="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary transition-colors"
-              :to="services[0].slug ? '/' + services[0].slug : '#'"
+              :to="services[0].slug ? '/services/' + services[0].slug : '#'"
             >
               Khám phá ngay
               <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
@@ -83,7 +83,7 @@
               </p>
               <ULink
                 class="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary transition-colors"
-                :to="service.slug ? '/' + service.slug : '#'"
+                :to="service.slug ? '/services/' + service.slug : '#'"
               >
                 Khám phá ngay
                 <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
@@ -106,4 +106,5 @@ const props = defineProps<{
 
 const sectionData = computed(() => props.data?.shortcode || {})
 const services = computed(() => props.data?.services || [])
+console.log(services.value);
 </script>

@@ -9,32 +9,17 @@ export default defineEventHandler(async (event) => {
     return { type: 'unknown', data: null, error: 'Missing slug param' }
   }
 
-  // 1. Check if it's a Service first
   try {
-    const serviceRes = await apiFetch<any>(event, `/services/${slug}`, {
+    const response = await apiFetch<any>(event, `/pages/${slug}/details`, {
       query: { locale },
       headers: { 'X-Locale': locale },
     })
-    if (serviceRes && !serviceRes.error) {
-       return { type: 'service', data: serviceRes }
-    }
-  } catch (err: any) {
-    // ignore
-  }
+    
+    // PageDetailController returns { type: 'service' | 'page' | 'blog' | 'unknown', data: ... }
+    return response
 
-  // 2. Check if it's a Blog Post 
-  try {
-    const postRes = await apiFetch<any>(event, `/posts/${slug}`, {
-      query: { locale },
-      headers: { 'X-Locale': locale },
-    })
-    if (postRes && !postRes.error) {
-       return { type: 'blog', data: postRes }
-    }
   } catch (err: any) {
-    // ignore
+    console.error('Entity resolution error:', err.message)
+    return { type: 'unknown', data: null, error: err.message }
   }
-
-  // Fallback unknown
-  return { type: 'unknown', data: null }
 })

@@ -47,7 +47,7 @@ class BlogPostsShortcode implements ShortcodeInterface
                 'name'        => $this->getTranslatedValue($post, 'name', $locale),
                 'description' => $this->getTranslatedValue($post, 'description', $locale),
                 'image'       => $this->imageUrl($post->image),
-                'url'         => $slug ? '/' . $slug : null,
+                'url'         => $slug ? '/blog/' . $slug : null,
                 'slug'        => $slug,
                 'created_at'  => $post->created_at?->toIso8601String(),
                 'author'      => $post->author?->name ?? null,
