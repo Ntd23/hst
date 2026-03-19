@@ -14,6 +14,8 @@ use Botble\Table\Columns\NameColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Botble\Table\Columns\ImageColumn;
 use Botble\Table\Columns\StatusColumn;
+use Botble\Base\Enums\BaseStatusEnum;
+
 
 
 
@@ -29,11 +31,12 @@ class DemoWebsitesTable extends TableAbstract
             ]);
     }
 
-    public function query(): Builder
-    {
-        $query = $this->model;
-        return $this->applyScopes($query);
-    }
+    // public function query(): Builder
+    // {
+    //     $query = $this->model;
+    //     return $this->applyScopes($query);
+    // }
+ 
 
     public function columns(): array
     {
@@ -42,7 +45,8 @@ class DemoWebsitesTable extends TableAbstract
             ImageColumn::make('img_feature'),
             NameColumn::make(),
             CreatedAtColumn::make(),
-            StatusColumn::make(),
+            StatusColumn::make('status'),
+            
         ];
     }
 

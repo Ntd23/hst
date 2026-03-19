@@ -11,15 +11,13 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useEntitySeo } from "~/composables/seo/useEntitySeo";
 
-definePageMeta({ name: 'single-slug-route' })
+definePageMeta({ name: "single-slug-route" });
 
 const route = useRoute();
-const pageSlug = computed(() => String(route.params.page || ''));
+const pageSlug = computed(() => String(route.params.page || ""));
 
 // Chỉ load PageRenderer khi route chính xác trùng với single-slug-route (ko phải route con)
 const isSingleSlug = computed(() => {
-  console.log("Current route name:", route.name);
-  console.log("Matched routes:", route.matched.map(r => r.name));
   return !route.params.detail;
 });
 

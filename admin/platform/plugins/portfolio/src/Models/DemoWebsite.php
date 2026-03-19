@@ -5,16 +5,17 @@ namespace Botble\Portfolio\Models;
 use Botble\Base\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Revision\RevisionableTrait;
+use Botble\Slug\Models\Slug;
 
 class DemoWebsite extends BaseModel
 {
-    use HasFactory;
 
     protected $table = 'demo_websites';
 
     protected $fillable = [
         'name',
-        'slug',
         'url_client',
         'web_id',
         'url_admin',
@@ -23,10 +24,11 @@ class DemoWebsite extends BaseModel
         'img_full',
         'img_feautrer',
         'status',
-        'description',
+        'content',
     ];
-
-
+    protected $casts = [
+        'status' => BaseStatusEnum::class,
+    ];
     public $timestamps = true;
 
     public function parent()
@@ -43,28 +45,31 @@ class DemoWebsite extends BaseModel
     {
         return $this->children()->count();
     }
+     // Quan hệ morphOne với Slug
 
-    public function translation($lang_code)
-    {
-        return $this->hasOne(DemoWebsiteTranslation::class)
-            ->where('lang_code', $lang_code);
-    }
+    
 
-    public function translationId($lang_code)
-    {
-        return $this->hasOne(DemoWebsiteTranslation::class)
-            ->where('lang_id', $lang_code);
-    }
+    // public function translation($lang_code)
+    // {
+    //     return $this->hasOne(DemoWebsiteTranslation::class)
+    //         ->where('lang_code', $lang_code);
+    // }
 
-    public function translations()
-    {
-        return $this->hasMany(DemoWebsiteTranslation::class);
-    }
+    // public function translationId($lang_code)
+    // {
+    //     return $this->hasOne(DemoWebsiteTranslation::class)
+    //         ->where('lang_id', $lang_code);
+    // }
 
-    public function translationByLang($lang = null)
-    {
-        $lang = $lang ?: app()->getLocale();
+    // public function translations()
+    // {
+    //     return $this->hasMany(DemoWebsiteTranslation::class);
+    // }
 
-        return $this->translations->where('lang_id', $lang)->first();
-    }
+    // public function translationByLang($lang = null)
+    // {
+    //     $lang = $lang ?: app()->getLocale();
+
+    //     return $this->translations->where('lang_id', $lang)->first();
+    // }
 }

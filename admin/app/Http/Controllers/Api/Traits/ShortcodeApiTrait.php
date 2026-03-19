@@ -396,7 +396,7 @@ trait ShortcodeApiTrait
             return $model->slugable->key;
         }
 
-        return $model->slug ?? null;
+        return $model->slug ? $model->slug : null;
     }
 
     // ──────────────────────────────────────────────

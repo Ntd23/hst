@@ -59,6 +59,7 @@ class PostController extends BaseController
 
     public function edit(Post $post)
     {
+
         $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $post->name]));
 
         return PostForm::createFromModel($post)->renderForm();
