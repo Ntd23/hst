@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace Botble\Portfolio\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Botble\Base\Models\BaseModel;
+use Botble\Blog\Models\DemoWebsite;
 
 class DemoWebsiteTranslation extends BaseModel
 {
     use HasFactory;
 
-    protected $table = 'demo_website_translations1';
+    protected $table = 'demo_websites_translations';
 
     protected $fillable = [
         'name',
@@ -18,7 +19,7 @@ class DemoWebsiteTranslation extends BaseModel
         'seo_description',
         'description',
         'lang_code',
-        'demo_website_id',
+        'demo_websites_id',
         'lang_id',
     ];
 
@@ -29,6 +30,6 @@ class DemoWebsiteTranslation extends BaseModel
      */
     public function demoWebsite()
     {
-        return $this->belongsTo(DemoWebsite::class, 'demo_website_id');
+        return $this->belongsTo(DemoWebsite::class, 'demo_websites_id');
     }
 }

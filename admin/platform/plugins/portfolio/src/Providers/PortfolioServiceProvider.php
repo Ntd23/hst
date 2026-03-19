@@ -23,6 +23,8 @@ use Botble\Theme\FormFrontManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Events\RouteMatched;
+use Botble\Portfolio\Models\DemoWebsite;
+use Botble\Language\Facades\Language;
 
 class PortfolioServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,7 @@ class PortfolioServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+       
         $this
             ->setNamespace('plugins/portfolio')
             ->loadAndPublishConfigurations(['permissions', 'email'])
@@ -65,7 +68,7 @@ class PortfolioServiceProvider extends ServiceProvider
                     'id' => 'cms-core-portfolio-websites',
                     'priority' => 1,
                     'parent_id' => 'cms-core-portfolio',
-                    'name' => 'plugins/portfolio::portfolio.website.name',
+                    'name' => 'plugins/portfolio::portfolio.demo-websites.name',
                     'permissions' => ['portfolio.projects.index'],
                     'url' => route('portfolio.demo-websites.index'),
                 ])
@@ -126,6 +129,18 @@ class PortfolioServiceProvider extends ServiceProvider
                 'projects',
                 'packages',
             ]);
+        });
+        /**
+         * 🔥 Đăng ký slug cho DemoWebsite
+         */
+        SlugHelper::registering(function () {
+            SlugHelper::registerModule(
+                DemoWebsite::class,
+                fn () => trans('plugins/portfolio::portfolio.demo-websites.name')
+            );
+
+            // prefix URL (tuỳ chọn)
+            SlugHelper::setPrefix(DemoWebsite::class, 'demo-websites', true);
         });
 
         FormFrontManager::register(QuotationForm::class, QuoteRequest::class);
@@ -200,6 +215,12 @@ class PortfolioServiceProvider extends ServiceProvider
         LanguageAdvancedManager::registerModule(CustomFieldOption::class, [
             'label',
             'value',
+        ]);
+        LanguageAdvancedManager::registerModule(DemoWebsite::class, [
+            'name',
+            'content',
+            'seo_title',
+            'seo_description',
         ]);
 
         LanguageAdvancedManager::addTranslatableMetaBox('custom_fields_box');

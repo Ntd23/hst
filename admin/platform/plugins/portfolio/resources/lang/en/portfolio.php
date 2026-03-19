@@ -118,4 +118,14 @@ return [
     'services' => 'Services',
     'projects' => 'Projects',
     'packages' => 'Packages',
+    'demo-websites'=> [
+        'url_client'=> 'Url client',
+        'url_admin'=> 'Url admin',
+        'seo_title'=> 'SEO title',
+        'seo_description'=> 'SEO description',
+        'img_full'=> 'Image full',
+        'img_feautrer'=> 'Image feautrer',
+        'name' => 'Websites'
+    ],
+
 ];
