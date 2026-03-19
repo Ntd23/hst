@@ -44,7 +44,7 @@ AdminHelper::registerRoutes(function (): void {
         });
 
         Route::group(['prefix' => 'demo-websites', 'as' => 'demo-websites.'], function (): void {
-            Route::resource('', DemoWebsitesController::class)->parameters(['' => 'demo-websites']);
+            Route::resource('', DemoWebsitesController::class)->parameters(['' => 'demoWebsite']);
         });
     });
 });

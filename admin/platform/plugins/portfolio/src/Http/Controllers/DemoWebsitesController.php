@@ -6,10 +6,11 @@ use Botble\Base\Facades\PageTitle;
 use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
-use Botble\Portfolio\Forms\CustomFieldForm;
-use Botble\Portfolio\Http\Requests\CustomFieldRequest;
+use Botble\Portfolio\Forms\DemoWebsiteForm;
+use Botble\Portfolio\Http\Requests\DemoWebsiteRequest;
 use Botble\Portfolio\Http\Resources\CustomFieldResource;
 use Botble\Portfolio\Models\CustomField;
+use Botble\Portfolio\Models\DemoWebsite;
 use Botble\Portfolio\Tables\DemoWebsitesTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -26,16 +27,16 @@ class DemoWebsitesController extends BaseController
 
     public function create(): string
     {
-        PageTitle::setTitle(trans('plugins/portfolio::portfolio.custom_field.create'));
+        PageTitle::setTitle(trans('plugins/portfolio::portfolio.demo-websites.create'));
 
-        return CustomFieldForm::create()->renderForm();
+        return DemoWebsiteForm::create()->renderForm();
     }
 
-    public function store(CustomFieldRequest $request): BaseHttpResponse
+    public function store(DemoWebsiteRequest $request): BaseHttpResponse
     {
-        $form = CustomFieldForm::create();
+        $form = DemoWebsiteForm::create();
 
-        $form->saving(function (CustomFieldForm $form) use ($request): void {
+        $form->saving(function (DemoWebsiteForm $form) use ($request): void {
             $model = $form->getModel();
 
             $model->fill([...$request->validated(),
@@ -52,48 +53,46 @@ class DemoWebsitesController extends BaseController
 
         return $this
             ->httpResponse()
-            ->setPreviousUrl(route('portfolio.custom-fields.index'))
-            ->setNextUrl(route('portfolio.custom-fields.edit', $form->getModel()->getKey()))
+            ->setPreviousUrl(route('portfolio.demo-websites.index'))
+            ->setNextUrl(route('portfolio.demo-websites.edit', $form->getModel()->getKey()))
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
-    public function edit(CustomField $customField): string
+    public function edit(DemoWebsite $demoWebsite)
     {
-        $customField->loadMissing('options');
+        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $demoWebsite->name]));
 
-        PageTitle::setTitle(trans('core/base::forms.edit_item', ['name' => $customField->name]));
-
-        return CustomFieldForm::createFromModel($customField)->renderForm();
+        return DemoWebsiteForm::createFromModel($demoWebsite)->renderForm();
     }
 
-    public function update(CustomField $customField, CustomFieldRequest $request): BaseHttpResponse
+    public function update(DemoWebsite $demoWebsite, DemoWebsiteRequest $request): BaseHttpResponse
     {
-        CustomFieldForm::createFromModel($customField)->setRequest($request)
-            ->saving(function (CustomFieldForm $form) use ($request): void {
+        DemoWebsiteForm::createFromModel($demoWebsite)->setRequest($request)
+            ->saving(function (DemoWebsiteForm $form) use ($request): void {
                 $model = $form->getModel();
 
                 $model->update($request->validated());
 
-                $model->saveOptions($request->input('options', []));
+                // $model->saveOptions($request->input('options', []));
             });
 
         return $this
             ->httpResponse()
-            ->setPreviousUrl(route('portfolio.custom-fields.index'))
+            ->setPreviousUrl(route('portfolio.demo-websites.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
     }
 
-    public function destroy(CustomField $customField): DeleteResourceAction
+    public function destroy(DemoWebsite $demoWebsite): DeleteResourceAction
     {
-        return DeleteResourceAction::make($customField);
+        return DeleteResourceAction::make($demoWebsite);
     }
 
-    public function getInfo(Request $request): CustomFieldResource
-    {
-        $customField = CustomField::query()
-            ->with(['options'])
-            ->findOrFail($request->input('id'));
+    // public function getInfo(Request $request): CustomFieldResource
+    // {
+    //     $customField = CustomField::query()
+    //         ->with(['options'])
+    //         ->findOrFail($request->input('id'));
 
-        return new CustomFieldResource($customField);
-    }
+    //     return new CustomFieldResource($customField);
+    // }
 }
