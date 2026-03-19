@@ -34,7 +34,7 @@ class ContentFeaturedShortcode implements ShortcodeInterface
             'shortcode' => [
                 'title' => $attrs['title'] ?? null,
                 'description' => $attrs['description'] ?? null,
-                'image' => isset($attrs['image']) ? url("storage/" . $attrs['image']) : null,
+                'image' => isset($attrs['image']) ? $this->imageUrl($attrs['image']) : null,
                 'background_color' => $attrs['background_color'] ?? null,
             ],
             'features' => $features,
