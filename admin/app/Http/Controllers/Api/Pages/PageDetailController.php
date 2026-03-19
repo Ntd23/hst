@@ -12,7 +12,7 @@ use Botble\Portfolio\Models\Service;
 use Botble\Slug\Models\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use App\Models\DemoWebsite;
+use Botble\Portfolio\Models\DemoWebsite;
 
 
 class PageDetailController extends Controller
@@ -35,6 +35,7 @@ class PageDetailController extends Controller
 
         $payload = Cache::remember($cacheKey, 1, function () use ($slug, $locale) {
             $slugRecord = $this->pageService->resolveSlug($slug);
+
 
             if (!$slugRecord) {
                 return $this->notFoundPayload($slug);
@@ -69,20 +70,27 @@ class PageDetailController extends Controller
             return $this->notFoundPayload($slug);
         }
         $demoWeb->loadMissing(['translations']);
+
         $name        = $this->getTranslatedValue($demoWeb, 'name', $locale) ?: $demoWeb->name;
-        $description = $this->getTranslatedValue($demoWeb, 'description', $locale) ?: $demoWeb->description;
+        $content = $this->getTranslatedValue($demoWeb, 'content', $locale) ?: $demoWeb->content;
+
+        $meta = ['index'=> 'index'];
+
         return [
+            'meta'=>$meta,
             'type' => 'blog',
             'slug' => $slug,
             'data' => [
-                'id'           => $post->id,
+                'id'           => $demoWeb->id,
                 'name'         => $name,
-                'description'  => $description,
+                'content'  => $content,
+                'seo_description' => $demoWeb->seo_description,
                 'img_feautrer'        => $this->imageUrl($demoWeb->img_feautrer ?? null),
                 'url_client' => $demoWeb->url_client,
                 'url_admin' => $demoWeb->url_admin,
+                'date' => $demoWeb->created_at->format('Y-m-d')
             ],
-            'seo' => $this->buildSeo($meta, $name, $description, $post->image ?? null),
+            'seo' => $this->buildSeo($meta, $name, $demoWeb->seo_description, $demoWeb->img_feautrer ?? null),
         ];
     }
 
@@ -109,6 +117,7 @@ class PageDetailController extends Controller
                 'content'  => $this->stripShortcodeTags($content),
                 'template' => $page->template ?? null,
                 'sections' => $this->parseContentSections($content, $locale),
+
             ],
             'seo' => $this->buildSeo($meta, $name),
         ];
@@ -144,6 +153,7 @@ class PageDetailController extends Controller
         $meta = method_exists($post, 'getMetaData')
             ? $post->getMetaData('seo_meta', true)
             : [];
+
 
         return [
             'type' => 'blog',
@@ -189,7 +199,7 @@ class PageDetailController extends Controller
         $meta = method_exists($service, 'getMetaData')
             ? $service->getMetaData('seo_meta', true)
             : [];
-
+        dd($meta);
         return [
             'type' => 'service',
             'slug' => $slug,

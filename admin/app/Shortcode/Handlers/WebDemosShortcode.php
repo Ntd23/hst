@@ -2,7 +2,7 @@
 namespace App\Shortcode\Handlers;
 use App\shortcode\Contracts\ShortcodeInterface;
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
-use App\Models\DemoWebsite;
+use Botble\Portfolio\Models\DemoWebsite;
 
 class WebDemosShortcode implements ShortcodeInterface
 {
@@ -15,18 +15,19 @@ class WebDemosShortcode implements ShortcodeInterface
     public function handle(array $attrs, string $locale): array
     {
         $limit = isset($attrs['limit']) ? (int) $attrs['limit'] : 6;
-
         $webs = DemoWebsite::limit($limit)
             ->get()
             ->map(function ($web) use ($locale){
+                $slug = $this->getSlug($web);
                 return[
                     'name' => $this->getTranslatedValue($web, 'name', $locale),
-                    'slug' => $web->slug,
+                    'slug' => $slug,
                     'img_full' => $this->imageUrl($web->img_full),
                 ];
             });
 
-         return array_merge(
+
+        return array_merge(
             ['locale' => $locale],
             [
                 'items' => $webs,

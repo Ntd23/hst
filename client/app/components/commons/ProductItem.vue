@@ -22,11 +22,12 @@
     <div
       class="relative overflow-hidden h-56 shadow-[0_10px_20px_rgba(0,0,0,0.07)]"
     >
-      <NuxtImg
-        alt="Real Estate Website Demo"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        :src="image"
-      />
+      <div class="h-56 overflow-hidden relative group">
+        <NuxtImg
+          :src="image"
+          class="absolute top-0 left-0 w-full transition-all duration-[5500ms] ease-linear group-hover:top-[-800%]"
+        />
+      </div>
       <div
         class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       ></div>
