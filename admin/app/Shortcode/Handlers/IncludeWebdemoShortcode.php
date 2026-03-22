@@ -2,6 +2,7 @@
 namespace App\Shortcode\Handlers;
 use App\shortcode\Contracts\ShortcodeInterface;
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+use Botble\Portfolio\Models\DemoWebsite;
 
 class IncludeWebdemoShortcode implements ShortcodeInterface
 {
@@ -13,7 +14,7 @@ class IncludeWebdemoShortcode implements ShortcodeInterface
     }
     public function handle (array $attrs, string $locale): array
     {
-        $websites = \App\Models\DemoWebsite::query()
+        $websites = DemoWebsite::query()
             ->whereNull('web_id')
             ->with('translations')
             ->orderBy('created_at', 'desc')
@@ -25,15 +26,13 @@ class IncludeWebdemoShortcode implements ShortcodeInterface
         }
 
         $items = $websites->map(function ($website) use ($locale) {
-            $translation = $website->translationByLang($locale);
 
             return [
                 'id' => $website->id,
-                'name' => (string) ($translation->name ?? $website->name),
-                'slug' => $website->slug,
-                'description' => (string) ($translation->description ?? $website->description),
-                'seo_title' => (string) ($translation->seo_title ?? $website->seo_title),
-                'seo_description' => (string) ($translation->seo_description ?? $website->seo_description),
+                'name' => $this->getTranslatedValue($website, 'name', $locale),
+                'content' => $this->getTranslatedValue($website, 'content', $locale),
+                'seo_title' => $this->getTranslatedValue($website, 'seo_title', $locale),
+                'seo_description' => $this->getTranslatedValue($website, 'seo_description', $locale),
                 'url_client' => $website->url_client,
                 'url_admin' => $website->url_admin,
                 'img_full' => $this->imageUrl($website->img_full),
