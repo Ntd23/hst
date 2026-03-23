@@ -23,6 +23,7 @@ class WebDemosShortcode implements ShortcodeInterface
                     'name' => $this->getTranslatedValue($web, 'name', $locale),
                     'slug' => $slug,
                     'img_full' => $this->imageUrl($web->img_full),
+                    'date' => $web->created_at->format('d/m/Y'),
                 ];
             });
 
