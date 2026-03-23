@@ -1,74 +1,79 @@
 <template>
-  <section
-    ref="sectionRef"
-    class="stats-section relative py-10 overflow-hidden"
-  >
+  <section ref="sectionRef" class="stats-section relative py-6 overflow-hidden">
     <UContainer class="relative z-10">
-      <!-- Section header -->
+      <!-- Header -->
       <div
         v-if="sectionData?.title || sectionData?.subtitle"
         v-motion
-        :initial="{ opacity: 0, y: 30 }"
+        :initial="{ opacity: 0, y: 24 }"
         :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
         class="text-center mb-12 sm:mb-16"
       >
-        <span v-if="sectionData?.subtitle" class="text-primary font-semibold tracking-wide uppercase text-sm">
-          {{ sectionData.subtitle }}
-        </span>
-        <h2 v-if="sectionData?.title" class="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900">
+        <div v-if="sectionData?.subtitle" class="inline-flex items-center gap-2 mb-3">
+          <span class="h-px w-6 bg-primary/50" />
+          <span class="text-primary font-bold tracking-widest uppercase text-xs">{{ sectionData.subtitle }}</span>
+          <span class="h-px w-6 bg-primary/50" />
+        </div>
+        <h2 v-if="sectionData?.title" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">
           {{ sectionData.title }}
         </h2>
-        <p v-if="sectionData?.description" class="mt-4 text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        <p v-if="sectionData?.description" class="mt-4 text-gray-500 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
           {{ sectionData.description }}
         </p>
       </div>
 
-      <!-- Stats grid -->
-      <div class="grid grid-cols-4 gap-2 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
+      <!-- Stats Bento Grid: 2 cols mobile → 4 cols desktop -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
         <div
           v-for="(tab, index) in tabs"
           :key="index"
           v-motion
-          :initial="{ opacity: 0, y: 30 }"
-          :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 100 } }"
-          class="stat-item flex flex-col items-center group relative p-1 sm:p-2"
+          :initial="{ opacity: 0, y: 40, scale: 0.95 }"
+          :visible-once="{ opacity: 1, y: 0, scale: 1, transition: { duration: 550, delay: index * 90, ease: [0.16, 1, 0.3, 1] } }"
+          class="stat-card group"
         >
-          <!-- Icon -->
-          <div class="stat-icon-wrapper shrink-0">
-            <NuxtImg
-              v-if="tab.image"
-              :src="tab.image"
-              :alt="tab.title"
-              width="40"
-              height="40"
-              loading="lazy"
-              class="w-8 h-8 sm:w-10 sm:h-10 object-contain transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3"
-            />
+          <!-- 3D Icon container -->
+          <div class="icon-3d-wrap mb-4 sm:mb-5">
+            <div class="icon-3d-inner">
+              <NuxtImg
+                v-if="tab.image"
+                :src="tab.image"
+                :alt="tab.title"
+                width="48"
+                height="48"
+                loading="lazy"
+                class="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-md group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-500"
+              />
+              <UIcon v-else name="i-lucide-bar-chart-2" class="size-9 sm:size-11 text-white drop-shadow" />
+            </div>
           </div>
 
           <!-- Number + Unit -->
-          <div class="flex items-baseline justify-center gap-[2px] mt-3 sm:mt-5">
-            <span class="stat-number text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight tabular-nums">
+          <div class="flex items-baseline justify-center gap-0.5">
+            <span class="stat-number text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight tabular-nums">
               {{ animatedValues[index] ?? 0 }}
             </span>
-            <span v-if="tab.unit" class="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
+            <span v-if="tab.unit" class="stat-unit text-lg sm:text-xl lg:text-2xl font-black">
               {{ tab.unit }}
             </span>
           </div>
 
-          <!-- Title -->
-          <p class="mt-1.5 sm:mt-3 text-[10px] sm:text-sm lg:text-base text-slate-500 font-medium text-center leading-snug sm:leading-relaxed text-balance line-clamp-3">
+          <!-- Divider -->
+          <div class="stat-divider my-3 sm:my-4" />
+
+          <!-- Label -->
+          <p class="text-gray-500 text-xs sm:text-sm font-medium text-center leading-snug line-clamp-2">
             {{ tab.title }}
           </p>
         </div>
       </div>
 
-      <!-- CTA Button -->
+      <!-- CTA -->
       <div
         v-if="sectionData?.button?.label && sectionData?.button?.url"
         v-motion
         :initial="{ opacity: 0, y: 20 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: 600 } }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: 500 } }"
         class="text-center mt-12 sm:mt-16"
       >
         <UButton
@@ -77,7 +82,7 @@
           variant="solid"
           size="lg"
           trailing-icon="i-lucide-arrow-right"
-          class="rounded-xl font-semibold btn-primary-elevated"
+          class="rounded-full px-8 font-bold shadow-lg shadow-primary/25"
         >
           {{ sectionData.button.label }}
         </UButton>
@@ -128,7 +133,6 @@ const animateCountUp = () => {
 
 onMounted(() => {
   if (!sectionRef.value) return
-
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0]?.isIntersecting) {
@@ -138,46 +142,106 @@ onMounted(() => {
     },
     { threshold: 0.3 },
   )
-
   observer.observe(sectionRef.value)
 })
 </script>
 
 <style scoped>
-.stat-item {
-  transition: all 0.3s ease;
-}
 
-.stat-icon-wrapper {
+/* ── Stat card: glassmorphism white card ── */
+.stat-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1), rgba(var(--color-primary-rgb), 0.05));
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.25rem 1rem;
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(200, 230, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 40px -8px rgba(14, 165, 233, 0.18),
+    0 0 0 1.5px rgba(125, 211, 252, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 @media (min-width: 640px) {
-  .stat-icon-wrapper {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1.25rem;
-    background: linear-gradient(135deg, var(--color-primary), rgba(0, 124, 195, 0.8));
-    box-shadow: 0 4px 16px rgba(0, 124, 195, 0.2);
-  }
+  .stat-card { padding: 1.75rem 1.25rem; }
 }
 
-.stat-item:hover .stat-icon-wrapper {
-  transform: translateY(-4px);
+/* ── 3D Icon wrapper ── */
+.icon-3d-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-3d-inner {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #38bdf8, #6366f1);
+  box-shadow:
+    0 8px 20px rgba(99, 102, 241, 0.35),
+    0 2px 6px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.35),
+    inset 0 -2px 4px rgba(0,0,0,0.12);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+.stat-card:hover .icon-3d-inner {
+  transform: translateY(-4px) rotate(-4deg);
+  box-shadow:
+    0 16px 32px rgba(99, 102, 241, 0.4),
+    0 4px 8px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
+@media (min-width: 640px) {
+  .icon-3d-inner { width: 4rem; height: 4rem; border-radius: 1.25rem; }
+}
+
+/* ── Tech number typography ── */
 .stat-number {
-  font-family: 'Monda', 'Inter', sans-serif;
-  background: linear-gradient(to right, #0f172a, var(--color-primary));
+  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: linear-gradient(355deg, #0f172a 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat-unit {
+  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ── Divider with gradient ── */
+.stat-divider {
+  width: 2.5rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  opacity: 0.5;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+.stat-card:hover .stat-divider {
+  width: 3.5rem;
+  opacity: 0.9;
 }
 </style>
