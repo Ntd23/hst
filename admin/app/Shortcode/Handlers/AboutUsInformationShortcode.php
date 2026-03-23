@@ -1,12 +1,14 @@
 <?php 
 namespace App\Shortcode\Handlers;
 
+use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
 use App\shortcode\Contracts\ShortcodeInterface;
 use Illuminate\Support\Facades\DB;
 use Botble\Media\Facades\RvMedia;
 
 class AboutUsInformationShortcode implements ShortcodeInterface
 {
+    use ShortcodeApiTrait;
     public static function shortcode(): string
     {
         return 'about-us-information';
@@ -17,8 +19,14 @@ class AboutUsInformationShortcode implements ShortcodeInterface
 
         return [
             'locale' => $locale,
-            'data' => array_merge(
+            'data' => array_filter(
                 [
+                    'style' => $attrs['style'] ?? null,
+                    'title' => $attrs['title'] ?? null,
+                    'subtitle' => $attrs['subtitle'] ?? null,
+                    'description' => $attrs['description'] ?? null,
+                    'button_label' => $attrs['button_label'] ?? null,
+                    'button_url' => $attrs['button_url'] ?? null,
                     'image' => $this->imageUrl($attrs['image'] ?? null),
                     'image_1' => $this->imageUrl($attrs['image_1'] ?? null),
                     'image_2' => $this->imageUrl($attrs['image_2'] ?? null),
@@ -38,34 +46,10 @@ class AboutUsInformationShortcode implements ShortcodeInterface
                         'icon_image' => $this->imageUrl($attrs['contact_icon_image'] ?? null),
                     ],
                     'tabs' => $tabs,
-                ]
+                ],
+                fn($val) => $val !== null && $val !== ''
             ),
         ];
     }
-     protected function imageUrl(?string $path): ?string
-    {
-        return $path ? RvMedia::getImageUrl($path) : null;
-    }
-    protected function parseShortcodeTabs(array $attrs, array $fields, array $imageFields = []): array
-    {
-        $quantity = isset($attrs['quantity']) ? (int) $attrs['quantity'] : 0;
-        $tabs = [];
-
-        for ($i = 1; $i <= $quantity; $i++) {
-            $tab = [];
-            foreach ($fields as $field) {
-                $key = "{$field}_{$i}";
-                $value = $attrs[$key] ?? null;
-
-                if ($value && in_array($field, $imageFields)) {
-                    $value = $this->imageUrl($value);
-                }
-
-                $tab[$field] = $value;
-            }
-            $tabs[] = $tab;
-        }
-
-        return $tabs;
-    }
+  
 }

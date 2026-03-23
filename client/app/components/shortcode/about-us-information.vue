@@ -1,85 +1,106 @@
 <template>
-  <section class="py-16 sm:py-20 lg:py-24 relative overflow-hidden">
+  <section class="py-16 sm:py-24 relative overflow-hidden font-inter">
     <UContainer>
-      <div class="glass-panel rounded-3xl overflow-hidden relative">
-        <div class="grid grid-cols-1 lg:grid-cols-2">
-          <div class="relative h-80 sm:h-96 lg:h-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        
+        <!-- LEFT: Image + Floating Avatar Badge -->
+        <div class="relative w-full max-w-lg mx-auto lg:mx-0">
+          <!-- Main Image -->
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: -30 }"
+            :visible-once="{ opacity: 1, x: 0, transition: { duration: 700, ease: [0.16, 1, 0.3, 1] } }"
+            class="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50 aspect-[4/5]"
+          >
             <NuxtImg
               v-if="sectionData.image"
-              :alt="sectionData.title || 'About Image'"
-              class="absolute inset-0 w-full h-full object-cover"
+              :alt="sectionData.title || 'About Us'"
+              class="w-full h-full object-cover"
               :src="sectionData.image"
             />
-            <div
-              class="absolute inset-0 from-primary/80 to-transparent mix-blend-multiply"
-            />
-            <div
-              v-if="tabs.length > 0"
-              class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 glass-panel-darker p-4 sm:p-6 rounded-2xl"
-            >
-              <div v-for="(tab, idx) in tabs.slice(0, 2)" :key="idx" class="flex items-center gap-4 mb-4 last:mb-0">
-                <div :class="['p-2.5 sm:p-3 rounded-full', idx === 0 ? 'bg-blue-100 text-primary' : 'bg-yellow-100 text-secondary']">
-                  <UIcon :name="'i-lucide-check-circle'" class="size-5 sm:size-6" />
-                </div>
-                <div>
-                  <h4 class="font-bold text-sm sm:text-base text-slate-800" v-html="tab.title">
-                  </h4>
-                  <p class="text-sm text-slate-600" v-if="tab.description" v-html="tab.description">
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
+
+          <!-- Floating Avatar Badge (Top Right) -->
           <div
-            class="p-6 sm:p-10 lg:p-16 flex flex-col justify-center relative"
+            v-if="sectionData.image_1 || sectionData.image_2"
+            v-motion
+            :initial="{ opacity: 0, scale: 0.8 }"
+            :visible-once="{ opacity: 1, scale: 1, transition: { duration: 600, delay: 300 } }"
+            class="absolute top-8 -right-6 lg:-right-10 bg-white/70 backdrop-blur-xl p-2.5 rounded-full shadow-lg shadow-slate-200/50 border border-white flex items-center"
           >
-            <div
-              class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"
-            />
-            <span
-              v-if="sectionData.subtitle"
-              class="text-secondary font-semibold tracking-wide uppercase text-sm mb-4 block"
-              v-html="sectionData.subtitle"
-              ></span>
-            <h2
-              v-if="sectionData.title"
-              class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6"
-              v-html="sectionData.title"
-            >
-            </h2>
-            <p v-if="sectionData.description" class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed" v-html="sectionData.description">
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 mt-4">
-              <UButton
-                v-if="sectionData.button?.label"
-                :to="sectionData.button?.url || '#'"
-                color="primary"
-                variant="solid"
-                size="lg"
-                trailing-icon="i-lucide-arrow-right"
-                class="rounded-xl font-semibold w-full sm:w-auto btn-primary-elevated"
-              >
-                {{ sectionData.button.label }}
-              </UButton>
-              <div class="flex flex-wrap items-center gap-4 px-2 sm:px-4 py-2" v-if="sectionData.image_1 || sectionData.image_2">
-                <div class="flex -space-x-4">
-                  <NuxtImg
-                    v-if="sectionData.image_1"
-                    alt="Image 1"
-                    class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                    :src="sectionData.image_1"
-                  />
-                  <NuxtImg
-                    v-if="sectionData.image_2"
-                    alt="Image 2"
-                    class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                    :src="sectionData.image_2"
-                  />
-                </div>
-              </div>
+            <div class="flex -space-x-4">
+              <NuxtImg
+                v-if="sectionData.image_1"
+                class="w-16 h-16 rounded-full border-[3px] border-white object-cover shadow-sm"
+                :src="sectionData.image_1"
+              />
+              <NuxtImg
+                v-if="sectionData.image_2"
+                class="w-16 h-16 rounded-full border-[3px] border-white object-cover shadow-sm"
+                :src="sectionData.image_2"
+              />
             </div>
           </div>
         </div>
+
+        <!-- RIGHT: Content & Cards -->
+        <div class="flex flex-col justify-center relative">
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: 30 }"
+            :visible-once="{ opacity: 1, x: 0, transition: { duration: 700, ease: [0.16, 1, 0.3, 1] } }"
+          >
+            <!-- Subtitle -->
+            <h4
+              v-if="sectionData.subtitle"
+              class="text-primary font-bold tracking-wider uppercase text-sm mb-4"
+              v-html="sectionData.subtitle"
+            />
+
+            <!-- Title -->
+            <h2
+              v-if="sectionData.title"
+              class="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight"
+              v-html="sectionData.title"
+            />
+            
+            <!-- Description -->
+            <p
+              v-if="sectionData.description"
+              class="text-slate-600 text-base sm:text-lg mb-10 leading-relaxed"
+              v-html="sectionData.description"
+            />
+
+            <!-- Bento Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10" v-if="tabs.length">
+              <div
+                v-for="(tab, idx) in tabs.slice(0, 2)"
+                :key="idx"
+                class="bg-[#f2f9ff]/80 backdrop-blur-md rounded-[24px] p-6 lg:p-8 border border-white/60 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <!-- Glass Icon Box -->
+                <div class="w-14 h-14 rounded-[16px] bg-white border border-slate-100 flex items-center justify-center mb-6 shadow-sm">
+                  <UIcon :name="tab.icon || 'i-lucide-check-circle'" class="size-6 text-slate-700" />
+                </div>
+                <!-- Texts -->
+                <h3 class="font-bold text-lg text-slate-900 mb-3" v-html="tab.title" />
+                <p class="text-sm text-slate-500 leading-relaxed" v-if="tab.description" v-html="tab.description" />
+              </div>
+            </div>
+
+            <!-- Button / Action -->
+            <div v-if="sectionData.button_label" class="pt-2">
+              <NuxtLink
+                :to="sectionData.button_url || '#'"
+                class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg"
+              >
+                {{ sectionData.button_label }}
+                <UIcon name="i-lucide-arrow-right" class="size-4" />
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
       </div>
     </UContainer>
   </section>
@@ -90,7 +111,19 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.data || props.data || {})
-console.log(sectionData.value)
+const sectionData = computed(() => {
+  const d = props.data?.data || props.data || {};
+  return {
+    ...props.data, 
+    ...d          
+  }
+})
+
 const tabs = computed(() => sectionData.value?.tabs || [])
 </script>
+
+<style scoped>
+.font-inter {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+</style>
