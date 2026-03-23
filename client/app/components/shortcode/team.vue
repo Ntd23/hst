@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 bg-slate-50/50 dark:bg-slate-900/50">
+  <section class="py-16">
     <UContainer>
       <div
         v-motion
@@ -22,7 +22,7 @@
           :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: Number(i) * 100 } }"
           class="group"
         >
-          <div class="card-hover-glow rounded-2xl overflow-hidden shadow-lg transition-all duration-400 bg-white dark:bg-slate-800 h-full flex flex-col">
+          <div class="card-hover-glow rounded-2xl overflow-hidden shadow-lg transition-all duration-400 bg-white/70 backdrop-blur-sm dark:bg-slate-800/70 h-full flex flex-col">
             <!-- Photo -->
             <div class="h-52 sm:h-56 md:h-64 lg:h-72 overflow-hidden relative">
               <NuxtImg
