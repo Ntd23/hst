@@ -1,18 +1,20 @@
-<?php 
+<?php
+
 namespace App\Shortcode\Handlers;
-use App\shortcode\Contracts\ShortcodeInterface;
+
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+use App\Shortcode\Contracts\ShortcodeInterface;
 
 class TestimonialsShortcode implements ShortcodeInterface
 {
     use ShortcodeApiTrait;
 
-     public static function shortcode(): string
+    public static function shortcode(): string
     {
         return 'testimonials';
     }
 
-    public function handle(array $attrs, string $locale): array
+    public function handle(array $attrs, string $locale): ?array
     {
         $testimonialIds = isset($attrs['testimonial_ids'])
             ? array_filter(explode(',', $attrs['testimonial_ids']))
@@ -43,11 +45,16 @@ class TestimonialsShortcode implements ShortcodeInterface
             ];
         })->values()->toArray();
 
-        return array_merge(
-            ['locale' => $locale],
-            [
+        return [
+            'locale' => $locale,
+            'data' => array_filter([
+                'style' => $attrs['style'] ?? null,
+                'title' => $attrs['title'] ?? null,
+                'subtitle' => $attrs['subtitle'] ?? null,
+                'background_color' => $attrs['background_color'] ?? null,
+                'enable_lazy_loading' => $attrs['enable_lazy_loading'] ?? null,
                 'items' => $items,
-            ]
-        );
+            ], fn ($value) => $value !== null && $value !== ''),
+        ];
     }
 }
