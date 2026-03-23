@@ -11,6 +11,7 @@
         <NuxtImg
           v-if="sectionData.background_image"
           :src="sectionData.background_image"
+          :loading="imageLoading"
           alt=""
           class="absolute inset-0 w-full h-full object-cover opacity-20"
         />
@@ -77,7 +78,11 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.data || props.data || {})
+const rootData = computed(() => props.data?.content || props.data || {})
+const sectionData = computed(() => rootData.value?.data || rootData.value || {})
+const imageLoading = computed(() => 
+   sectionData.value.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
+)
 </script>
 
 <style scoped>
