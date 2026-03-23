@@ -35,8 +35,6 @@ class PageDetailController extends Controller
 
         $payload = Cache::remember($cacheKey, 1, function () use ($slug, $locale) {
             $slugRecord = $this->pageService->resolveSlug($slug);
-
-
             if (!$slugRecord) {
                 return $this->notFoundPayload($slug);
             }
@@ -74,6 +72,19 @@ class PageDetailController extends Controller
         $name        = $this->getTranslatedValue($demoWeb, 'name', $locale) ?: $demoWeb->name;
         $content = $this->getTranslatedValue($demoWeb, 'content', $locale) ?: $demoWeb->content;
 
+        $relatedWeb = DemoWebsite::with('translations')
+            ->whereKeyNot($demoWeb->id)
+            ->latest()
+            ->take(6)
+            ->get()
+            ->map(fn ($p) => [
+                'id'           => $p->id,
+                'name'         => $this->getTranslatedValue($p, 'name', $locale),
+                'image'        => \RvMedia::getImageUrl($p->img_full),
+                'slug'         => $p->slug,
+                'published_at' => $p->created_at->format('Y-m-d'),
+            ]);
+
         $meta = ['index'=> 'index'];
 
         return [
@@ -84,11 +95,13 @@ class PageDetailController extends Controller
                 'id'           => $demoWeb->id,
                 'name'         => $name,
                 'content'  => $content,
-                'seo_description' => $demoWeb->seo_description,
+                'seo_description' => $this->getTranslatedValue($demoWeb, 'seo_description', $locale),
                 'img_feautrer'        => $this->imageUrl($demoWeb->img_feautrer ?? null),
                 'url_client' => $demoWeb->url_client,
                 'url_admin' => $demoWeb->url_admin,
-                'date' => $demoWeb->created_at->format('Y-m-d')
+                'date' => $demoWeb->created_at->format('Y-m-d'),
+                'demo_webs' => $relatedWeb,
+                'locale' => $locale,
             ],
             'seo' => $this->buildSeo($meta, $name, $demoWeb->seo_description, $demoWeb->img_feautrer ?? null),
         ];
