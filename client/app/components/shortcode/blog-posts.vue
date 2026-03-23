@@ -29,7 +29,7 @@
           v-for="article in articles"
           :key="article.id"
           :to="article.url || '/blog'"
-          class="card-hover-glow rounded-2xl overflow-hidden group cursor-pointer bg-white dark:bg-slate-800 flex flex-col"
+          class="card-hover-glow rounded-2xl overflow-hidden group cursor-pointer bg-white/70 backdrop-blur-sm dark:bg-slate-800/70 flex flex-col"
         >
           <!-- Thumbnail -->
           <div class="aspect-video bg-slate-100 relative overflow-hidden">
@@ -105,7 +105,7 @@
             v-for="article in articles.slice(1, 4)"
             :key="article.id"
             :to="article.url || '/blog'"
-            class="card-hover-glow rounded-2xl overflow-hidden flex flex-row group cursor-pointer bg-white dark:bg-slate-800 flex-1"
+            class="card-hover-glow rounded-2xl overflow-hidden flex flex-row group cursor-pointer bg-white/70 backdrop-blur-sm dark:bg-slate-800/70 flex-1"
           >
             <div class="w-24 sm:w-28 lg:w-32 shrink-0 bg-slate-900 relative overflow-hidden">
               <NuxtImg

@@ -11,7 +11,7 @@ class ServicesShortcode implements ShortcodeInterface
         return 'services';
     }
 
-    public function handle(array $attrs, string $locale): array
+    public function handle(array $attrs, string $locale): array|string|null
     {
         $serviceIds = isset($attrs['service_ids'])
             ? array_filter(explode(',', $attrs['service_ids']))

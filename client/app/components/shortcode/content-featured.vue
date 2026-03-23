@@ -1,5 +1,5 @@
-﻿<template>
-  <section class="flex flex-col md:flex-row gap-8 items-center bg-white/90 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100">
+<template>
+  <section class="flex flex-col md:flex-row gap-8 items-center bg-white/60 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-sm border border-white/80">
     <div class="w-full md:w-1/2">
       <div v-if="sectionData.image" class="rounded-2xl overflow-hidden shadow-lg w-full h-64">
         <NuxtImg
