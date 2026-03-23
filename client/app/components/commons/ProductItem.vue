@@ -24,7 +24,7 @@
     >
       <div class="h-56 overflow-hidden relative group">
         <NuxtImg
-          :src="image"
+          :src="props.image"
           class="absolute top-0 left-0 w-full transition-all duration-[5500ms] ease-linear group-hover:top-[-800%]"
         />
       </div>
@@ -33,11 +33,12 @@
       ></div>
     </div>
     <div class="p-6">
-      <h3
-        class="text-xl font-bold text-hisotech-blue dark:text-blue-300 mb-2 line-clamp-2"
+      <NuxtLink
+        :to="props.slug"
+        class="text-xl font-bold text-hisotech-blue dark:text-blue-300 mb-2 line-clamp-2 hover:underline"
       >
-        {{ title }}
-      </h3>
+        {{ props.title }}
+      </NuxtLink>
       <div class="flex items-center space-x-2 mb-6">
         <div
           class="w-8 h-8 rounded-full bg-avata flex items-center justify-center text-white text-xs font-bold"
@@ -55,13 +56,13 @@
         class="flex justify-between items-center border-t border-slate-200 dark:border-slate-700 pt-4"
       >
         <NuxtLink
-          :to="slug"
-          class="flex items-center space-x-1 text-primary hover:text-primary-dark font-medium transition-colors bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-lg"
+          :to="props.slug"
+          class="flex items-center space-x-1 text-primary hover:text-primary-dark font-medium transition-all bg-blue-50 hover:bg-blue-100 border border-transparent hover:border-blue-300 px-3 py-1.5 rounded-lg"
         >
           <span
             class="text-xs uppercase tracking-wide cursor-pointer transition-colors duration-300 hover:text-blue-600"
           >
-            Chi tiết
+            {{ button_text || "Chi tiết" }}
           </span>
           <span class="material-symbols-outlined text-sm">
             <svg
@@ -82,7 +83,7 @@
         </NuxtLink>
         <div class="flex items-center text-xs text-slate-400">
           <UIcon name="solar:calendar-broken" class="size-5" />
-          17-04-2025
+          {{ props.date }}
         </div>
       </div>
     </div>
@@ -90,9 +91,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   title: string;
   image: string;
   slug: string;
+  date: string;
+  locale: string;
 }>();
+
+const button_text = props.locale == "en" ? "View Details" : "Chi tiết";
 </script>

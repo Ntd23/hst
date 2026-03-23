@@ -7,6 +7,8 @@
         :title="web.name"
         :image="web.img_full"
         :slug="route.fullPath + '/' + web.slug"
+        :date="web.date"
+        :locale="props.data.locale"
       />
     </div>
   </div>
@@ -20,6 +22,8 @@ const props = defineProps({
   },
 });
 const route = useRoute();
+
+console.log(props.data?.items);
 
 const webs = props.data?.items || [];
 </script>

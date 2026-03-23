@@ -1,12 +1,6 @@
 <template>
-  <main class="py-12 relative overflow-hidden">
-    <div
-      class="absolute top-0 right-0 -mr-40 -mt-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl pointer-events-none"
-    ></div>
-    <div
-      class="absolute bottom-0 left-0 -ml-40 -mb-40 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl pointer-events-none"
-    ></div>
-    <div class="container mx-auto px-4 relative z-10">
+  <main class="py-12 relative overflow-hidden container">
+    <div class="mx-auto px-4 relative z-10">
       <div class="mb-12 text-center md:text-left">
         <h1
           class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight"
@@ -62,7 +56,7 @@
         </NuxtLink>
         <NuxtLink
           class="flex items-center space-x-2 bg-slate-900 dark:bg-slate-700 text-white hover:bg-slate-800 dark:hover:bg-slate-600 px-8 py-3 rounded-xl font-bold transition shadow-lg transform hover:-translate-y-1"
-          href="#"
+          :to="{ path: '/contact', query: { slug: route.params.detail } }"
         >
           <span>LIÊN HỆ NGAY</span>
           <UIcon name="solar:arrow-right-linear" class="size-5" />
@@ -71,7 +65,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div
           v-html="dataWeb.content"
-          class="lg:col-span-8 space-y-8 [&>*]:mb-2 [&>p]:mb-2"
+          class="lg:col-span-8 space-y-8 [&>*]:mb-2 [&>p]:mb-2 border border-white rounded-[20px] bg-[#dcf0fa] p-7"
         ></div>
         <div class="lg:col-span-4 space-y-6">
           <div
@@ -136,14 +130,36 @@
               <div
                 class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-700"
               >
-                <button
-                  class="w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white py-3 rounded-xl font-bold hover:opacity-90 transition"
+                <NuxtLink
+                  :to="{
+                    path: '/contact',
+                    query: { slug: route.params.detail },
+                  }"
+                  class="px-10 w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white py-3 rounded-xl font-bold hover:opacity-90 transition"
                 >
                   Yêu cầu báo giá
-                </button>
+                </NuxtLink>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="mt-10">
+        <h3
+          class="text-4xl font-bold text-slate-900 mb-6 pb-2 border-b border-slate-100"
+        >
+          Web demo
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <CommonsProductItem
+            v-for="web in pageData.demo_webs"
+            :key="web.index"
+            :title="web.name"
+            :image="web.image"
+            :slug="'/' + route.path.split('/')[1] + '/' + web.slug"
+            :locale="`en`"
+            :date="web.published_at"
+          />
         </div>
       </div>
     </div>
@@ -153,7 +169,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useMappedShortcodes } from "~/composables/useMappedShortcodes";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const props = defineProps<{
   slug: string;
 }>();
@@ -170,7 +188,7 @@ const dataWeb = ref({
   seo_description: pageData.value?.seo_description,
   date: pageData.value?.date,
 });
-console.log(dataWeb);
+console.log(pageData.value);
 
 if (pageData.value?.sections) {
   mapSectionsToShortcodes(pageData.value.sections);
