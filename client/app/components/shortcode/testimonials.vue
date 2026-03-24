@@ -166,7 +166,7 @@ onUnmounted(() => {
 
 <style scoped>
 .testimonials-highlight {
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-family: var(--font-tech, 'Space Grotesk', sans-serif);
 }
 
 /* ── Vacuum Background ── */
@@ -187,6 +187,7 @@ onUnmounted(() => {
 }
 
 .highlight-kicker {
+  font-family: var(--font-tech, sans-serif);
   display: inline-block;
   padding: 8px 16px;
   background: white;

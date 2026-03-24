@@ -104,7 +104,7 @@
               </div>
               <div class="flex flex-col">
                 <span class="text-sm font-black text-slate-900 whitespace-nowrap leading-tight" v-html="tab.title" />
-                <span v-if="tab.description" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 line-clamp-1">Service</span>
+                <span v-if="tab.description" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 line-clamp-1">{{ $t('common.service') }}</span>
               </div>
             </div>
           </div>
@@ -144,11 +144,11 @@ const tabs = computed(() => sectionData.value?.tabs || [])
 
 <style scoped>
 .about-section {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body, 'Inter', sans-serif);
 }
 
 .font-space {
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-family: var(--font-tech, 'Space Grotesk', sans-serif);
 }
 
 /* ── Vacuum Elements ── */

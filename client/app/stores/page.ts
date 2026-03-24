@@ -1,33 +1,13 @@
 /**
  * Page store: resolve dynamic routes from Laravel menu URLs.
  */
-export const usePageStore = defineStore('page', () => {
-  type MenuItem = {
-    id?: number | string
-    title?: string
-    url?: string
-    reference_id?: number | string | null
-    reference_type?: string | null
-    children?: MenuItem[]
-  }
+import type { MenuItem } from "~~/shared/types/menu";
+import { flattenMenuItems, normalizePath } from "~~/shared/utils/menu";
 
+export const usePageStore = defineStore('page', () => {
   const currentPage = ref<MenuItem | null>(null)
   const loading = ref(false)
   const error = ref<any>(null)
-
-  const normalizePath = (value: string | undefined | null): string => {
-    if (!value) return '/'
-
-    let path = value.trim()
-    if (!path.startsWith('/')) path = `/${path}`
-    path = path.replace(/\/{2,}/g, '/')
-    if (path.length > 1) path = path.replace(/\/+$/, '')
-    return path.toLowerCase()
-  }
-
-  const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
-    return items.flatMap((item) => [item, ...flattenMenuItems(item.children ?? [])])
-  }
 
   /**
    * Resolve page by matching slug to menu item URL.

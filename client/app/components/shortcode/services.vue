@@ -48,6 +48,7 @@
             <NuxtImg
               :src="services[0].image"
               :alt="services[0].name"
+              :loading="imageLoading"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-1000"
             />
             <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
@@ -62,7 +63,7 @@
           <!-- Badge -->
           <div class="absolute top-4 left-4 featured-badge z-10">
             <UIcon name="i-lucide-award" class="size-3 text-amber-500" />
-            <span class="text-[9px] uppercase font-black tracking-widest text-amber-700">Premium</span>
+            <span class="text-[9px] uppercase font-black tracking-widest text-amber-700">{{ $t('services.premium') }}</span>
           </div>
 
           <!-- Text overlay at bottom -->
@@ -76,7 +77,7 @@
               v-html="services[0].description"
             />
             <span class="cta-pill">
-              Khám phá ngay
+              {{ $t('services.explore') }}
               <UIcon name="i-lucide-arrow-right" class="size-3.5 group-hover:translate-x-1 transition-transform duration-300" />
             </span>
           </div>
@@ -98,6 +99,7 @@
               <NuxtImg
                 :src="service.image"
                 :alt="service.name"
+                :loading="imageLoading"
                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.1] transition-transform duration-1000"
               />
               <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
@@ -119,10 +121,6 @@
                 class="text-white/70 text-[11px] sm:text-xs leading-relaxed line-clamp-2 mb-3 font-medium opacity-90"
                 v-html="service.description"
               />
-              <div class="inline-flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest mt-auto">
-                Details
-                <UIcon name="i-lucide-arrow-right" class="size-3 group-hover:translate-x-1 transition-transform duration-300" />
-              </div>
             </div>
           </NuxtLink>
         </div>
@@ -138,10 +136,13 @@ const props = defineProps<{
 }>()
 
 const rootData = computed(() => props.data?.content || props.data || {})
-// If the backend puts title/subtitle inside a 'data' key, use it; otherwise use rootData itself
-const sectionData = computed(() => rootData.value?.data || rootData.value || {})
+const sectionData = computed(() =>
+  rootData.value?.shortcode || rootData.value?.data || rootData.value || {}
+)
 const services = computed(() => rootData.value?.services || rootData.value?.items || [])
-
+const imageLoading = computed(() =>
+  sectionData.value?.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
+)
 // Breakpoint detection (SSR-safe)
 const isMobile = ref(true)
 onMounted(() => {
@@ -163,6 +164,16 @@ const sliderInitial = (i: number) =>
 </script>
 
 <style scoped>
+.services-section {
+  font-family: var(--font-body, sans-serif);
+}
+.services-section h2,
+.services-section h3,
+.services-kicker,
+.featured-badge,
+.cta-pill {
+  font-family: var(--font-tech, sans-serif);
+}
 
 /* ── Subtitle pill ── */
 .subtitle-pill {

@@ -25,6 +25,7 @@
     "subtitle": "Dịch vụ cốt lõi",
     "title": "Sản phẩm tốt nhất",
     "explore": "Khám phá ngay",
+    "premium": "Premium",
     "items": {
       "enterprise": {
         "title": "Giải pháp Doanh nghiệp",
@@ -157,5 +158,27 @@
   "seo": {
     "title": "HISOTECH - Giải pháp chuyển đổi số cho doanh nghiệp",
     "description": "HISOTECH cung cấp giải pháp phần mềm, dịch vụ công nghệ và tư vấn chuyển đổi số toàn diện cho doanh nghiệp Việt Nam."
+  },
+  "common": {
+    "noImage": "Không có ảnh",
+    "service": "Dịch vụ",
+    "defaultCategory": "Tin tức",
+    "viewAllNews": "Xem tất cả tin tức"
+  },
+  "contactForm": {
+    "name": "Họ và Tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ",
+    "policy": "Tôi đồng ý với Điều khoản và Chính sách quyền riêng tư",
+    "titleForm": "Tiêu đề",
+    "messagePlaceholder": "Viết lời nhắn của bạn ở đây.",
+    "submit": "Gửi",
+    "submitting": "Đang gửi...",
+    "success": "Gửi liên hệ thành công!",
+    "error": "Không thể gửi liên hệ lúc này. Vui lòng thử lại sau.",
+    "successTitle": "Tin nhắn đã được gửi",
+    "successDescription": "Đội ngũ của chúng tôi sẽ xem xét và phản hồi bạn trong thời gian sớm nhất.",
+    "sendAnother": "Gửi thêm tin nhắn"
   }
 }

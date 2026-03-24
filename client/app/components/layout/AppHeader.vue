@@ -28,7 +28,6 @@
         </NuxtLink>
       </div>
 
-      <!-- Desktop nav — custom links, full control -->
       <ul class="hidden lg:flex items-center gap-1">
         <li
           v-for="item in computedNavItems"
@@ -37,7 +36,6 @@
           @mouseenter="activeDropdown = item.id ?? item.title"
           @mouseleave="activeDropdown = null"
         >
-          <!-- Item có children -->
           <template v-if="item.has_children && item.children?.length">
             <NuxtLink
               :to="item.url || item.to"
@@ -57,7 +55,6 @@
               />
             </NuxtLink>
 
-            <!-- Dropdown panel -->
             <Transition
               enter-active-class="transition-all duration-200 ease-out"
               enter-from-class="opacity-0 translate-y-1"
@@ -83,7 +80,6 @@
             </Transition>
           </template>
 
-          <!-- Item thông thường -->
           <NuxtLink v-else :to="item.url || item.to" class="nav-item-desktop">
             <span class="nav-item-text" :data-text="item.title || item.label">{{
               item.title || item.label
@@ -93,11 +89,9 @@
       </ul>
 
       <div class="flex items-center gap-3 lg:gap-4">
-        <!-- Language pill toggle -->
         <div
           class="hidden md:flex items-center relative bg-slate-100 dark:bg-slate-800 rounded-full p-0.5 border border-slate-200/60 dark:border-slate-700/60"
         >
-          <!-- Sliding indicator -->
           <div
             class="absolute top-0.5 h-[calc(100%-4px)] rounded-full bg-white dark:bg-slate-700 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
             :style="{
@@ -128,6 +122,7 @@
         </NuxtLink>
 
         <UButton
+          :to="contactButtonLink"
           color="primary"
           variant="solid"
           size="md"
@@ -136,7 +131,6 @@
           {{ $t("nav.contact") }}
         </UButton>
 
-        <!-- Mobile locale toggle — compact, next to hamburger -->
         <button
           class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg border border-primary/40 text-[11px] font-bold text-primary hover:bg-primary/10 transition-all duration-200 active:scale-90"
           @click="switchLocale(locale === 'vi' ? 'en' : 'vi')"
@@ -157,7 +151,6 @@
       </div>
     </div>
 
-    <!-- Mobile menu -->
     <Transition
       enter-active-class="transition-all duration-300 ease-out"
       enter-from-class="opacity-0 -translate-y-2"
@@ -216,10 +209,12 @@
             {{ $t("nav.login") }}
           </NuxtLink>
           <UButton
+            :to="contactButtonLink"
             color="primary"
             variant="solid"
             size="lg"
             class="w-full rounded-xl font-semibold justify-center btn-primary-lift-sm"
+            @click="isMobileMenuOpen = false"
           >
             {{ $t("nav.contact") }}
           </UButton>
@@ -230,19 +225,20 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuItem } from "~~/shared/types/menu";
+import { flattenMenuItems } from "~~/shared/utils/menu";
+
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
 const activeDropdown = ref<string | number | null>(null);
 
-const { locale, locales, setLocale } = useI18n();
+const { locale, locales } = useI18n();
 const availableLocales = computed(
   () => locales.value as Array<{ code: string; name: string }>
 );
 
-const { t } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 
-// Pinia-backed header — SSR awaits data, client caches across pages
 await useHeader();
 const commonStore = useCommonStore();
 const headerData = computed(() => commonStore.headerData);
@@ -254,9 +250,26 @@ const switchLocale = (code: string) => {
   }
 };
 
-// Menu items from API (no static fallback needed)
 const computedNavItems = computed(() => {
-  return headerData.value?.main_menu?.items ?? [];
+  return (headerData.value?.main_menu?.items ?? []) as MenuItem[];
+});
+
+const contactButtonLink = computed(() => {
+  const menuItems = flattenMenuItems(computedNavItems.value);
+  const contactItem = menuItems.find((item) => {
+    const title = (item.title || item.label || "").toLowerCase().trim();
+    const url = (item.url || item.to || "").toLowerCase().trim();
+
+    return (
+      title.includes("liên h?") ||
+      title.includes("lien he") ||
+      title.includes("contact") ||
+      url.includes("lien-he") ||
+      url.includes("contact")
+    );
+  });
+
+  return contactItem?.url || contactItem?.to || "/contact-us";
 });
 
 const handleScroll = () => {
@@ -283,10 +296,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* ===========================
-   Desktop Nav Items
-   Text 16px, hover: text becomes gradient + bold
-   =========================== */
 .nav-item-desktop {
   display: flex;
   align-items: center;
@@ -305,7 +314,6 @@ onBeforeUnmount(() => {
   transition: color 0.2s ease;
 }
 
-/* Phantom bold — reserve space for bold text so width doesn't change on hover */
 .nav-item-desktop .nav-item-text::before {
   content: attr(data-text);
   font-weight: 600;
@@ -317,12 +325,10 @@ onBeforeUnmount(() => {
   user-select: none;
 }
 
-/* Hover: text becomes primary, NO font-weight change to avoid layout shift */
 .nav-item-desktop:hover {
   color: var(--color-primary);
 }
 
-/* Active dot indicator below */
 .nav-item-desktop::after {
   content: "";
   position: absolute;
@@ -344,10 +350,6 @@ onBeforeUnmount(() => {
   width: 50%;
 }
 
-/* ===========================
-   Mobile Nav Items
-   Text 18px, bold, pill hover bg
-   =========================== */
 .nav-item-mobile {
   display: flex;
   align-items: center;
@@ -372,9 +374,6 @@ onBeforeUnmount(() => {
   padding-left: 1.25rem;
 }
 
-/* ===========================
-   Login Button — underline grows from center
-   =========================== */
 .nav-login-btn::after {
   content: "";
   position: absolute;
@@ -392,83 +391,38 @@ onBeforeUnmount(() => {
   width: 60%;
 }
 
-/* ===========================
-   Dropdown panel — glass-nav style
-   =========================== */
 .nav-dropdown {
   position: absolute;
   top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 230px;
-
-  /* glass-panel style */
-  background: rgba(255, 255, 255, 0.85);
+  left: 0;
+  min-width: 240px;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px rgba(0, 124, 195, 0.08),
-    0 0 0 1px rgba(0, 124, 195, 0.06);
-
-  border-top: 2px solid transparent;
-  background-clip: padding-box;
-  border-radius: 0 0 1rem 1rem;
-
-  padding: 0.375rem;
-  z-index: 100;
-  list-style: none;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    border-radius: 2px 2px 0 0;
-    background: linear-gradient(90deg, var(--color-primary), #00a8e8);
-  }
-}
-
-.dark .nav-dropdown {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .nav-dropdown-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 0.875rem;
-  border-radius: 0.625rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  gap: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.875rem;
   color: #334155;
   text-decoration: none;
-  white-space: nowrap;
   transition: all 0.2s ease;
-}
-
-.dark .nav-dropdown-item {
-  color: #cbd5e1;
 }
 
 .nav-dropdown-item:hover {
   color: var(--color-primary);
-  background: rgba(0, 124, 195, 0.07);
+  background: rgba(0, 124, 195, 0.06);
 }
 
 .nav-dropdown-icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  opacity: 0.35;
-  flex-shrink: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.nav-dropdown-item:hover .nav-dropdown-icon {
-  opacity: 1;
-  transform: translateX(2px);
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.5;
 }
 </style>
