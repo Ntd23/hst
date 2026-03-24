@@ -147,7 +147,13 @@ onMounted(() => {
 <style scoped>
 .faq-vacuum {
   background: transparent;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+.faq-vacuum h2,
+.faq-vacuum h3,
+.faq-vacuum h4,
+.node-index {
+  font-family: var(--font-tech, sans-serif);
 }
 
 /* ── Vacuum Ambience ── */

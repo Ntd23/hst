@@ -122,7 +122,7 @@ const imageLoading = computed(() =>
 
 /* ── Title: gradient text cyan → green ── */
 .cta-title {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Space Grotesk', sans-serif);
   background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 40%, #c7d2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -140,7 +140,7 @@ const imageLoading = computed(() =>
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.18);
   color: white;
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, sans-serif);
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.01em;
