@@ -115,6 +115,12 @@ const socialIcon = (name: string) => {
 <style scoped>
 .team-section {
   background: transparent;
+  font-family: var(--font-body, sans-serif);
+}
+.team-section h2,
+.team-section h3,
+.team-kicker {
+  font-family: var(--font-tech, sans-serif);
 }
 
 .team-kicker {
