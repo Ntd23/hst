@@ -118,7 +118,8 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sliderData = computed(() => props.data)
+const rootData = computed(() => props.data?.content || props.data || {})
+const sliderData = computed(() => rootData.value || {})
 const sliderItems = computed(() => sliderData.value?.items ?? [])
 const currentItem = computed(() => sliderItems.value[activeSlide.value] ?? null)
 
