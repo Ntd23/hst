@@ -214,7 +214,7 @@ onMounted(() => {
 
 /* ── Tech number typography ── */
 .stat-number {
-  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Monda', sans-serif);
   background: linear-gradient(355deg, #0f172a 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -223,7 +223,7 @@ onMounted(() => {
   line-height: 1;
 }
 .stat-unit {
-  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Monda', sans-serif);
   background: linear-gradient(135deg, #0ea5e9, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

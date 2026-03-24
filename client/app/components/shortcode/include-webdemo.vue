@@ -34,7 +34,7 @@
             <template v-if="product.img_full || product.img_featured">
               <NuxtImg :src="product.img_full || product.img_featured" loading="lazy" class="w-full h-full object-cover relative z-10 transition-transform duration-700 group-hover:scale-105" />
             </template>
-            <div v-else class="text-slate-400">Không có ảnh</div>
+            <div v-else class="text-slate-400">{{ $t('common.noImage') }}</div>
           </div>
 
           <!-- Overlay info -->
@@ -54,6 +54,15 @@
     </UContainer>
   </section>
 </template>
+
+<style scoped>
+section {
+  font-family: var(--font-body, sans-serif);
+}
+h2, h3, .text-secondary {
+  font-family: var(--font-tech, sans-serif);
+}
+</style>
 
 <script setup lang="ts">
 const props = defineProps<{
