@@ -96,8 +96,9 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.data || props.data)
-const tabs = computed<any[]>(() => sectionData.value?.tabs ?? [])
+const rootData = computed(() => props.data?.content || props.data || {})
+const sectionData = computed(() => rootData.value?.data || rootData.value || {})
+const tabs = computed<any[]>(() => sectionData.value?.tabs || sectionData.value?.items || [])
 
 // ===== Count-up animation =====
 const sectionRef = ref<HTMLElement | null>(null)
@@ -213,7 +214,7 @@ onMounted(() => {
 
 /* ── Tech number typography ── */
 .stat-number {
-  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Monda', sans-serif);
   background: linear-gradient(355deg, #0f172a 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -222,7 +223,7 @@ onMounted(() => {
   line-height: 1;
 }
 .stat-unit {
-  font-family: 'Monda', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Monda', sans-serif);
   background: linear-gradient(135deg, #0ea5e9, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

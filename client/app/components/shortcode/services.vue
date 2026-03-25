@@ -41,44 +41,44 @@
           v-motion
           :initial="{ opacity: 0, x: -30 }"
           :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: 60 } }"
-          class="bento-card bento-featured group relative overflow-hidden"
+          class="bento-card bento-featured group relative overflow-hidden h-[320px] lg:h-auto"
         >
-          <!-- Full-height image -->
+          <!-- Full-height image filling the entire box -->
           <template v-if="services[0].image">
             <NuxtImg
               :src="services[0].image"
               :alt="services[0].name"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+              :loading="imageLoading"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-1000"
             />
-            <!-- Scan-line tech overlay -->
-            <div class="scan-line absolute inset-0 pointer-events-none" />
+            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
           </template>
           <div v-else class="absolute inset-0 hero-fallback flex items-center justify-center">
             <div class="glass-icon-lg">
-              <i v-if="services[0].icon" :class="services[0].icon + ' text-4xl text-white'" />
-              <UIcon v-else name="i-lucide-layers" class="size-10 text-white" />
+              <i v-if="services[0].icon" :class="services[0].icon + ' text-3xl text-white'" />
+              <UIcon v-else name="i-lucide-layers" class="size-8 text-white" />
             </div>
           </div>
 
           <!-- Badge -->
-          <div class="absolute top-3 left-3 featured-badge">
-            <UIcon name="i-lucide-star" class="size-3 text-amber-500" />
-            <span class="text-xs font-bold text-amber-700">Nổi bật</span>
+          <div class="absolute top-4 left-4 featured-badge z-10">
+            <UIcon name="i-lucide-award" class="size-3 text-amber-500" />
+            <span class="text-[9px] uppercase font-black tracking-widest text-amber-700">{{ $t('services.premium') }}</span>
           </div>
 
           <!-- Text overlay at bottom -->
-          <div class="featured-overlay absolute inset-x-0 bottom-0 p-4 sm:p-5 lg:p-6">
+          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10">
             <h3
-              class="text-base sm:text-lg lg:text-xl font-extrabold text-white mb-1.5 line-clamp-2"
+              class="text-lg sm:text-xl font-black text-white mb-2 tracking-tight leading-tight line-clamp-2"
               v-html="services[0].name"
             />
             <p
-              class="text-white/75 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-3"
+              class="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4 font-medium max-w-lg"
               v-html="services[0].description"
             />
             <span class="cta-pill">
-              Khám phá ngay
-              <UIcon name="i-lucide-arrow-right" class="size-3.5 group-hover:translate-x-1 transition-transform duration-200" />
+              {{ $t('services.explore') }}
+              <UIcon name="i-lucide-arrow-right" class="size-3.5 group-hover:translate-x-1 transition-transform duration-300" />
             </span>
           </div>
         </NuxtLink>
@@ -92,36 +92,35 @@
             v-motion
             :initial="sliderInitial(Number(i))"
             :visible-once="{ opacity: 1, x: 0, y: 0, transition: { duration: 550, delay: 80 * Number(i), ease: [0.22, 1, 0.36, 1] } }"
-            class="bento-card slider-card group flex flex-col"
+            class="bento-card slider-card group relative overflow-hidden h-[260px] lg:h-[320px]"
           >
-            <!-- Thumbnail -->
-            <div class="card-thumb relative overflow-hidden rounded-xl mb-4">
+            <!-- Background Image filling the entire box -->
+            <template v-if="service.image">
               <NuxtImg
-                v-if="service.image"
                 :src="service.image"
                 :alt="service.name"
-                class="w-full h-full object-cover group-hover:scale-[1.06] transition-transform duration-500"
+                :loading="imageLoading"
+                class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.1] transition-transform duration-1000"
               />
-              <div v-else class="w-full h-full thumb-fallback flex items-center justify-center">
-                <div class="glass-icon-sm">
-                  <i v-if="service.icon" :class="service.icon + ' text-xl text-white'" />
-                  <UIcon v-else name="i-lucide-layers" class="size-5 text-white" />
-                </div>
+              <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
+            </template>
+            <div v-else class="absolute inset-0 thumb-fallback flex items-center justify-center">
+              <div class="glass-icon-sm">
+                <i v-if="service.icon" :class="service.icon + ' text-xl text-white'" />
+                <UIcon name="i-lucide-scan" v-else class="size-5 text-white" />
               </div>
-              <div class="card-thumb-overlay absolute inset-0" />
             </div>
 
-            <h3
-              class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-emerald-600 transition-colors duration-200 mb-1.5 line-clamp-2"
-              v-html="service.name"
-            />
-            <p
-              class="text-gray-400 text-xs sm:text-sm leading-relaxed line-clamp-3 flex-1"
-              v-html="service.description"
-            />
-            <div class="mt-3 sm:mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
-              Xem chi tiết
-              <UIcon name="i-lucide-arrow-right" class="size-3 group-hover:translate-x-1 transition-transform duration-200" />
+            <!-- Content Overlay at bottom -->
+            <div class="absolute inset-x-0 bottom-0 p-4 sm:p-5 z-10">
+              <h3
+                class="text-base font-bold text-white group-hover:text-emerald-300 transition-colors duration-300 mb-1.5 leading-tight line-clamp-2"
+                v-html="service.name"
+              />
+              <p
+                class="text-white/70 text-[11px] sm:text-xs leading-relaxed line-clamp-2 mb-3 font-medium opacity-90"
+                v-html="service.description"
+              />
             </div>
           </NuxtLink>
         </div>
@@ -136,9 +135,14 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.shortcode || {})
-const services = computed(() => props.data?.services || [])
-
+const rootData = computed(() => props.data?.content || props.data || {})
+const sectionData = computed(() =>
+  rootData.value?.shortcode || rootData.value?.data || rootData.value || {}
+)
+const services = computed(() => rootData.value?.services || rootData.value?.items || [])
+const imageLoading = computed(() =>
+  sectionData.value?.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
+)
 // Breakpoint detection (SSR-safe)
 const isMobile = ref(true)
 onMounted(() => {
@@ -160,6 +164,16 @@ const sliderInitial = (i: number) =>
 </script>
 
 <style scoped>
+.services-section {
+  font-family: var(--font-body, sans-serif);
+}
+.services-section h2,
+.services-section h3,
+.services-kicker,
+.featured-badge,
+.cta-pill {
+  font-family: var(--font-tech, sans-serif);
+}
 
 /* ── Subtitle pill ── */
 .subtitle-pill {
@@ -245,85 +259,56 @@ const sliderInitial = (i: number) =>
 
 /* ── Cards ── */
 .bento-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 1.375rem;
-  padding: 1.125rem;
-  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  background: #f8fafc;
+  border-radius: 1.5rem;
+  padding: 0 !important; /* Image fills the entire card */
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 .bento-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   box-shadow:
-    0 24px 50px -10px rgba(16, 185, 129, 0.2),
-    0 8px 20px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-  border-color: rgba(110, 231, 183, 0.6);
+    0 32px 64px -12px rgba(16, 185, 129, 0.2),
+    0 10px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 
-@media (min-width: 640px) {
-  .bento-card { padding: 1.375rem; }
-}
-@media (min-width: 1024px) {
-  .bento-featured { padding: 1.75rem; }
-}
-
-/* ── Featured card: full-height image + overlay ── */
 .bento-featured {
-  padding: 0 !important;
-  min-height: 320px;
-  /* Image fills the card entirely — no glass blur needed */
+  min-height: 400px;
+  background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: transparent !important;
 }
-@media (min-width: 640px) { .bento-featured { min-height: 380px; } }
-@media (min-width: 1024px) { .bento-featured { min-height: unset; height: 100%; } }
-
-.hero-fallback {
-  background: linear-gradient(135deg, #d1fae5 0%, #bfdbfe 100%);
+@media (min-width: 1024px) { 
+  .bento-featured { height: 100%; min-height: 520px; } 
 }
 
-.featured-overlay {
-  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+.hero-fallback, .thumb-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
 }
 
-/* ── Scan-line: tech glare sweeping down the featured image ── */
-.scan-line {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255,255,255,0.04) 48%,
-    rgba(255,255,255,0.12) 50%,
-    rgba(255,255,255,0.04) 52%,
-    transparent 100%
-  );
-  background-size: 100% 200%;
-  animation: scan 4s linear infinite;
-  mix-blend-mode: overlay;
-}
-@keyframes scan {
-  0%   { background-position: 0% -100%; }
-  100% { background-position: 0% 200%; }
+.card-overlay {
+  z-index: 1;
 }
 
-/* ── Shimmer: plays once on card entry ── */
-.bento-featured::after {
+/* ── Shimmer on Card ── */
+.bento-card::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    105deg,
+    115deg,
     transparent 30%,
-    rgba(255,255,255,0.18) 50%,
+    rgba(255,255,255,0.12) 50%,
     transparent 70%
   );
   background-size: 200% 100%;
-  animation: shimmer-once 1s ease-out 0.5s both;
+  animation: shimmer-once 1.2s ease-out 0.2s both;
   pointer-events: none;
   border-radius: inherit;
   z-index: 2;
@@ -334,104 +319,55 @@ const sliderInitial = (i: number) =>
   100% { background-position: -200% 0; opacity: 0; }
 }
 
-/* ── Slider card: subtle shimmer on enter ── */
-.slider-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255,255,255,0.14) 50%,
-    transparent 70%
-  );
-  background-size: 200% 100%;
-  border-radius: inherit;
-  pointer-events: none;
-  animation: shimmer-once 0.8s ease-out 0.2s both;
-  z-index: 2;
-}
-
-/* ── Card thumbnail ── */
-.card-thumb {
-  width: 100%;
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #ecfdf5 0%, #dbeafe 100%);
-}
-.thumb-fallback {
-  background: linear-gradient(135deg, #d1fae5 0%, #c7d2fe 100%);
-}
-.card-thumb-overlay {
-  background: linear-gradient(to top, rgba(4, 120, 87, 0.15), transparent);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-.group:hover .card-thumb-overlay { opacity: 1; }
-
-/* ── Glass icons ── */
+/* ── Glass icons (Fallbacks) ── */
 .glass-icon-lg {
   width: 80px; height: 80px;
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
 .glass-icon-sm {
-  width: 48px; height: 48px;
-  border-radius: 0.875rem;
-  background: rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.5);
+  width: 56px; height: 56px;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
-}
-
-/* ── Number badge ── */
-.num-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  line-height: 1;
-  padding: 4px 7px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.7);
-  color: #059669;
-  letter-spacing: 0.03em;
-}
-
-/* ── Featured badge ── */
-.featured-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(253, 230, 138, 0.7);
-  border-radius: 999px;
 }
 
 /* ── CTA pill ── */
 .cta-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #059669;
-  background: linear-gradient(135deg, #d1fae5, #dbeafe);
-  border: 1px solid #a7f3d0;
+  gap: 8px;
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #065f46;
+  background: white;
   border-radius: 999px;
-  transition: background 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 .group:hover .cta-pill {
   background: linear-gradient(135deg, #10b981, #3b82f6);
   color: white;
-  border-color: transparent;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.4);
+}
+
+/* ── Featured badge ── */
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid white;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
 </style>

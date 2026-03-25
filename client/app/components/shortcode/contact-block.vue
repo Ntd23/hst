@@ -11,6 +11,7 @@
         <NuxtImg
           v-if="sectionData.background_image"
           :src="sectionData.background_image"
+          :loading="imageLoading"
           alt=""
           class="absolute inset-0 w-full h-full object-cover opacity-20"
         />
@@ -77,7 +78,11 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.data || props.data || {})
+const rootData = computed(() => props.data?.content || props.data || {})
+const sectionData = computed(() => rootData.value?.data || rootData.value || {})
+const imageLoading = computed(() => 
+   sectionData.value.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
+)
 </script>
 
 <style scoped>
@@ -117,7 +122,7 @@ const sectionData = computed(() => props.data?.data || props.data || {})
 
 /* ── Title: gradient text cyan → green ── */
 .cta-title {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, 'Space Grotesk', sans-serif);
   background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 40%, #c7d2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -135,7 +140,7 @@ const sectionData = computed(() => props.data?.data || props.data || {})
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.18);
   color: white;
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-tech, sans-serif);
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.01em;

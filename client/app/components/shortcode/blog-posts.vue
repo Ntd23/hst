@@ -81,7 +81,7 @@
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
             <div class="relative p-5 sm:p-6 lg:p-8 w-full">
               <UBadge color="primary" variant="subtle" size="sm" class="mb-2 sm:mb-3">
-                {{ articles[0]?.categories?.[0]?.name ?? 'Tin tức' }}
+                {{ articles[0]?.categories?.[0]?.name ?? $t('common.defaultCategory') }}
               </UBadge>
               <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2">
                 {{ articles[0]?.name }}
@@ -117,7 +117,7 @@
             </div>
             <div class="p-3 sm:p-4 flex flex-col justify-center flex-1 min-w-0">
               <span class="text-xs font-bold text-primary uppercase mb-1">
-                {{ article.categories?.[0]?.name ?? 'Tin tức' }}
+                {{ article.categories?.[0]?.name ?? $t('common.defaultCategory') }}
               </span>
               <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-2 group-hover:text-primary transition-colors">
                 {{ article.name }}
@@ -133,13 +133,22 @@
           class="inline-flex items-center text-primary font-medium hover:text-secondary transition-colors"
           to="/blog"
         >
-          Xem tất cả tin tức
+          {{ $t('common.viewAllNews') }}
           <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
         </ULink>
       </div>
     </UContainer>
   </section>
 </template>
+
+<style scoped>
+section {
+  font-family: var(--font-body, sans-serif);
+}
+h2, h3, .text-secondary, .text-primary {
+  font-family: var(--font-tech, sans-serif);
+}
+</style>
 
 <script setup lang="ts">
 const props = defineProps<{
