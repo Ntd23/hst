@@ -1,12 +1,15 @@
-<?php 
+<?php
+
 namespace App\Shortcode\Handlers;
-use App\shortcode\Contracts\ShortcodeInterface;
+
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
+use App\Shortcode\Contracts\ShortcodeInterface;
 
 class ServicesShortcode implements ShortcodeInterface
 {
     use ShortcodeApiTrait;
-     public static function shortcode(): string
+
+    public static function shortcode(): string
     {
         return 'services';
     }
@@ -33,6 +36,7 @@ class ServicesShortcode implements ShortcodeInterface
 
         $items = $services->map(function ($service) use ($locale) {
             $slug = $this->getSlug($service);
+
             return [
                 'id' => $service->id,
                 'locale' => $locale,
@@ -47,6 +51,13 @@ class ServicesShortcode implements ShortcodeInterface
 
         return [
             'locale' => $locale,
+            'shortcode' => array_filter([
+                // 'style' => $attrs['style'] ?? null,
+                'title' => $attrs['title'] ?? null,
+                'subtitle' => $attrs['subtitle'] ?? null,
+                // 'background_color' => $attrs['background_color'] ?? null,
+                'enable_lazy_loading' => $attrs['enable_lazy_loading'] ?? null,
+            ], fn ($value) => $value !== null && $value !== ''),
             'services' => $items,
         ];
     }

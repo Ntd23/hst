@@ -25,6 +25,7 @@
     "subtitle": "Core Services",
     "title": "Best Products",
     "explore": "Explore Now",
+    "premium": "Premium",
     "items": {
       "enterprise": {
         "title": "Enterprise Solutions",
@@ -157,5 +158,27 @@
   "seo": {
     "title": "HISOTECH - Digital Transformation Solutions for Businesses",
     "description": "HISOTECH provides software solutions, technology services, and comprehensive digital transformation consulting for Vietnamese businesses."
+  },
+  "common": {
+    "noImage": "No image",
+    "service": "Service",
+    "defaultCategory": "News",
+    "viewAllNews": "View all news"
+  },
+  "contactForm": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "policy": "I agree to the Terms and Privacy Policy.",
+    "titleForm": "Title",
+    "messagePlaceholder": "Write your message here.",
+    "submit": "Send",
+    "submitting": "Sending...",
+    "success": "Send message successfully!",
+    "error": "Can't send message right now. Please try again later.",
+    "successTitle": "Message sent",
+    "successDescription": "Our team will review it and get back to you as soon as possible.",
+    "sendAnother": "Send another message"
   }
 }

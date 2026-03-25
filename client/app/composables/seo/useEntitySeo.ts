@@ -32,5 +32,6 @@ export const useEntitySeo = (slug: string, fallbackTitle?: string) => {
   })
 
   usePageSeo(seo)
+  console.log('SEO data for slug:', seo.value)
   return { seo }
 }
