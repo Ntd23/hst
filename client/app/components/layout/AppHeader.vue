@@ -225,74 +225,17 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from "~~/shared/types/menu";
-import { flattenMenuItems } from "~~/shared/utils/menu";
-
-const isScrolled = ref(false);
-const isMobileMenuOpen = ref(false);
-const activeDropdown = ref<string | number | null>(null);
-
-const { locale, locales } = useI18n();
-const availableLocales = computed(
-  () => locales.value as Array<{ code: string; name: string }>
-);
-
-const switchLocalePath = useSwitchLocalePath();
-
-await useHeader();
-const commonStore = useCommonStore();
-const headerData = computed(() => commonStore.headerData);
-
-const switchLocale = (code: string) => {
-  const path = switchLocalePath(code as "vi" | "en");
-  if (import.meta.client) {
-    window.location.href = path;
-  }
-};
-
-const computedNavItems = computed(() => {
-  return (headerData.value?.main_menu?.items ?? []) as MenuItem[];
-});
-
-const contactButtonLink = computed(() => {
-  const menuItems = flattenMenuItems(computedNavItems.value);
-  const contactItem = menuItems.find((item) => {
-    const title = (item.title || item.label || "").toLowerCase().trim();
-    const url = (item.url || item.to || "").toLowerCase().trim();
-
-    return (
-      title.includes("liên h?") ||
-      title.includes("lien he") ||
-      title.includes("contact") ||
-      url.includes("lien-he") ||
-      url.includes("contact")
-    );
-  });
-
-  return contactItem?.url || contactItem?.to || "/contact-us";
-});
-
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 12;
-};
-
-const handleResize = () => {
-  if (window.innerWidth >= 1024) {
-    isMobileMenuOpen.value = false;
-  }
-};
-
-onMounted(() => {
-  handleScroll();
-  handleResize();
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  window.addEventListener("resize", handleResize, { passive: true });
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("scroll", handleScroll);
-  window.removeEventListener("resize", handleResize);
-});
+const {
+  isScrolled,
+  isMobileMenuOpen,
+  activeDropdown,
+  locale,
+  availableLocales,
+  headerData,
+  computedNavItems,
+  contactButtonLink,
+  switchLocale,
+} = useAppHeader();
 </script>
 
 <style scoped>

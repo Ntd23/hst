@@ -1,6 +1,6 @@
-import { validateContactFormBody } from "~~/shared/utils/contactFormValidation";
-import { getContactValidationMessages } from "~~/shared/utils/contactFormMessages";
-import { getLocale } from "~~/server/utils/getLocale";
+﻿import { validateContactFormBody } from "~~/shared/validation/contactFormValidation";
+import { getContactValidationMessages } from "~~/shared/validation/contactFormMessages";
+import { getLocale } from "~~/server/utils/locale/getLocale";
 
 export default defineEventHandler(async (event) => {
   if (
@@ -28,3 +28,5 @@ export default defineEventHandler(async (event) => {
 
   event.context.validatedContactFormBody = data;
 });
+
+

@@ -37,7 +37,7 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data?.shortcode || props.data?.data || props.data || {})
-const features = computed(() => props.data?.features || [])
-const hasHeader = computed(() => Boolean(sectionData.value?.title || sectionData.value?.description))
+const { sectionData, features, hasHeader } = useContentFeatureListShortcode(
+  toRef(props, "data")
+)
 </script>

@@ -1,21 +1,28 @@
-import { apiFetch } from '~~/server/utils/apiFetch'
-import { getLocale } from '~~/server/utils/getLocale'
+﻿import { proxyApiWithFallback } from '~~/server/utils/http/apiProxy'
 
 export default defineEventHandler(async (event): Promise<any> => {
   const { slug } = getRouterParams(event)
-  const locale = getLocale(event)
 
-  try {
-    return await apiFetch<any>(event, `/pages/${slug}/meta`, {
-      query: { locale },
-      headers: { 'X-Locale': locale },
-    })
-  } catch (err: any) {
-    const status = err?.response?.status || err?.status || err?.statusCode
-    if (status === 404) return null
-    
-    // Log other errors to console but still avoid crashing SSR if possible
-    console.error(`[meta.get.ts] Error fetching meta for slug ${slug}:`, err.message)
-    return null
-  }
+  return proxyApiWithFallback<any>(
+    event,
+    {
+      path: `/pages/${slug}/meta`,
+    },
+    {
+      onError: (error) => {
+        const status =
+          error?.response?.status || error?.status || error?.statusCode
+
+        if (status !== 404) {
+          console.error(
+            `[meta.get.ts] Error fetching meta for slug ${slug}:`,
+            error.message
+          )
+        }
+
+        return null
+      },
+    }
+  )
 })
+
