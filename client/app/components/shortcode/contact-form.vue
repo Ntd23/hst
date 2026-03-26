@@ -96,6 +96,7 @@
                 v-else
                 key="form"
                 :aria-busy="contactStore.loading"
+                novalidate
                 class="space-y-5"
                 @submit.prevent="handleSubmit"
               >
@@ -111,12 +112,19 @@
                       id="contact-name"
                       ref="nameInputRef"
                       v-model="form.name"
+                      :aria-describedby="fieldError('name') ? fieldErrorId('name') : undefined"
+                      :aria-invalid="fieldError('name') ? 'true' : 'false'"
                       :placeholder="`${labels.name}....`"
+                      autocomplete="name"
                       class="contact-input"
                       required
                       type="text"
                     />
-                    <p v-if="fieldError('name')" class="contact-error">
+                    <p
+                      v-if="fieldError('name')"
+                      :id="fieldErrorId('name')"
+                      class="contact-error"
+                    >
                       {{ fieldError("name") }}
                     </p>
                   </div>
@@ -130,13 +138,21 @@
                     </label>
                     <input
                       id="contact-email"
+                      ref="emailInputRef"
                       v-model="form.email"
+                      :aria-describedby="fieldError('email') ? fieldErrorId('email') : undefined"
+                      :aria-invalid="fieldError('email') ? 'true' : 'false'"
                       :placeholder="`${labels.email}....`"
                       :required="mandatoryFields.email"
+                      autocomplete="email"
                       class="contact-input"
                       type="email"
                     />
-                    <p v-if="fieldError('email')" class="contact-error">
+                    <p
+                      v-if="fieldError('email')"
+                      :id="fieldErrorId('email')"
+                      class="contact-error"
+                    >
                       {{ fieldError("email") }}
                     </p>
                   </div>
@@ -152,13 +168,21 @@
                     </label>
                     <input
                       id="contact-address"
+                      ref="addressInputRef"
                       v-model="form.address"
+                      :aria-describedby="fieldError('address') ? fieldErrorId('address') : undefined"
+                      :aria-invalid="fieldError('address') ? 'true' : 'false'"
                       :placeholder="`${labels.address}....`"
                       :required="mandatoryFields.address"
+                      autocomplete="street-address"
                       class="contact-input"
                       type="text"
                     />
-                    <p v-if="fieldError('address')" class="contact-error">
+                    <p
+                      v-if="fieldError('address')"
+                      :id="fieldErrorId('address')"
+                      class="contact-error"
+                    >
                       {{ fieldError("address") }}
                     </p>
                   </div>
@@ -172,13 +196,21 @@
                     </label>
                     <input
                       id="contact-phone"
+                      ref="phoneInputRef"
                       v-model="form.phone"
+                      :aria-describedby="fieldError('phone') ? fieldErrorId('phone') : undefined"
+                      :aria-invalid="fieldError('phone') ? 'true' : 'false'"
                       :placeholder="`${labels.phone}....`"
                       :required="mandatoryFields.phone"
+                      autocomplete="tel"
                       class="contact-input"
                       type="tel"
                     />
-                    <p v-if="fieldError('phone')" class="contact-error">
+                    <p
+                      v-if="fieldError('phone')"
+                      :id="fieldErrorId('phone')"
+                      class="contact-error"
+                    >
                       {{ fieldError("phone") }}
                     </p>
                   </div>
@@ -193,13 +225,21 @@
                   </label>
                   <input
                     id="contact-subject"
+                    ref="subjectInputRef"
                     v-model="form.subject"
+                    :aria-describedby="fieldError('subject') ? fieldErrorId('subject') : undefined"
+                    :aria-invalid="fieldError('subject') ? 'true' : 'false'"
                     :placeholder="`${labels.subject}....`"
                     :required="mandatoryFields.subject"
+                    autocomplete="off"
                     class="contact-input"
                     type="text"
                   />
-                  <p v-if="fieldError('subject')" class="contact-error">
+                  <p
+                    v-if="fieldError('subject')"
+                    :id="fieldErrorId('subject')"
+                    class="contact-error"
+                  >
                     {{ fieldError("subject") }}
                   </p>
                 </div>
@@ -210,13 +250,21 @@
                   </label>
                   <textarea
                     id="contact-message"
+                    ref="contentInputRef"
                     v-model="form.content"
+                    :aria-describedby="fieldError('content') ? fieldErrorId('content') : undefined"
+                    :aria-invalid="fieldError('content') ? 'true' : 'false'"
                     :placeholder="labels.message"
                     class="contact-input resize-none"
+                    autocomplete="off"
                     required
                     rows="4"
                   />
-                  <p v-if="fieldError('content')" class="contact-error">
+                  <p
+                    v-if="fieldError('content')"
+                    :id="fieldErrorId('content')"
+                    class="contact-error"
+                  >
                     {{ fieldError("content") }}
                   </p>
                 </div>
@@ -224,7 +272,16 @@
                 <div class="flex items-start gap-2 pt-2">
                   <input
                     id="policy"
+                    ref="policyInputRef"
                     v-model="form.agree_terms_and_policy"
+                    :aria-describedby="
+                      fieldError('agree_terms_and_policy')
+                        ? fieldErrorId('agree_terms_and_policy')
+                        : undefined
+                    "
+                    :aria-invalid="
+                      fieldError('agree_terms_and_policy') ? 'true' : 'false'
+                    "
                     class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     type="checkbox"
                   />
@@ -234,6 +291,7 @@
                 </div>
                 <p
                   v-if="fieldError('agree_terms_and_policy')"
+                  :id="fieldErrorId('agree_terms_and_policy')"
                   class="contact-error"
                 >
                   {{ fieldError("agree_terms_and_policy") }}
@@ -241,6 +299,7 @@
 
                 <p
                   v-if="submitError"
+                  role="alert"
                   class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
                 >
                   {{ submitError }}
@@ -278,6 +337,12 @@ const {
   contactStore,
   contactPanelRef,
   nameInputRef,
+  emailInputRef,
+  addressInputRef,
+  phoneInputRef,
+  subjectInputRef,
+  contentInputRef,
+  policyInputRef,
   sectionData,
   formMeta,
   labels,
@@ -289,6 +354,7 @@ const {
   submitError,
   submitSuccess,
   fieldError,
+  fieldErrorId,
   handleSubmit,
   handleSendAnother,
 } = useContactSectionForm(toRef(props, "data"));
@@ -313,6 +379,11 @@ const {
   outline: none;
   border-color: transparent;
   box-shadow: 0 0 0 2px rgb(0 124 195 / 0.35);
+}
+
+.contact-input[aria-invalid="true"] {
+  border-color: rgb(248 113 113);
+  box-shadow: 0 0 0 1px rgb(248 113 113 / 0.18);
 }
 
 .contact-error {

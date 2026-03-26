@@ -1,4 +1,7 @@
-import type { PageSeoInput } from '~/composables/seo/usePageSeo'
+﻿import {
+  createSeoInput,
+  type PageSeoInput,
+} from '~/composables/seo/seo.helpers'
 
 const homeSeoDefaults: PageSeoInput = {
   title: 'HISOTECH - Giải pháp chuyển đổi số cho doanh nghiệp',
@@ -8,24 +11,14 @@ const homeSeoDefaults: PageSeoInput = {
 }
 
 export const useHomeSeo = () => {
-  const { locale } = useI18n()
+  const { localeCode } = useI18nText()
 
   const { data } = useFetch<any>('/api/pages/homepage/meta', {
-    key: `seo-home-${locale.value}`,
-    query: computed(() => ({ locale: locale.value })),
+    key: `seo-home-${localeCode.value}`,
+    query: computed(() => ({ locale: localeCode.value })),
   })
 
-  const seo = computed<PageSeoInput>(() => {
-    if (!data.value) return homeSeoDefaults
-    return {
-      title:       data.value.title       || homeSeoDefaults.title,
-      description: data.value.description || homeSeoDefaults.description,
-      image:       data.value.og?.image   || undefined,
-      type:        data.value.og?.type    || 'website',
-      robots:      data.value.robots      || 'index,follow',
-      favicon:     data.value.favicon     || undefined,
-    }
-  })
+  const seo = computed(() => createSeoInput(data.value, homeSeoDefaults))
 
   usePageSeo(seo)
   return { seo }

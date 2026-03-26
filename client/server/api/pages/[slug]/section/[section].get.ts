@@ -1,5 +1,4 @@
-import { apiFetch } from '~~/server/utils/apiFetch'
-import { getLocale } from '~~/server/utils/getLocale'
+﻿import { proxyApi } from '~~/server/utils/http/apiProxy'
 
 /**
  * Generic page section endpoint.
@@ -10,21 +9,13 @@ export default defineEventHandler(async (event): Promise<any> => {
   const params = getRouterParams(event)
   const slug = params.slug
   const section = params.section
-  const locale = getLocale(event)
 
   if (!slug || !section) {
     return { error: 'Missing params', params, contextParams: event.context.params }
   }
-  console.log('--- ENTERED section.get.ts ---', slug, section, locale)
-  try {
-    const res = await apiFetch<any>(event, `/pages/${slug}/section/${section}`, {
-      query: { locale },
-      headers: { 'X-Locale': locale },
-    })
-    console.log('--- FETCH SUCCESS ---')
-    return res
-  } catch (err: any) {
-    console.log('--- FETCH FAILED ---', err.message)
-    throw err
-  }
+
+  return proxyApi<any>(event, {
+    path: `/pages/${slug}/section/${section}`,
+  })
 })
+

@@ -1,4 +1,4 @@
-import type { ContactFormPayload } from "~~/shared/types/contact";
+﻿import type { ContactFormPayload } from "~~/shared/validation/types";
 
 export const useContactStore = defineStore("contact", () => {
   const loading = ref(false);
@@ -36,3 +36,4 @@ export const useContactStore = defineStore("contact", () => {
     submitSectionForm,
   };
 });
+

@@ -96,55 +96,8 @@ const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sectionData = computed(() => rootData.value?.data || rootData.value || {})
-const tabs = computed<any[]>(() => sectionData.value?.tabs || sectionData.value?.items || [])
-
-// ===== Count-up animation =====
-const sectionRef = ref<HTMLElement | null>(null)
-const animatedValues = ref<number[]>([])
-let hasAnimated = false
-
-watch(tabs, (newTabs) => {
-  animatedValues.value = newTabs.map(() => 0)
-}, { immediate: true })
-
-const animateCountUp = () => {
-  if (hasAnimated) return
-  hasAnimated = true
-
-  tabs.value.forEach((tab, index) => {
-    const target = parseInt(tab.data) || 0
-    const duration = 2000
-    const steps = 60
-    const stepDuration = duration / steps
-    let current = 0
-    const increment = target / steps
-
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= target) {
-        current = target
-        clearInterval(timer)
-      }
-      animatedValues.value[index] = Math.round(current)
-    }, stepDuration)
-  })
-}
-
-onMounted(() => {
-  if (!sectionRef.value) return
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0]?.isIntersecting) {
-        animateCountUp()
-        observer.disconnect()
-      }
-    },
-    { threshold: 0.3 },
-  )
-  observer.observe(sectionRef.value)
-})
+const { sectionData, tabs, sectionRef, animatedValues } =
+  useSiteStatisticsShortcode(toRef(props, "data"))
 </script>
 
 <style scoped>

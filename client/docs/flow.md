@@ -1,4 +1,4 @@
-# Luồng hoạt động: Browser → Nuxt → Backend
+﻿# Luồng hoạt động: Browser → Nuxt → Backend
 
 > Dành cho người mới học Nuxt. Tài liệu này giải thích cách request di chuyển từ trình duyệt đến server Laravel thông qua Nuxt.
 
@@ -114,7 +114,7 @@ Server Route nhận vai trò **middleware/proxy**:
 #### Bước 4 — `apiFetch` gọi Laravel
 
 ```ts
-// server/utils/apiFetch.ts
+// server/utils/http/apiFetch.ts
 export function apiFetch<T>(path: string, opts = {}) {
   const config = useRuntimeConfig()
   return $fetch<T>(path, {
@@ -282,3 +282,5 @@ Nuxt tự động map file → URL:
 | `useI18n().locale` | Reactive locale value từ URL hoặc cookie |
 | `Cache::remember` | Laravel cache kết quả DB query |
 | `layouts/default.vue` | Wrap mọi trang với Header và Footer |
+
+

@@ -118,74 +118,14 @@ const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sliderData = computed(() => rootData.value || {})
-const sliderItems = computed(() => sliderData.value?.items ?? [])
-const currentItem = computed(() => sliderItems.value[activeSlide.value] ?? null)
-
-const activeSlide = ref(0);
-const slideInterval = 6000;
-let timer: ReturnType<typeof setInterval> | null = null;
-
-// ===== Typewriter =====
-const typedText = ref("");
-const isTyping = ref(false);
-let typeTimer: ReturnType<typeof setTimeout> | null = null;
-
-const typeTitle = (text: string) => {
-  if (typeTimer) clearTimeout(typeTimer);
-  typedText.value = "";
-  isTyping.value = true;
-  let i = 0;
-  const speed = 45; // ms per character
-
-  const tick = () => {
-    if (i < text.length) {
-      typedText.value = text.slice(0, i + 1);
-      i++;
-      typeTimer = setTimeout(tick, speed);
-    } else {
-      // Cursor blinks briefly then disappears
-      setTimeout(() => {
-        isTyping.value = false;
-      }, 800);
-    }
-  };
-  tick();
-};
-
-// Re-type whenever slide changes
-watch(
-  () => currentItem.value?.title,
-  (newTitle) => {
-    typeTitle(newTitle || "HISOTECH");
-  },
-  { immediate: true }
-);
-
-// ===== Slide navigation =====
-const goToSlide = (index: number) => {
-  activeSlide.value = index;
-  resetTimer();
-};
-
-const nextSlide = () => {
-  if (sliderItems.value.length > 1)
-    activeSlide.value = (activeSlide.value + 1) % sliderItems.value.length;
-};
-
-const resetTimer = () => {
-  if (timer) clearInterval(timer);
-  timer = setInterval(nextSlide, slideInterval);
-};
-
-onMounted(() => {
-  resetTimer();
-});
-onBeforeUnmount(() => {
-  if (timer) clearInterval(timer);
-  if (typeTimer) clearTimeout(typeTimer);
-});
+const {
+  sliderItems,
+  currentItem,
+  activeSlide,
+  typedText,
+  isTyping,
+  slideInterval,
+} = useSimpleSliderShortcode(toRef(props, "data"))
 </script>
 
 <style scoped>

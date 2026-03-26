@@ -122,24 +122,8 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => {
-  const d = props.data?.data || props.data || {};
-  return {
-    ...props.data, 
-    ...d          
-  }
-})
-
-// Logic for alternating/generic layout
-const isImageRight = computed(() => {
-  const style = sectionData.value.style || '';
-  // Support style-14, style-8, or any style containing "right"
-  return style.includes('14') || style.includes('right') || style.includes('style-8');
-})
-
-const isFloatingMode = computed(() => isImageRight.value || tabs.value.length <= 3);
-
-const tabs = computed(() => sectionData.value?.tabs || [])
+const { sectionData, tabs, isImageRight, isFloatingMode } =
+  useAboutUsInformationShortcode(toRef(props, "data"))
 </script>
 
 <style scoped>

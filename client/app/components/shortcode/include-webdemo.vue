@@ -69,6 +69,7 @@ const props = defineProps<{
   data?: any
 }>()
 
-const sectionData = computed(() => props.data || {})
-const products = computed(() => props.data?.items || [])
+const { sectionData, products } = useIncludeWebdemoShortcode(
+  toRef(props, "data")
+)
 </script>
