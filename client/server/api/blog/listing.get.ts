@@ -1,17 +1,13 @@
-import { apiFetch } from '~~/server/utils/apiFetch'
-import { getLocale } from '~~/server/utils/getLocale'
+﻿import { proxyApi } from '~~/server/utils/http/apiProxy'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const locale = getLocale(event)
 
   try {
-    const response = await apiFetch<any>(event, '/blog/listing', {
-      query: { ...query, locale },
-      headers: { 'X-Locale': locale },
+    return await proxyApi<any>(event, {
+      path: '/blog/listing',
+      query: { ...query },
     })
-
-    return response
   } catch (err: any) {
     throw createError({
       statusCode: err?.response?.status || 500,
@@ -19,3 +15,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

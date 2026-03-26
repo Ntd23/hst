@@ -100,68 +100,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-
 const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sectionData = computed(() => rootData.value?.data || rootData.value || {})
-const items = computed(() => sectionData.value?.items || [])
-
-const sliderRef = ref<HTMLElement | null>(null)
-const activeIndex = ref(0)
-let autoplayInterval: any = null
-
-const updateActiveIndex = () => {
-  const slider = sliderRef.value
-  if (!slider) return
-  const scrollLeft = slider.scrollLeft
-  const firstChild = slider.children[0] as HTMLElement | undefined
-  if (!firstChild) return
-  const itemWidth = firstChild.clientWidth + 24 // card width + gap
-  const index = Math.round(scrollLeft / itemWidth)
-  activeIndex.value = index
-}
-
-const scrollToIndex = (index: number) => {
-  const slider = sliderRef.value
-  if (!slider) return
-  const targetIndex = index % items.value.length
-  const item = slider.children[targetIndex] as HTMLElement | undefined
-  if (item) {
-    const offset = item.offsetLeft - (slider.clientWidth / 2) + (item.clientWidth / 2)
-    slider.scrollTo({ left: offset, behavior: 'smooth' })
-    activeIndex.value = targetIndex
-  }
-}
-
-const scrollNext = () => {
-  const nextIdx = (activeIndex.value + 1) % items.value.length
-  scrollToIndex(nextIdx)
-}
-
-const startAutoplay = () => {
-  if (autoplayInterval) clearInterval(autoplayInterval)
-  autoplayInterval = setInterval(() => {
-    scrollNext()
-  }, 6000)
-}
-
-onMounted(() => {
-  const slider = sliderRef.value
-  if (slider) {
-    slider.addEventListener('scroll', updateActiveIndex)
-    updateActiveIndex()
-    startAutoplay()
-  }
-})
-
-onUnmounted(() => {
-  sliderRef.value?.removeEventListener('scroll', updateActiveIndex)
-  if (autoplayInterval) clearInterval(autoplayInterval)
-})
+const { sectionData, items, sliderRef, activeIndex, scrollToIndex } =
+  useTestimonialsShortcode(toRef(props, "data"))
 </script>
 
 <style scoped>

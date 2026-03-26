@@ -1,12 +1,10 @@
-import { apiFetch } from '~~/server/utils/apiFetch'
-import { getLocale } from '~~/server/utils/getLocale'
+﻿import { proxyApi } from '~~/server/utils/http/apiProxy'
 
 export default defineEventHandler(async (event): Promise<any> => {
   const { section } = getRouterParams(event)
-  const locale = getLocale(event)
 
-  return apiFetch<any>(event, `/pages/home/section/${section}`, {
-    query: { locale },
-    headers: { 'X-Locale': locale },
+  return proxyApi<any>(event, {
+    path: `/pages/home/section/${section}`,
   })
 })
+

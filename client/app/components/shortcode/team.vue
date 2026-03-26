@@ -84,32 +84,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
 const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sectionData = computed(() => rootData.value?.data || rootData.value || {})
-const team = computed(() => rootData.value?.items || [])
-
-const socialEntries = (socials?: Record<string, string>) =>
-  Object.entries(socials || {})
-    .filter(([, value]) => Boolean(value))
-    .map(([name, url]) => ({ name, url }))
-
-const socialIcon = (name: string) => {
-  const normalized = String(name).toLowerCase()
-
-  if (normalized === 'facebook') return 'i-simple-icons-facebook'
-  if (normalized === 'instagram') return 'i-simple-icons-instagram'
-  if (normalized === 'twitter') return 'i-simple-icons-x'
-  if (normalized === 'linkedin') return 'i-simple-icons-linkedin'
-  if (normalized === 'youtube') return 'i-simple-icons-youtube'
-
-  return 'i-lucide-link'
-}
+const { sectionData, team, socialEntries, socialIcon } = useTeamShortcode(
+  toRef(props, "data")
+)
 </script>
 
 <style scoped>
