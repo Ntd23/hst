@@ -157,7 +157,7 @@
             :title="web.name"
             :image="web.image"
             :slug="'/' + route.path.split('/')[1] + '/' + web.slug"
-            :locale="`en`"
+            :locale="pageData.locale"
             :date="web.published_at"
           />
         </div>
@@ -188,7 +188,6 @@ const dataWeb = ref({
   seo_description: pageData.value?.seo_description,
   date: pageData.value?.date,
 });
-console.log(pageData.value);
 
 if (pageData.value?.sections) {
   mapSectionsToShortcodes(pageData.value.sections);
