@@ -78,10 +78,8 @@ const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sectionData = computed(() => rootData.value?.data || rootData.value || {})
-const imageLoading = computed(() => 
-   sectionData.value.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
+const { sectionData, imageLoading } = useContactBlockShortcode(
+  toRef(props, "data")
 )
 </script>
 

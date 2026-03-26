@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Page store: resolve dynamic routes from Laravel menu URLs.
  */
-import type { MenuItem } from "~~/shared/types/menu";
-import { flattenMenuItems, normalizePath } from "~~/shared/utils/menu";
+import type { MenuItem } from "~~/shared/navigation/types";
+import { flattenMenuItems, normalizePath } from "~~/shared/navigation/menu";
 
 export const usePageStore = defineStore('page', () => {
   const currentPage = ref<MenuItem | null>(null)
@@ -39,3 +39,4 @@ export const usePageStore = defineStore('page', () => {
 
   return { currentPage, loading, error, resolvePage, $reset }
 })
+

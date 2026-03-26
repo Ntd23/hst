@@ -39,7 +39,7 @@
           v-if="services[0]"
           :to="services[0].slug ? '/services/' + services[0].slug : '#'"
           v-motion
-          :initial="{ opacity: 0, x: -30 }"
+          :initial="featuredInitial"
           :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: 60 } }"
           class="bento-card bento-featured group relative overflow-hidden h-[320px] lg:h-auto"
         >
@@ -135,32 +135,13 @@ const props = defineProps<{
   data?: any
 }>()
 
-const rootData = computed(() => props.data?.content || props.data || {})
-const sectionData = computed(() =>
-  rootData.value?.shortcode || rootData.value?.data || rootData.value || {}
-)
-const services = computed(() => rootData.value?.services || rootData.value?.items || [])
-const imageLoading = computed(() =>
-  sectionData.value?.enable_lazy_loading === 'yes' ? 'lazy' : 'eager'
-)
-// Breakpoint detection (SSR-safe)
-const isMobile = ref(true)
-onMounted(() => {
-  const mq = window.matchMedia('(min-width: 1024px)')
-  isMobile.value = !mq.matches
-  mq.addEventListener('change', (e) => { isMobile.value = !e.matches })
-})
-
-// Featured: cinematic scale + blur reveal (always)
-const featuredInitial = { opacity: 0, scale: 0.93, y: 16, filter: 'blur(6px)' }
-
-// Slider cards:
-// - Mobile: slide from right (matches scroll direction)
-// - Desktop: stagger slide up
-const sliderInitial = (i: number) =>
-  isMobile.value
-    ? { opacity: 0, x: 60 + i * 20 }
-    : { opacity: 0, y: 50 }
+const {
+  sectionData,
+  services,
+  imageLoading,
+  featuredInitial,
+  sliderInitial,
+} = useServicesShortcode(toRef(props, "data"))
 </script>
 
 <style scoped>

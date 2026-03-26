@@ -1,20 +1,17 @@
-import { apiFetch } from "~~/server/utils/apiFetch";
-import { getLocale } from "~~/server/utils/getLocale";
-import type { ContactFormPayload } from "~~/shared/types/contact";
+﻿import { proxyApi } from "~~/server/utils/http/apiProxy";
+import type { ContactFormPayload } from "~~/shared/validation/types";
 
 export default defineEventHandler(async (event) => {
-  const locale = getLocale(event);
   const body =
     (event.context.validatedContactFormBody as
       | ContactFormPayload
       | undefined) || (await readBody(event));
 
   try {
-    return await apiFetch<any>(event, "/pages/contact/section/form", {
+    return await proxyApi<any>(event, {
+      path: "/pages/contact/section/form",
       method: "POST",
       body,
-      query: { locale },
-      headers: { "X-Locale": locale },
     });
   } catch (error: any) {
     const responseData = error?.data || error?.response?._data;
@@ -22,11 +19,10 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: error?.statusCode || error?.response?.status || 500,
       statusMessage:
-        responseData?.message ||
-        error?.statusMessage ||
-        error?.message ||
-        "Failed to submit contact form",
+        error?.statusMessage || error?.message || "Failed to submit contact form",
       data: responseData,
     });
   }
 });
+
+

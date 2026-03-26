@@ -1,4 +1,4 @@
-<style>
+﻿<style>
 .blog-hero {
   background: #e7e6dde0;
   border: 1px solid white;
@@ -11,183 +11,173 @@
 }
 </style>
 <template>
-  <main class="relative overflow-hidden w-full container">
-    <div v-if="pending" class="flex min-h-[60vh] items-center justify-center">
-      <UIcon
-        name="i-lucide-loader-2"
-        class="size-8 animate-spin text-primary"
-      />
-    </div>
-    <div v-else class="">
-      <!-- Breadcrumb -->
-      <CommonsAppBreadcrumb
-        title="Chi tiết bài viết"
-        :items="[
-          { label: post.name }
-        ]"
-      />
+  <main class="relative container w-full overflow-hidden">
+    <div v-if="pending" class="mx-auto px-4 pb-20 pt-5 sm:px-6 lg:px-8">
+      <div class="mb-10 grid grid-cols-1 gap-6 rounded-[15px] border border-white bg-white/70 p-5 shadow-md lg:grid-cols-12">
+        <div class="space-y-4 lg:col-span-5">
+          <div class="h-10 w-4/5 animate-pulse rounded-2xl bg-slate-200/80" />
+          <div class="h-4 w-full animate-pulse rounded-xl bg-slate-200/70" />
+          <div class="h-4 w-2/3 animate-pulse rounded-xl bg-slate-200/70" />
+        </div>
+        <div class="lg:col-span-7">
+          <div class="aspect-video animate-pulse rounded-2xl bg-slate-200/80" />
+        </div>
+      </div>
 
-      <div class="pt-5 pb-20 px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <div class="space-y-6 lg:col-span-8">
+          <div class="rounded-3xl bg-white/70 p-5 shadow-md">
+            <div
+              v-for="index in 7"
+              :key="`blog-detail-skeleton-${index}`"
+              class="mb-4 h-4 animate-pulse rounded-xl bg-slate-200/70"
+              :class="index === 1 ? 'w-11/12' : index === 7 ? 'w-4/6' : 'w-full'"
+            />
+          </div>
+        </div>
+
+        <aside class="space-y-8 lg:col-span-4">
+          <div class="h-80 animate-pulse rounded-2xl bg-white/75 shadow-md" />
+          <div class="h-48 animate-pulse rounded-2xl bg-white/75 shadow-md" />
+        </aside>
+      </div>
+    </div>
+    <div v-else>
+      <CommonsAppBreadcrumb :title="breadcrumbTitle" :items="[{ label: post.name }]" />
+
+      <div class="mx-auto px-4 pb-20 pt-5 sm:px-6 lg:px-8">
         <div
-          class="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center p-5 mb-10 shadow-md blog-hero"
+          class="blog-hero mb-10 grid grid-cols-1 items-center gap-6 p-5 shadow-md lg:col-span-12 lg:grid-cols-12"
         >
-          <!-- LEFT -->
-          <div class="lg:col-span-5 flex flex-col justify-center">
-            <h1
-              class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight"
-            >
+          <div class="flex flex-col justify-center lg:col-span-5">
+            <h1 class="mb-6 text-3xl font-bold leading-tight text-slate-900 md:text-4xl">
               {{ post.name }}
             </h1>
 
-            <div
-              class="flex-wrap items-center gap-4 md:gap-6 text-sm text-slate-500 pb-8 border-b border-slate-200"
-            >
+            <div class="flex-wrap gap-4 border-b border-slate-200 pb-8 text-sm text-slate-500 md:gap-6">
               <div class="flex">
                 <div
                   v-for="category in categories"
                   :key="category.id"
-                  class="flex me-4 items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-primary border border-blue-100 shadow-sm text-xs font-medium cursor-pointer transition-all duration-200 hover:bg-blue-100 hover:shadow-md hover:-translate-y-0.5"
+                  class="me-4 flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-100 hover:shadow-md"
                 >
                   <span>{{ category.name }}</span>
                 </div>
               </div>
 
-              <div class="flex items-center gap-1.5 mt-4">
+              <div class="mt-4 flex items-center gap-1.5">
                 <UIcon name="solar:calendar-broken" class="size-5" />
-                <span>{{ post.published_at }}</span>
+                <span>{{ post.formatted_published_at }}</span>
               </div>
             </div>
           </div>
-          <!-- RIGHT -->
-          <div class="lg:col-span-7 flex items-center">
-            <div
-              class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md"
-            >
-              <NuxtImg :src="post.image" class="w-full h-full object-cover" />
+
+          <div class="flex items-center lg:col-span-7">
+            <div class="relative aspect-video w-full overflow-hidden rounded-2xl shadow-md">
+              <NuxtImg :src="post.image" class="h-full w-full object-cover" />
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
           <div class="lg:col-span-8">
             <article class="glass-panel-heavy rounded-3xl">
               <div
                 v-html="post.content"
-                class="prose p-5 prose-lg prose-slate max-w-none prose-headings:font-bold shadow-md prose-p:text-slate-600 prose-img:rounded-xl"
+                class="prose prose-lg max-w-none p-5 prose-slate shadow-md prose-headings:font-bold prose-img:rounded-xl prose-p:text-slate-600"
               ></div>
-              <div
-                class="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4"
-              >
+              <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 md:flex-row">
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-semibold text-slate-700">Thẻ:</span>
+                  <span class="text-sm font-semibold text-slate-700">{{ tagsLabel }}:</span>
                   <a
                     v-for="tag in tags"
                     :key="tag.id"
-                    class="px-3 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-primary hover:text-white transition-colors text-sm"
+                    class="rounded-lg bg-slate-100 px-3 py-1 text-sm text-slate-600 transition-colors hover:bg-primary hover:text-white"
                     href="#"
                   >{{ tag.name }}</a>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-sm font-semibold text-slate-700">Chia sẻ:</span>
+                  <span class="text-sm font-semibold text-slate-700">{{ shareLabel }}:</span>
                   <div class="flex gap-2">
-                    <button
-                      class="w-8 h-8 rounded-full bg-slate-100 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-colors text-slate-500"
+                    <a
+                      v-for="item in shareLinks"
+                      :key="item.name"
+                      :href="item.href"
+                      :aria-label="item.label"
+                      :title="item.label"
+                      class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors"
+                      :class="item.className"
+                      rel="noopener noreferrer"
+                      target="_blank"
                     >
-                      <i class="fab fa-facebook-f text-sm">f</i>
-                    </button>
-                    <button
-                      class="w-8 h-8 rounded-full bg-slate-100 hover:bg-black hover:text-white flex items-center justify-center transition-colors text-slate-500"
-                    >
-                      <span class="text-sm font-bold">X</span>
-                    </button>
-                    <button
-                      class="w-8 h-8 rounded-full bg-slate-100 hover:bg-[#E60023] hover:text-white flex items-center justify-center transition-colors text-slate-500"
-                    >
-                      <span class="text-sm font-bold">P</span>
-                    </button>
-                    <button
-                      class="w-8 h-8 rounded-full bg-slate-100 hover:bg-[#0077B5] hover:text-white flex items-center justify-center transition-colors text-slate-500"
-                    >
-                      <span class="text-xs font-bold">in</span>
-                    </button>
+                      <span :class="item.textClass">{{ item.shortLabel }}</span>
+                    </a>
                   </div>
                 </div>
               </div>
-              <div
-                class="mt-8 p-6 rounded-2xl bg-blue-50/50 border border-blue-100 flex items-center gap-4"
-              >
-                <div
-                  class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center p-1 shrink-0"
-                >
-                  <div
-                    class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold text-center leading-none"
-                  >
+              <div class="mt-8 flex items-center gap-4 rounded-2xl border border-blue-100 bg-blue-50/50 p-6">
+                <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white p-1 shadow-sm">
+                  <div class="flex h-full w-full items-center justify-center rounded-full bg-slate-900 text-center text-xs font-bold leading-none text-white">
                     SOTECH<br />GROUP
                   </div>
                 </div>
                 <div>
-                  <span
-                    class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                  >Tác giả</span>
-                  <h4 class="text-lg font-bold text-primary">HisoTech Group</h4>
-                  <p class="text-sm text-slate-600 mt-1">
-                    Chuyên gia tư vấn giải pháp chuyển đổi số toàn diện cho
-                    doanh nghiệp.
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">{{ authorLabel }}</span>
+                  <a
+                    :href="siteUrl"
+                    class="text-lg font-bold text-primary transition-colors hover:text-secondary"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    HisoTech Group
+                  </a>
+                  <p class="mt-1 text-sm text-slate-600">
+                    {{ authorDescription }}
                   </p>
                 </div>
               </div>
             </article>
           </div>
-          <aside class="lg:col-span-4 space-y-8">
-            <div class="glass-panel rounded-2xl shadow-md p-6">
-              <h3
-                class="text-lg font-bold text-slate-900 mb-6 pb-2 border-b border-slate-100"
-              >
-                Bài viết mới
+          <aside class="space-y-8 lg:col-span-4">
+            <div class="glass-panel rounded-2xl p-6 shadow-md">
+              <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
+                {{ recentPostsLabel }}
               </h3>
               <div class="space-y-5">
                 <NuxtLink
-                  v-for="p in post_new"
+                  v-for="p in recentPosts"
                   :key="p.id"
-                  class="group flex gap-4 items-start"
+                  class="group flex items-start gap-4"
                   :to="`/blog/${p.slug}`"
                 >
-                  <div
-                    class="w-20 h-20 rounded-lg overflow-hidden shrink-0 relative"
-                  >
+                  <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
                     <img
-                      alt="Post"
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                       :alt="p.name"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       :src="p.image"
                     />
                   </div>
                   <div>
-                    <h4
-                      class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors line-clamp-2 leading-snug"
-                    >
+                    <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
                       {{ p.name }}
                     </h4>
-                    <div
-                      class="flex items-center gap-1 mt-2 text-xs text-slate-400"
-                    >
+                    <div class="mt-2 flex items-center gap-1 text-xs text-slate-400">
                       <UIcon name="solar:calendar-broken" class="size-5" />
-                      <span>{{ p.published_at }}</span>
+                      <span>{{ p.formatted_published_at }}</span>
                     </div>
                   </div>
                 </NuxtLink>
               </div>
             </div>
-            <div class="glass-panel rounded-2xl shadow-md p-6">
-              <h3
-                class="text-lg font-bold text-slate-900 mb-6 pb-2 border-b border-slate-100"
-              >
-                Tags
+            <div class="glass-panel rounded-2xl p-6 shadow-md">
+              <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
+                {{ tagsLabel }}
               </h3>
               <div class="flex flex-wrap gap-2">
                 <a
                   v-for="tag in tags"
                   :key="tag.id"
-                  class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-primary hover:text-white transition-colors"
+                  class="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-primary hover:text-white"
                   href="#"
                 >{{ tag.name }}</a>
               </div>
@@ -200,27 +190,87 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useMappedShortcodes } from "~/composables/useMappedShortcodes";
+import CommonsAppBreadcrumb from "~/components/commons/navigation/AppBreadcrumb.vue";
 
 const props = defineProps<{
   slug: string;
 }>();
 
-const { Shortcodes, mapSectionsToShortcodes } = useMappedShortcodes();
-const { data: pageData, pending } = await usePageDetail<any>(props.slug);
+const { translate, localeCode } = useI18nText();
+const { pending, post, recentPosts, categories, tags } =
+  await useBlogDetailPage(toRef(props, "slug"));
+const {
+  siteUrl,
+  canonicalUrl,
+  labels: shareSectionLabels,
+  shareLinks,
+  toAbsoluteUrl,
+} = useBlogDetailShare({ post });
 
-const post = ref({
-  name: pageData.value?.name,
-  image: pageData.value?.image,
-  content: pageData.value?.content,
-  published_at: pageData.value?.published_at,
+const breadcrumbTitle = computed(() =>
+  translate("blogDetail.breadcrumb", localeCode.value === "en" ? "Blog Details" : "Chi tiết bài viết")
+);
+const tagsLabel = computed(() =>
+  translate("blogDetail.tags", localeCode.value === "en" ? "Tags" : "Thẻ")
+);
+const shareLabel = computed(() => shareSectionLabels.value.share);
+const authorLabel = computed(() =>
+  translate("blogDetail.author", localeCode.value === "en" ? "Author" : "Tác giả")
+);
+const authorDescription = computed(() =>
+  translate(
+    "blogDetail.authorDescription",
+    localeCode.value === "en"
+      ? "Experts in comprehensive digital transformation consulting for businesses."
+      : "Chuyên gia tư vấn giải pháp chuyển đổi số toàn diện cho doanh nghiệp."
+  )
+);
+const recentPostsLabel = computed(() =>
+  translate("blogDetail.recentPosts", localeCode.value === "en" ? "Recent Posts" : "Bài viết mới")
+);
+const articleDescription = computed(() => {
+  const content = String(post.value?.content || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return content || authorDescription.value;
 });
-const post_new = pageData.value?.posts;
-const categories = pageData.value?.categories;
-const tags = pageData.value?.tags;
 
-if (pageData.value?.sections) {
-  mapSectionsToShortcodes(pageData.value.sections);
-}
+const blogSchema = computed(() => {
+  if (!post.value?.name) {
+    return null;
+  }
+
+  const image = toAbsoluteUrl(post.value.image);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.value.name,
+    description: articleDescription.value,
+    image,
+    datePublished: post.value.published_at || undefined,
+    dateModified: post.value.published_at || undefined,
+    mainEntityOfPage: canonicalUrl.value,
+    author: {
+      "@type": "Organization",
+      name: "HISOTECH Group",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "HISOTECH Group",
+      logo: image
+        ? {
+            "@type": "ImageObject",
+            url: image,
+          }
+        : undefined,
+    },
+    articleSection: categories.value?.map((item: any) => item.name) || undefined,
+    keywords: tags.value?.map((item: any) => item.name)?.join(", ") || undefined,
+  };
+});
+
+useJsonLd(blogSchema);
 </script>

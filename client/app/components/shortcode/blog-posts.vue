@@ -155,22 +155,7 @@ const props = defineProps<{
   data?: any
 }>()
 
-const articles = computed(() => props.data?.items ?? [])
-
-// Tự động phát hiện: nếu API trả > 4 bài thì đang ở trang listing (/blog)
-// Nếu <= 4 bài thì đang ở trang chủ (preview mode)
-const isListingMode = computed(() => articles.value.length > 4)
-
-function formatDate(dateStr?: string) {
-  if (!dateStr) return ''
-  try {
-    return new Date(dateStr).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
-  } catch {
-    return dateStr
-  }
-}
+const { articles, isListingMode, formatDate } = useBlogPostsShortcode(
+  toRef(props, "data")
+)
 </script>
