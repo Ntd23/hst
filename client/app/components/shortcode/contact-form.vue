@@ -103,7 +103,9 @@
                   <div>
                     <label for="contact-name">
                       {{ labels.name }}
-                      <span class="text-red-500">*</span>
+                      <span v-if="mandatoryFields.name" class="text-red-500"
+                        >*</span
+                      >
                     </label>
                     <input
                       id="contact-name"
@@ -122,7 +124,9 @@
                   <div v-if="displayFields.email">
                     <label for="contact-email">
                       {{ labels.email }}
-                      <span v-if="mandatoryFields.email" class="text-red-500">*</span>
+                      <span v-if="mandatoryFields.email" class="text-red-500"
+                        >*</span
+                      >
                     </label>
                     <input
                       id="contact-email"
@@ -142,7 +146,9 @@
                   <div v-if="displayFields.address">
                     <label for="contact-address">
                       {{ labels.address }}
-                      <span v-if="mandatoryFields.address" class="text-red-500">*</span>
+                      <span v-if="mandatoryFields.address" class="text-red-500"
+                        >*</span
+                      >
                     </label>
                     <input
                       id="contact-address"
@@ -160,7 +166,9 @@
                   <div v-if="displayFields.phone">
                     <label for="contact-phone">
                       {{ labels.phone }}
-                      <span v-if="mandatoryFields.phone" class="text-red-500">*</span>
+                      <span v-if="mandatoryFields.phone" class="text-red-500"
+                        >*</span
+                      >
                     </label>
                     <input
                       id="contact-phone"
@@ -179,7 +187,9 @@
                 <div v-if="displayFields.subject">
                   <label for="contact-subject">
                     {{ labels.subject }}
-                    <span v-if="mandatoryFields.subject" class="text-red-500">*</span>
+                    <span v-if="mandatoryFields.subject" class="text-red-500"
+                      >*</span
+                    >
                   </label>
                   <input
                     id="contact-subject"
@@ -414,8 +424,11 @@ const {
   gap: 1rem;
   border-radius: 1.5rem;
   border: 1px solid rgb(167 243 208);
-  background:
-    radial-gradient(circle at top right, rgb(167 243 208 / 0.46), transparent 30%),
+  background: radial-gradient(
+      circle at top right,
+      rgb(167 243 208 / 0.46),
+      transparent 30%
+    ),
     linear-gradient(180deg, rgb(240 253 250), rgb(236 253 245));
   padding: 1.75rem;
   box-shadow: 0 30px 70px rgb(16 185 129 / 0.12);
