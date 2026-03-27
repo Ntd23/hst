@@ -1,5 +1,11 @@
 export const useAppFooter = () => {
   const { translate } = useI18nText();
+  const { footerData } = useFooter();
+
+  const test = footerData.value;
+
+  const footerLeftTitle = footerData.value.footer[0].data.title;
+  console.log(footerData.value.footer[0].data.title);
 
   const socials = [
     { label: "f", to: "#" },
@@ -30,5 +36,7 @@ export const useAppFooter = () => {
     serviceLinks,
     quickLinks,
     handleNewsletterSubmit,
+    test,
+    footerLeftTitle,
   };
 };
