@@ -247,9 +247,11 @@ trait CommonApiTrait
                 : (array) $widget->data;
 
             return [
+                'widget' => $this->resolveWidgetName($widget->widget_id),
+                'widget_key' => $this->resolveWidgetKey($widget->widget_id),
                 'widget_id' => $widget->widget_id,
                 'position' => (int) $widget->position,
-                'data' => $this->normalizeWidgetData($widget->widget_id, $data ?? []),
+                'content' => $this->normalizeWidgetData($widget->widget_id, $data ?? []),
             ];
         })->values()->toArray();
     }
@@ -352,5 +354,17 @@ trait CommonApiTrait
                 'open_new_tab' => ($flat['is_open_new_tab'] ?? '0') === '1',
             ];
         }, $items);
+    }
+
+    protected function resolveWidgetName(string $widgetId): string
+    {
+        $widgetName = class_basename($widgetId);
+
+        return preg_replace('/Widget$/', '', $widgetName) ?: $widgetName;
+    }
+
+    protected function resolveWidgetKey(string $widgetId): string
+    {
+        return (string) str($this->resolveWidgetName($widgetId))->kebab();
     }
 }

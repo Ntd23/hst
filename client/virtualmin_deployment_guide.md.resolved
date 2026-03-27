@@ -12,7 +12,7 @@ graph LR
 > [!IMPORTANT]
 > - Production **KHÔNG** dùng `php artisan serve`. Laravel chạy qua **PHP-FPM** trực tiếp.
 > - Nuxt 3 chạy ở chế độ **SSR** → data fetch từ API mỗi request → **admin cập nhật content thì user reload là thấy**, không cần build lại.
-> - `npm run build` chỉ chạy **1 lần khi deploy** hoặc **khi thay đổi code frontend**.
+> - `pnpm build` chỉ chạy **1 lần khi deploy** hoặc **khi thay đổi code frontend**.
 
 ---
 
@@ -80,16 +80,27 @@ chmod -R 775 /home/hst/admin/storage /home/hst/admin/bootstrap/cache
 
 ```bash
 cd /home/hst/client
-npm install
+corepack enable
+corepack prepare pnpm@latest --activate
+pnpm install
+
+# Nếu pnpm cảnh báo ignored build scripts, approve các package build quan trọng
+pnpm approve-builds
 
 # Build 1 lần duy nhất (chỉ build lại khi thay đổi CODE, không phải content)
-npm run build
+pnpm build
 ```
+
+> [!TIP]
+> Khi chạy `pnpm approve-builds`, nên approve các package như:
+> - `esbuild`
+> - `sharp`
+> - `@parcel/watcher`
 
 ### Chạy bằng PM2
 
 ```bash
-npm install -g pm2
+pnpm add -g pm2
 
 # Start Nuxt 3 SSR server
 pm2 start .output/server/index.mjs --name "hst-client"
@@ -207,8 +218,8 @@ Vì Nuxt 3 cần đóng gói các component Vue thành Javascript tối ưu hóa
 ```bash
 cd /home/hst/client
 git pull origin main       # Kéo code mới nhất từ git
-npm install                # (Tùy chọn) Chạy nếu có thêm thư viện mới trong package.json
-npm run build              # Build lại ứng dụng Vue/Nuxt
+pnpm install               # Chạy nếu có thay đổi dependencies hoặc lockfile
+pnpm build                 # Build lại ứng dụng Vue/Nuxt
 pm2 restart hst-client     # Khởi động lại tiến trình SSR để code mới có hiệu lực
 ```
 
@@ -218,4 +229,21 @@ pm2 restart hst-client     # Khởi động lại tiến trình SSR để code m
 |---|---|
 | Admin sửa nội dung, thông tin (Bài viết, Ảnh...) | **Không cần làm gì** — do SSR nên user F5 là thấy nội dung mới. |
 | Thay đổi code **backend API** (Laravel) | `cd admin` → `git pull` → `php artisan config:cache` |
-| Thêm database migration mới (Laravel) | `cd admin` → `git pull` → PagesTemplatesContactTemplate`php artisan migrate` |
+| Thêm database migration mới (Laravel) | `cd admin` → `git pull` → `php artisan migrate` |
+
+---
+
+## 9️⃣ Ghi chú package manager
+
+Repo `client/` hiện đã có:
+- [pnpm-lock.yaml](/d:/Duong/src/laragon/www/hst/client/pnpm-lock.yaml)
+
+Khuyến nghị production:
+- dùng `pnpm`
+- không dùng song song `npm install`
+- nếu CI/deploy script cũ đang dùng npm, đổi sang:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+```

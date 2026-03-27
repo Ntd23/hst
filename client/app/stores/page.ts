@@ -19,6 +19,9 @@ export const usePageStore = defineStore('page', () => {
     try {
       const commonStore = useCommonStore()
       await commonStore.fetchHeader(locale)
+      await commonStore.fetchFooter(locale)
+console.log('Footer data:', commonStore.footerData)
+console.log('Footer data:', commonStore.headerData)
 
       const routePath = normalizePath(slug)
       const menuItems = flattenMenuItems(commonStore.headerData?.main_menu?.items ?? [])
