@@ -8,6 +8,7 @@ export const useCommonStore = defineStore('common', () => {
   const _headerLocale = ref<string>('')
   const _footerLocale = ref<string>('')
 
+
   /**
    * Fetch header data. Only re-fetches if locale changed.
    */
@@ -15,6 +16,13 @@ export const useCommonStore = defineStore('common', () => {
     if (headerData.value && _headerLocale.value === locale) return
     _headerLocale.value = locale
     headerData.value = await $fetch('/api/common/header', {
+      query: { locale },
+    })
+  }
+   async function fetchFooter(locale: string) {
+    if (footerData.value && _footerLocale.value === locale) return
+    _footerLocale.value = locale
+    footerData.value = await $fetch('/api/common/footer', {
       query: { locale },
     })
   }
