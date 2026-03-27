@@ -1,4 +1,4 @@
-﻿export const useAppFooter = () => {
+export const useAppFooter = () => {
   const { translate } = useI18nText();
   const { footerData } = useFooter();
 
