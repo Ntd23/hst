@@ -8,9 +8,11 @@
           <h3 class="text-2xl font-black tracking-tighter text-white">
             HISOTECH
           </h3>
+
           <p class="text-sm leading-relaxed text-slate-400">
-            {{ $t("footer.description") }}
+            {{ footerLeftTitle }}
           </p>
+
           <div class="flex space-x-4">
             <ULink
               v-for="social in socials"
@@ -30,7 +32,8 @@
               <ULink
                 class="block whitespace-nowrap transition-colors hover:text-primary"
                 to="#"
-              >{{ link }}</ULink>
+                >{{ link }}</ULink
+              >
             </li>
           </ul>
         </div>
@@ -42,7 +45,8 @@
               <ULink
                 class="block whitespace-nowrap transition-colors hover:text-primary"
                 to="#"
-              >{{ link }}</ULink>
+                >{{ link }}</ULink
+              >
             </li>
           </ul>
         </div>
@@ -80,9 +84,15 @@
         class="flex flex-col items-center justify-between gap-3 text-center text-xs text-slate-500 md:flex-row md:text-left"
       >
         <p>{{ $t("footer.copyright") }}</p>
-        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
-          <ULink class="hover:text-white" to="#">{{ $t("footer.terms") }}</ULink>
-          <ULink class="hover:text-white" to="#">{{ $t("footer.privacy") }}</ULink>
+        <div
+          class="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end"
+        >
+          <ULink class="hover:text-white" to="#">{{
+            $t("footer.terms")
+          }}</ULink>
+          <ULink class="hover:text-white" to="#">{{
+            $t("footer.privacy")
+          }}</ULink>
         </div>
       </div>
     </UContainer>
@@ -90,6 +100,14 @@
 </template>
 
 <script setup lang="ts">
-const { socials, serviceLinks, quickLinks, handleNewsletterSubmit } =
-  useAppFooter();
+const {
+  socials,
+  serviceLinks,
+  quickLinks,
+  handleNewsletterSubmit,
+  test,
+  footerLeftTitle,
+} = useAppFooter();
+
+console.log("ádasdas", test);
 </script>
