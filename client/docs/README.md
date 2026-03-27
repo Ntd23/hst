@@ -16,8 +16,6 @@ Tài liệu nên đọc sau refactor:
 
 Doc cũ vẫn còn để tham chiếu:
 
-- [flow.md](/d:/Duong/src/laragon/www/hst/client/docs/flow.md)
-- [seo.md](/d:/Duong/src/laragon/www/hst/client/docs/seo.md)
 - [performance.md](/d:/Duong/src/laragon/www/hst/client/docs/performance.md)
 - [packages.md](/d:/Duong/src/laragon/www/hst/client/docs/packages.md)
 - [css-classes.md](/d:/Duong/src/laragon/www/hst/client/docs/css-classes.md)
