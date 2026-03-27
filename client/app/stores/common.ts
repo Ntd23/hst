@@ -28,6 +28,18 @@ export const useCommonStore = defineStore('common', () => {
   }
 
   /**
+   * Fetch footer data. Only re-fetches if locale changed.
+   */
+  async function fetchFooter(locale: string) {
+    if (footerData.value && _footerLocale.value === locale) return
+    _footerLocale.value = locale
+    footerData.value = await $fetch('/api/common/footer', {
+      query: { locale },
+    })
+
+  }
+
+  /**
    * Reset store — called when locale changes.
    */
   function $reset() {
