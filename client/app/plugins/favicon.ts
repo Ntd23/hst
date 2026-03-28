@@ -1,5 +1,5 @@
 /**
- * Plugin inject favicon từ header API.
+ * Plugin inject favicon từ menu API.
  * Dùng $fetch trực tiếp (không cần useI18n/useFetch trong plugin context).
  */
 export default defineNuxtPlugin(async (nuxtApp) => {
@@ -7,7 +7,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const locale = useCookie('i18n_redirected').value || 'vi'
 
   try {
-    const data = await $fetch<any>(`/api/common/header`, {
+    const data = await $fetch<any>(`/api/menus`, {
       query: { locale },
     })
 

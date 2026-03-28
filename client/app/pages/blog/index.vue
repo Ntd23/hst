@@ -100,84 +100,87 @@
         </div>
 
         <aside class="flex flex-col gap-8 lg:col-span-4">
-          <div class="rounded-2xl border border-slate-100 bg-white p-1 shadow-sm">
-            <UInput
-              v-model="searchQuery"
-              icon="i-heroicons-magnifying-glass-20-solid"
-              color="white"
-              variant="none"
-              :placeholder="searchPlaceholder"
-              class="h-11 w-full"
-              @keyup.enter="handleSearch"
-            />
-          </div>
-
-          <div v-if="categories.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-            <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
-              {{ categoriesLabel }}
-              <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
-            </h3>
-            <ul class="space-y-3">
-              <li v-for="cat in categories" :key="cat.id">
-                <div @click="toggleCategory(cat.slug)" class="group flex cursor-pointer items-center justify-between">
-                  <div class="flex items-center gap-2 text-slate-600 transition-colors group-hover:text-primary">
-                    <UIcon name="i-lucide-arrow-right" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
-                    <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ cat.name }}</span>
-                  </div>
-                  <span class="text-xs font-semibold text-slate-400">({{ cat.posts_count }})</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div v-if="recentPosts.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-            <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
-              {{ recentPostsLabel }}
-              <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
-            </h3>
-            <div class="flex flex-col gap-4">
-              <NuxtLink
-                v-for="recent in recentPosts"
-                :key="recent.id"
-                :to="recent.url || `/blog/${recent.slug}`"
-                class="group flex cursor-pointer gap-4"
-              >
-                <div class="relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                  <NuxtImg
-                    v-if="recent.image"
-                    :src="recent.image"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div class="flex flex-1 flex-col pb-1">
-                  <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
-                    {{ recent.name }}
-                  </h4>
-                  <div class="mt-auto flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">
-                    {{ formatDate(recent.created_at) }}
-                  </div>
-                </div>
-              </NuxtLink>
+          <CommonsSidebarWidgets v-if="sidebarWidgets.length" :widgets="sidebarWidgets" />
+          <template v-else>
+            <div class="rounded-2xl border border-slate-100 bg-white p-1 shadow-sm">
+              <UInput
+                v-model="searchQuery"
+                icon="i-heroicons-magnifying-glass-20-solid"
+                color="white"
+                variant="none"
+                :placeholder="searchPlaceholder"
+                class="h-11 w-full"
+                @keyup.enter="handleSearch"
+              />
             </div>
-          </div>
 
-          <div v-if="tags.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-            <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
-              {{ tagsLabel }}
-              <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <UBadge
-                v-for="tag in tags"
-                :key="tag.id"
-                @click="toggleTag(tag.slug)"
-                :class="selectedTag === tag.slug ? 'bg-primary text-white' : 'cursor-pointer border border-slate-200/50 bg-slate-100/80 font-medium text-primary shadow-none transition-colors hover:bg-slate-200'"
-                variant="solid"
-              >
-                #{{ tag.name }}
-              </UBadge>
+            <div v-if="categories.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+              <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
+                {{ categoriesLabel }}
+                <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
+              </h3>
+              <ul class="space-y-3">
+                <li v-for="cat in categories" :key="cat.id">
+                  <div @click="toggleCategory(cat.slug)" class="group flex cursor-pointer items-center justify-between">
+                    <div class="flex items-center gap-2 text-slate-600 transition-colors group-hover:text-primary">
+                      <UIcon name="i-lucide-arrow-right" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
+                      <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ cat.name }}</span>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-400">({{ cat.posts_count }})</span>
+                  </div>
+                </li>
+              </ul>
             </div>
-          </div>
+
+            <div v-if="recentPosts.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+              <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
+                {{ recentPostsLabel }}
+                <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
+              </h3>
+              <div class="flex flex-col gap-4">
+                <NuxtLink
+                  v-for="recent in recentPosts"
+                  :key="recent.id"
+                  :to="recent.url || `/blog/${recent.slug}`"
+                  class="group flex cursor-pointer gap-4"
+                >
+                  <div class="relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                    <NuxtImg
+                      v-if="recent.image"
+                      :src="recent.image"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div class="flex flex-1 flex-col pb-1">
+                    <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
+                      {{ recent.name }}
+                    </h4>
+                    <div class="mt-auto flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                      {{ formatDate(recent.created_at) }}
+                    </div>
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <div v-if="tags.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+              <h3 class="mb-5 flex flex-col border-b border-primary/20 pb-3 text-lg font-bold tracking-tight text-slate-900">
+                {{ tagsLabel }}
+                <div class="mt-3 h-1 w-8 rounded-full bg-primary"></div>
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                <UBadge
+                  v-for="tag in tags"
+                  :key="tag.id"
+                  @click="toggleTag(tag.slug)"
+                  :class="selectedTag === tag.slug ? 'bg-primary text-white' : 'cursor-pointer border border-slate-200/50 bg-slate-100/80 font-medium text-primary shadow-none transition-colors hover:bg-slate-200'"
+                  variant="solid"
+                >
+                  #{{ tag.name }}
+                </UBadge>
+              </div>
+            </div>
+          </template>
         </aside>
       </div>
     </UContainer>
@@ -186,6 +189,7 @@
 
 <script setup lang="ts">
 import CommonsAppBreadcrumb from "~/components/commons/navigation/AppBreadcrumb.vue";
+import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets.vue";
 
 definePageMeta({ name: "blog-listing" });
 
@@ -204,6 +208,7 @@ const {
   categories,
   recentPosts,
   tags,
+  sidebarWidgets,
   handleSearch,
   toggleCategory,
   toggleTag,

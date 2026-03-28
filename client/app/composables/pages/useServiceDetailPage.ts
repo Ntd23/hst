@@ -1,7 +1,8 @@
-﻿export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
+export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   const resolvedSlug = computed(() => toValue(slug));
   const { formatDate } = useCommonCardText();
   const { Shortcodes, mapSectionsToShortcodes } = useMappedShortcodes();
+  const { sidebarWidgetData } = useSidebarWidgets("service");
   const { data: pageData, pending } = await usePageDetail<any>(
     resolvedSlug.value
   );
@@ -15,7 +16,15 @@
   watch(
     () => pageData.value?.sections,
     (sections) => {
-      mapSectionsToShortcodes(sections || []);
+      const filteredSections = (sections || []).filter(
+        (section: any) => {
+          const shortcode = String(section?.shortcode || "");
+
+          return !shortcode.startsWith("services");
+        }
+      );
+
+      mapSectionsToShortcodes(filteredSections);
     },
     { immediate: true }
   );
@@ -67,6 +76,8 @@
     return stripped ? content : null;
   });
 
+  const sidebarWidgets = computed(() => sidebarWidgetData.value?.items ?? []);
+
   return {
     pageData,
     pending,
@@ -75,5 +86,6 @@
     recentPosts,
     handbookItems,
     cleanContent,
+    sidebarWidgets,
   };
 };
