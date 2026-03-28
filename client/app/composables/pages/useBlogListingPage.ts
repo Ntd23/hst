@@ -5,7 +5,10 @@ export const useBlogListingPage = async () => {
   const router = useRouter();
   const { translate, localeCode } = useI18nText();
   const { formatDate } = useCommonCardText();
-  const { sidebarWidgetData } = useSidebarWidgets("blog");
+  const { resolveSidebarTypeFromPage } = useSidebarType();
+  const { sidebarWidgetData } = useSidebarWidgets(
+    resolveSidebarTypeFromPage("blog")
+  );
 
   const pageTitle = computed(() =>
     translate("blogListing.title", localeCode.value === "en" ? "News" : "Tin tức")

@@ -24,7 +24,7 @@ trait WidgetApiTrait
     {
         $widgets = Widget::query()
             ->whereIn('sidebar_id', ['header_top_start_sidebar', 'header_top_end_sidebar'])
-            ->where('theme', $this->getWidgetThemeName($locale))
+            ->whereIn('theme', $this->getWidgetThemeCandidates($locale))
             ->orderBy('sidebar_id')
             ->orderBy('position')
             ->get();
@@ -54,6 +54,31 @@ trait WidgetApiTrait
 
     protected function parseContactInfoItems(array $data): array
     {
+        if (! empty($data['items']) && is_array($data['items'])) {
+            return array_values(array_filter(array_map(function (array $fields) {
+                $flat = [];
+
+                foreach ($fields as $field) {
+                    if (isset($field['key'])) {
+                        $flat[$field['key']] = $field['value'] ?? null;
+                    }
+                }
+
+                $title = $flat['title'] ?? '';
+
+                if (! $title) {
+                    return null;
+                }
+
+                return [
+                    'title' => $title,
+                    'icon' => $flat['icon'] ?? '',
+                    'icon_image' => $this->resolveMediaUrl($flat['icon_image'] ?? null),
+                    'url' => $flat['url'] ?? '',
+                ];
+            }, $data['items'])));
+        }
+
         $quantity = (int) ($data['quantity'] ?? 0);
         $items = [];
 
@@ -67,7 +92,7 @@ trait WidgetApiTrait
             $items[] = [
                 'title' => $title,
                 'icon' => $data["icon_{$i}"] ?? '',
-                'icon_image' => $data["icon_image_{$i}"] ?? '',
+                'icon_image' => $this->resolveMediaUrl($data["icon_image_{$i}"] ?? null),
                 'url' => $data["url_{$i}"] ?? '',
             ];
         }
@@ -223,7 +248,7 @@ trait WidgetApiTrait
     protected function querySidebarWidgets(string $sidebarId, string $locale)
     {
         return Widget::query()
-            ->where('theme', $this->getWidgetThemeName($locale))
+            ->whereIn('theme', $this->getWidgetThemeCandidates($locale))
             ->where('sidebar_id', $sidebarId)
             ->orderBy('position')
             ->get();
@@ -240,6 +265,24 @@ trait WidgetApiTrait
     protected function getWidgetThemeName(string $locale): string
     {
         return Widget::getThemeName($locale);
+    }
+
+    protected function getWidgetThemeCandidates(string $locale): array
+    {
+        $themes = [$this->getWidgetThemeName($locale)];
+
+        if (! str_contains($locale, '_')) {
+            $baseTheme = Theme::getThemeName();
+            $localizedThemes = Widget::query()
+                ->where('theme', 'like', $baseTheme . '-' . $locale . '_%')
+                ->distinct()
+                ->pluck('theme')
+                ->all();
+
+            $themes = [...$themes, ...$localizedThemes];
+        }
+
+        return array_values(array_unique(array_filter($themes)));
     }
 
     protected function normalizeRepeaterItems(array $items): array

@@ -1,7 +1,10 @@
 export const useBlogDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   const resolvedSlug = computed(() => toValue(slug));
   const { formatDate } = useCommonCardText();
-  const { sidebarWidgetData } = useSidebarWidgets("blog");
+  const { resolveSidebarTypeFromPage } = useSidebarType();
+  const { sidebarWidgetData } = useSidebarWidgets(
+    resolveSidebarTypeFromPage("blog")
+  );
   const { data: pageData, pending } = await usePageDetail<any>(
     resolvedSlug.value
   );
