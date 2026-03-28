@@ -139,49 +139,52 @@
             </article>
           </div>
           <aside class="space-y-8 lg:col-span-4">
-            <div class="glass-panel rounded-2xl p-6 shadow-md">
-              <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
-                {{ recentPostsLabel }}
-              </h3>
-              <div class="space-y-5">
-                <NuxtLink
-                  v-for="p in recentPosts"
-                  :key="p.id"
-                  class="group flex items-start gap-4"
-                  :to="`/blog/${p.slug}`"
-                >
-                  <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
-                    <img
-                       :alt="p.name"
-                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      :src="p.image"
-                    />
-                  </div>
-                  <div>
-                    <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
-                      {{ p.name }}
-                    </h4>
-                    <div class="mt-2 flex items-center gap-1 text-xs text-slate-400">
-                      <UIcon name="solar:calendar-broken" class="size-5" />
-                      <span>{{ p.formatted_published_at }}</span>
+            <CommonsSidebarWidgets v-if="sidebarWidgets.length" :widgets="sidebarWidgets" />
+            <template v-else>
+              <div class="glass-panel rounded-2xl p-6 shadow-md">
+                <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
+                  {{ recentPostsLabel }}
+                </h3>
+                <div class="space-y-5">
+                  <NuxtLink
+                    v-for="p in recentPosts"
+                    :key="p.id"
+                    class="group flex items-start gap-4"
+                    :to="`/blog/${p.slug}`"
+                  >
+                    <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
+                      <img
+                        :alt="p.name"
+                        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        :src="p.image"
+                      />
                     </div>
-                  </div>
-                </NuxtLink>
+                    <div>
+                      <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
+                        {{ p.name }}
+                      </h4>
+                      <div class="mt-2 flex items-center gap-1 text-xs text-slate-400">
+                        <UIcon name="solar:calendar-broken" class="size-5" />
+                        <span>{{ p.formatted_published_at }}</span>
+                      </div>
+                    </div>
+                  </NuxtLink>
+                </div>
               </div>
-            </div>
-            <div class="glass-panel rounded-2xl p-6 shadow-md">
-              <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
-                {{ tagsLabel }}
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                <a
-                  v-for="tag in tags"
-                  :key="tag.id"
-                  class="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-primary hover:text-white"
-                  href="#"
-                >{{ tag.name }}</a>
+              <div class="glass-panel rounded-2xl p-6 shadow-md">
+                <h3 class="mb-6 border-b border-slate-100 pb-2 text-lg font-bold text-slate-900">
+                  {{ tagsLabel }}
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <a
+                    v-for="tag in tags"
+                    :key="tag.id"
+                    class="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-primary hover:text-white"
+                    href="#"
+                  >{{ tag.name }}</a>
+                </div>
               </div>
-            </div>
+            </template>
           </aside>
         </div>
       </div>
@@ -191,13 +194,14 @@
 
 <script setup lang="ts">
 import CommonsAppBreadcrumb from "~/components/commons/navigation/AppBreadcrumb.vue";
+import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets.vue";
 
 const props = defineProps<{
   slug: string;
 }>();
 
 const { translate, localeCode } = useI18nText();
-const { pending, post, recentPosts, categories, tags } =
+const { pending, post, recentPosts, categories, tags, sidebarWidgets } =
   await useBlogDetailPage(toRef(props, "slug"));
 const {
   siteUrl,

@@ -1,6 +1,7 @@
-﻿export const useBlogDetailPage = async (slug: MaybeRefOrGetter<string>) => {
+export const useBlogDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   const resolvedSlug = computed(() => toValue(slug));
   const { formatDate } = useCommonCardText();
+  const { sidebarWidgetData } = useSidebarWidgets("blog");
   const { data: pageData, pending } = await usePageDetail<any>(
     resolvedSlug.value
   );
@@ -21,6 +22,7 @@
   );
   const categories = computed(() => pageData.value?.categories ?? []);
   const tags = computed(() => pageData.value?.tags ?? []);
+  const sidebarWidgets = computed(() => sidebarWidgetData.value?.items ?? []);
 
   return {
     pageData,
@@ -29,5 +31,6 @@
     recentPosts,
     categories,
     tags,
+    sidebarWidgets,
   };
 };
