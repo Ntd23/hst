@@ -2,7 +2,10 @@ export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   const resolvedSlug = computed(() => toValue(slug));
   const { formatDate } = useCommonCardText();
   const { Shortcodes, mapSectionsToShortcodes } = useMappedShortcodes();
-  const { sidebarWidgetData } = useSidebarWidgets("service");
+  const { resolveSidebarTypeFromPage } = useSidebarType();
+  const { sidebarWidgetData } = useSidebarWidgets(
+    resolveSidebarTypeFromPage("service")
+  );
   const { data: pageData, pending } = await usePageDetail<any>(
     resolvedSlug.value
   );

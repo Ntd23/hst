@@ -13,17 +13,18 @@ type AppWidgetItem = {
 export const useAppWidget = () => {
   const { layoutWidgetData } = useLayoutWidgets();
   const { mapWidgets } = useMappedWidgets();
+  const resolveLayoutItems = (section: any) => section?.items ?? section ?? [];
 
   const footerSettings = computed(() => layoutWidgetData.value?.settings ?? {});
 
   const topWidgets = computed(() =>
-    mapWidgets(layoutWidgetData.value?.top_footer ?? [])
+    mapWidgets(resolveLayoutItems(layoutWidgetData.value?.top_footer))
   );
   const mainWidgets = computed(() =>
-    mapWidgets(layoutWidgetData.value?.footer ?? [])
+    mapWidgets(resolveLayoutItems(layoutWidgetData.value?.footer))
   );
   const bottomWidgets = computed(() =>
-    mapWidgets(layoutWidgetData.value?.bottom_footer ?? [])
+    mapWidgets(resolveLayoutItems(layoutWidgetData.value?.bottom_footer))
   );
 
   const allFooterWidgets = computed(() => [...topWidgets.value, ...mainWidgets.value]);
