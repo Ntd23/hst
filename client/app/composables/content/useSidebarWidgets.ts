@@ -2,11 +2,11 @@
  * Sidebar widget composable backed by Pinia + useAsyncData for SSR.
  */
 export const useSidebarWidgets = (
-  type: MaybeRefOrGetter<string> = "page"
+  type: MaybeRefOrGetter<string> = "primary"
 ) => {
   const store = useSidebarWidgetStore();
   const { localeCode } = useI18nText();
-  const sidebarType = computed(() => toValue(type) || "page");
+  const sidebarType = computed(() => toValue(type) || "primary");
 
   const asyncData = useAsyncData(
     () => `widgets-sidebar-${sidebarType.value}-${localeCode.value}`,
