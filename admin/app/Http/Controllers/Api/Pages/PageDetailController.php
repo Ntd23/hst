@@ -212,7 +212,7 @@ class PageDetailController extends Controller
         $meta = method_exists($service, 'getMetaData')
             ? $service->getMetaData('seo_meta', true)
             : [];
-        dd($meta);
+
         return [
             'type' => 'service',
             'slug' => $slug,

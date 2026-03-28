@@ -1,5 +1,5 @@
 <style scoped>
-.header-top {
+.menu-top {
   height: 100px;
 }
 </style>
@@ -7,11 +7,11 @@
   <div
     class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300"
   >
-    <div class="header-top">
-      <LayoutAppHeader />
+    <div class="menu-top">
+      <LayoutAppMenu />
     </div>
     <slot />
-    <LayoutAppFooter />
+    <LayoutAppWidget />
   </div>
 </template>
 
