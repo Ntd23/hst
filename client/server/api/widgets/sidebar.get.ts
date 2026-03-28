@@ -12,7 +12,7 @@ export default defineEventHandler(async (event): Promise<any> => {
   return proxyApi<any>(event, {
     path: "/widgets/sidebar",
     query: {
-      type: query.type || "page",
+      type: query.type || "primary",
     },
   });
 });
