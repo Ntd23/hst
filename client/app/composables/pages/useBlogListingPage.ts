@@ -1,10 +1,11 @@
-﻿export const useBlogListingPage = async () => {
+export const useBlogListingPage = async () => {
   useEntitySeo("blog");
 
   const route = useRoute();
   const router = useRouter();
   const { translate, localeCode } = useI18nText();
   const { formatDate } = useCommonCardText();
+  const { sidebarWidgetData } = useSidebarWidgets("blog");
 
   const pageTitle = computed(() =>
     translate("blogListing.title", localeCode.value === "en" ? "News" : "Tin tức")
@@ -36,6 +37,7 @@
     () => apiResponse.value?.data?.sidebar?.recent_posts ?? []
   );
   const tags = computed(() => apiResponse.value?.data?.sidebar?.tags ?? []);
+  const sidebarWidgets = computed(() => sidebarWidgetData.value?.items ?? []);
 
   const syncUrl = () => {
     router.replace({
@@ -89,6 +91,7 @@
     categories,
     recentPosts,
     tags,
+    sidebarWidgets,
     handleSearch,
     toggleCategory,
     toggleTag,

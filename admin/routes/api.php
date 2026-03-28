@@ -1,16 +1,19 @@
 <?php
-use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\Pages\ShortcodeController;
 use App\Http\Controllers\Api\Pages\ContactController;
+use App\Http\Controllers\Api\WidgetController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Pages\PageDetailController;
 
-// -------------------Menu 
-Route::prefix('common')->group(function () {
-    Route::get('header',              [CommonController::class, 'getHeader']);   // ?locale=vi
-    Route::get('navigation/{locale}', [CommonController::class, 'getMainMenu']); // /vi hoặc /en
-    Route::get('footer',              [CommonController::class, 'getFooter']);
+// -------------------Layout
+Route::prefix('/')->group(function () {
+    Route::get('menus', [MenuController::class, 'getMenus']); // ?locale=vi
+    Route::prefix('widgets')->group(function () {
+        Route::get('layout', [WidgetController::class, 'getLayoutWidgets']); // ?locale=vi
+        Route::get('sidebar', [WidgetController::class, 'getSidebarWidgets']); // ?locale=vi&type=blog
+    });
 });
 
 // -------------------Pages (Dynamic by Slug)
