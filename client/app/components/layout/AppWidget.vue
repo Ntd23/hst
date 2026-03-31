@@ -95,38 +95,24 @@
               <li
                 v-for="(item, itemIndex) in widget.data?.items || []"
                 :key="`${item.label}-${itemIndex}`"
-                :class="
-                  hasIconItems(widget.data?.items)
-                    ? 'footer-contact-list__item'
-                    : undefined
-                "
-<<<<<<< HEAD
-                >
-                  <template v-if="hasIconItems(widget.data?.items)">
-                    <span class="footer-contact-list__icon">
-                      <img
-                        v-if="item.icon_image"
-                        :src="item.icon_image"
-                        :alt="item.label || 'Icon'"
-                        class="h-4 w-4 object-contain"
-                      />
-                      <UIcon
-                        v-else
-                        :name="iconName(item.icon)"
-                        class="size-4"
-                      />
-                    </span>
-                    <NuxtLink
-                      :to="item.url || '#'"
-=======
+                :class="hasIconItems(widget.data?.items) ? 'footer-contact-list__item' : undefined"
               >
                 <template v-if="hasIconItems(widget.data?.items)">
                   <span class="footer-contact-list__icon">
-                    <UIcon :name="toUiIcon(item.icon)" class="size-4" />
+                    <img
+                      v-if="item.icon_image"
+                      :src="item.icon_image"
+                      :alt="item.label || 'Icon'"
+                      class="h-4 w-4 object-contain"
+                    />
+                    <UIcon
+                      v-else
+                      :name="iconName(item.icon)"
+                      class="size-4"
+                    />
                   </span>
                   <NuxtLink
                     :to="item.url || '#'"
->>>>>>> origin/main
                     :target="item.open_new_tab ? '_blank' : undefined"
                     class="footer-contact-list__link"
                   >
@@ -164,7 +150,6 @@
             rel="noreferrer"
             class="footer-socials__item"
           >
-<<<<<<< HEAD
             <img
               v-if="social.icon_image"
               :src="social.icon_image"
@@ -172,11 +157,6 @@
               class="h-4 w-4 object-contain"
             />
             <UIcon v-else :name="iconName(social.icon)" class="size-4" />
-=======
-            <span class="text-[10px] font-black uppercase">
-              {{ social.network?.slice(0, 2) }}
-            </span>
->>>>>>> origin/main
           </NuxtLink>
         </div>
       </section>
@@ -186,10 +166,7 @@
 
 <script setup lang="ts">
 import { useAppWidget } from "~/composables/layout/useAppWidget";
-<<<<<<< HEAD
 import { iconName } from "~/utils/iconName";
-=======
->>>>>>> origin/main
 
 const {
   footerSettings,
@@ -197,7 +174,6 @@ const {
   orderedContentWidgets,
   copyrightText,
   socials,
-<<<<<<< HEAD
 } = await useAppWidget();
 
 if (import.meta.dev) {
@@ -221,9 +197,6 @@ if (import.meta.dev) {
     });
   });
 }
-=======
-} = useAppWidget();
->>>>>>> origin/main
 
 const newsletterContent = computed(() => newsletterWidget.value?.data || null);
 
@@ -237,15 +210,6 @@ const footerBackgroundStyle = computed(() => {
     : undefined;
 });
 
-<<<<<<< HEAD
-=======
-const toUiIcon = (icon?: string) => {
-  if (!icon) return "i-lucide-circle";
-
-  return `i-lucide-${icon.replace(/^ti ti-/, "")}`;
-};
-
->>>>>>> origin/main
 const hasIconItems = (items?: Array<{ icon?: string }>) =>
   Boolean(items?.some((item) => item.icon));
 
@@ -401,10 +365,7 @@ const contentCardClass = (widgetType?: string) => {
 }
 
 .footer-newsletter__button:hover {
-<<<<<<< HEAD
-=======
   transform: translateY(-1px);
->>>>>>> origin/main
   filter: brightness(1.06);
 }
 

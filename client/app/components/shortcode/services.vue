@@ -157,11 +157,7 @@ const {
 .services-section h3,
 .services-kicker,
 .featured-badge,
-<<<<<<< HEAD
 .btn-shared-cta {
-=======
-.cta-pill {
->>>>>>> origin/main
   font-family: var(--font-tech, sans-serif);
 }
 
@@ -202,36 +198,19 @@ const {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-<<<<<<< HEAD
   width: 100%;
   padding-bottom: 0.625rem;
-=======
-  padding-bottom: 0.625rem; /* space for scrollbar area */
-  /* Peek effect: bleed past container edges */
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
->>>>>>> origin/main
   scrollbar-width: none;
 }
 .cards-row::-webkit-scrollbar { display: none; }
 
 /* Each card in slider: fixed width so they don't shrink */
 .slider-card {
-<<<<<<< HEAD
   flex: 0 0 78%;
   scroll-snap-align: start;
 }
 @media (min-width: 480px) {
   .slider-card { flex: 0 0 60%; }
-=======
-  flex: 0 0 72%;
-  scroll-snap-align: start;
-}
-@media (min-width: 480px) {
-  .slider-card { flex: 0 0 55%; }
->>>>>>> origin/main
 }
 @media (min-width: 640px) {
   .slider-card { flex: 0 0 calc(50% - 0.5rem); }
@@ -373,13 +352,10 @@ const {
   border-radius: 999px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
-<<<<<<< HEAD
 
 .featured-panel :deep(.btn-shared-cta) {
   padding: 0.7rem 1.2rem;
   font-size: 0.875rem;
   box-shadow: 0 12px 28px rgba(0, 124, 195, 0.24);
 }
-=======
->>>>>>> origin/main
 </style>

@@ -20,8 +20,5 @@
 <script setup lang="ts">
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
-<<<<<<< HEAD
 const { decodeHtml } = useDecodeHtml();
-=======
->>>>>>> origin/main
 </script>
