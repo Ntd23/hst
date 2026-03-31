@@ -36,5 +36,8 @@
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
 const { formatDate } = useCommonCardText();
+<<<<<<< HEAD
 const { decodeHtml } = useDecodeHtml();
+=======
+>>>>>>> origin/main
 </script>

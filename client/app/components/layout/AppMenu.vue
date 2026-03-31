@@ -261,7 +261,10 @@
 
 <script setup lang="ts">
 import { useAppMenu } from "~/composables/layout/useAppMenu";
+<<<<<<< HEAD
 import { iconName } from "~/utils/iconName";
+=======
+>>>>>>> origin/main
 
 const {
   isScrolled,
@@ -271,6 +274,7 @@ const {
   availableLocales,
   menuData,
   computedNavItems,
+<<<<<<< HEAD
   headerStartItems,
   headerEndItems,
   menuSidebarSocials,
@@ -278,6 +282,11 @@ const {
   switchLocale,
 } = useAppMenu();
 
+=======
+  contactButtonLink,
+  switchLocale,
+} = useAppMenu();
+>>>>>>> origin/main
 </script>
 
 <style scoped>
@@ -359,6 +368,26 @@ const {
   padding-left: 1.25rem;
 }
 
+<<<<<<< HEAD
+=======
+.nav-login-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.nav-login-btn:hover::after {
+  width: 60%;
+}
+
+>>>>>>> origin/main
 .nav-dropdown {
   position: absolute;
   top: calc(100% + 10px);

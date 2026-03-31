@@ -244,6 +244,7 @@ const messageTitle = computed(() =>
     localeCode.value === "en" ? "Send us a message" : "Gửi tin nhắn cho chúng tôi"
   )
 );
+<<<<<<< HEAD
 const submitMessageLabel = computed(() =>
   translate("serviceDetail.submit", localeCode.value === "en" ? "Send message" : "Gửi tin nhắn")
 );
@@ -252,6 +253,23 @@ const fallbackContactFormData = computed(() => ({
   button_label: submitMessageLabel.value,
   background_color: "#ffffff",
 }));
+=======
+const namePlaceholder = computed(() =>
+  translate("serviceDetail.namePlaceholder", localeCode.value === "en" ? "Your name" : "Tên của bạn")
+);
+const emailPlaceholder = computed(() =>
+  translate("serviceDetail.emailPlaceholder", localeCode.value === "en" ? "Your email" : "Email của bạn")
+);
+const messagePlaceholder = computed(() =>
+  translate(
+    "serviceDetail.messagePlaceholder",
+    localeCode.value === "en" ? "Write your message here" : "Viết lời nhắn của bạn ở đây"
+  )
+);
+const submitMessageLabel = computed(() =>
+  translate("serviceDetail.submit", localeCode.value === "en" ? "Send message" : "Gửi tin nhắn")
+);
+>>>>>>> origin/main
 const notFoundTitle = computed(() =>
   translate("serviceDetail.notFoundTitle", localeCode.value === "en" ? "Page Content Not Found" : "Không tìm thấy nội dung trang")
 );
@@ -276,6 +294,7 @@ const toAbsoluteUrl = (value?: string) => {
   return `${siteUrl.value}${value.startsWith("/") ? value : `/${value}`}`;
 };
 
+<<<<<<< HEAD
 const serviceSeo = computed(() => {
   const seo = pageData.value?.__seo;
 
@@ -297,6 +316,8 @@ const serviceSeo = computed(() => {
   };
 });
 
+=======
+>>>>>>> origin/main
 const serviceSchema = computed(() => {
   if (!pageData.value?.name) {
     return null;
@@ -319,6 +340,9 @@ const serviceSchema = computed(() => {
   };
 });
 
+<<<<<<< HEAD
 usePageSeo(serviceSeo);
+=======
+>>>>>>> origin/main
 useJsonLd(serviceSchema);
 </script>

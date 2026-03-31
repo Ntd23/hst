@@ -1,9 +1,17 @@
 ﻿<template>
+<<<<<<< HEAD
   <main class="relative min-h-screen w-full overflow-hidden pb-16">
     <CommonsAppBreadcrumb :title="pageTitle" :items="[{ label: pageTitle }]" />
 
     <UContainer class="pt-8">
       <div v-if="loading" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+=======
+  <main class="relative min-h-screen w-full overflow-hidden bg-slate-50 pb-16">
+    <CommonsAppBreadcrumb :title="pageTitle" :items="[{ label: pageTitle }]" />
+
+    <UContainer class="pt-8">
+      <div v-if="pending" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+>>>>>>> origin/main
         <div class="space-y-6 lg:col-span-8">
           <div
             v-for="index in 3"
@@ -60,18 +68,30 @@
 
               <div v-if="post.categories?.length" class="absolute left-4 top-4">
                 <UBadge color="primary" variant="solid" class="max-w-[150px] truncate shadow-sm">
+<<<<<<< HEAD
                   {{ decodeHtml(post.categories[0].name) }}
+=======
+                  {{ post.categories[0].name }}
+>>>>>>> origin/main
                 </UBadge>
               </div>
             </div>
 
             <div class="flex flex-1 flex-col justify-center p-5 md:p-6">
               <h3 class="mb-3 line-clamp-2 text-xl font-bold leading-snug text-slate-900 transition-colors group-hover:text-primary">
+<<<<<<< HEAD
                 {{ decodeHtml(post.name) }}
               </h3>
 
               <p class="mb-4 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-600">
                 {{ decodeHtml(post.description) }}
+=======
+                {{ post.name }}
+              </h3>
+
+              <p class="mb-4 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-600">
+                {{ post.description }}
+>>>>>>> origin/main
               </p>
 
               <div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
@@ -89,13 +109,21 @@
 
           <div v-if="pagination && pagination.last_page > 1" class="mt-6 flex justify-center">
             <UPagination
+<<<<<<< HEAD
               :page="currentPage"
               :items-per-page="pagination.per_page"
+=======
+              v-model="currentPage"
+              :page-count="pagination.per_page"
+>>>>>>> origin/main
               :total="pagination.total"
               :max="5"
               show-first
               show-last
+<<<<<<< HEAD
               @update:page="handlePageChange"
+=======
+>>>>>>> origin/main
             />
           </div>
         </div>
@@ -125,7 +153,11 @@
                   <div @click="toggleCategory(cat.slug)" class="group flex cursor-pointer items-center justify-between">
                     <div class="flex items-center gap-2 text-slate-600 transition-colors group-hover:text-primary">
                       <UIcon name="i-lucide-arrow-right" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
+<<<<<<< HEAD
                       <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ decodeHtml(cat.name) }}</span>
+=======
+                      <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ cat.name }}</span>
+>>>>>>> origin/main
                     </div>
                     <span class="text-xs font-semibold text-slate-400">({{ cat.posts_count }})</span>
                   </div>
@@ -154,7 +186,11 @@
                   </div>
                   <div class="flex flex-1 flex-col pb-1">
                     <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
+<<<<<<< HEAD
                       {{ decodeHtml(recent.name) }}
+=======
+                      {{ recent.name }}
+>>>>>>> origin/main
                     </h4>
                     <div class="mt-auto flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">
                       {{ formatDate(recent.created_at) }}
@@ -195,12 +231,18 @@ import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets
 definePageMeta({ name: "blog-listing" });
 
 const { translate, localeCode } = useI18nText();
+<<<<<<< HEAD
 const { decodeHtml } = useDecodeHtml();
+=======
+>>>>>>> origin/main
 const { siteUrl, canonicalUrl } = useSeoContext();
 const {
   pageTitle,
   currentPage,
+<<<<<<< HEAD
   loading,
+=======
+>>>>>>> origin/main
   searchQuery,
   selectedCategory,
   selectedTag,
@@ -212,7 +254,10 @@ const {
   recentPosts,
   tags,
   sidebarWidgets,
+<<<<<<< HEAD
   handlePageChange,
+=======
+>>>>>>> origin/main
   handleSearch,
   toggleCategory,
   toggleTag,
