@@ -2,7 +2,7 @@
 namespace App\Shortcode\Handlers;
 
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
-use App\shortcode\Contracts\ShortcodeInterface;
+use App\Shortcode\Contracts\ShortcodeInterface;
 use Illuminate\Support\Facades\DB;
 use Botble\Media\Facades\RvMedia;
 

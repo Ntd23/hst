@@ -11,7 +11,7 @@
         :to="{ path: '/blog', query: item.slug ? { tag: item.slug } : {} }"
         class="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-primary hover:text-white"
       >
-        #{{ item.name }}
+        #{{ decodeHtml(item.name) }}
       </NuxtLink>
     </div>
   </div>
@@ -20,4 +20,5 @@
 <script setup lang="ts">
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
+const { decodeHtml } = useDecodeHtml();
 </script>

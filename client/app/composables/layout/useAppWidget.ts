@@ -10,13 +10,12 @@ type AppWidgetItem = {
   };
 };
 
-export const useAppWidget = () => {
-  const { layoutWidgetData } = useLayoutWidgets();
+export const useAppWidget = async () => {
+  const { layoutWidgetData } = await useLayoutWidgets();
   const { mapWidgets } = useMappedWidgets();
   const resolveLayoutItems = (section: any) => section?.items ?? section ?? [];
 
   const footerSettings = computed(() => layoutWidgetData.value?.settings ?? {});
-
   const topWidgets = computed(() =>
     mapWidgets(resolveLayoutItems(layoutWidgetData.value?.top_footer))
   );

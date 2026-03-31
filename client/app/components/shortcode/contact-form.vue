@@ -20,7 +20,13 @@
                 <div
                   class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-primary"
                 >
-                  <UIcon :name="item.icon" class="size-7" />
+                  <img
+                    v-if="item.icon_image"
+                    :src="item.icon_image"
+                    :alt="item.title || 'Icon'"
+                    class="h-7 w-7 object-contain"
+                  />
+                  <UIcon v-else :name="iconName(item.icon)" class="size-7" />
                 </div>
                 <div>
                   <h3 class="text-lg font-bold text-slate-900">
@@ -269,7 +275,7 @@
                   </p>
                 </div>
 
-                <div class="flex items-start gap-2 pt-2">
+                <div v-if="showPolicy" class="flex items-start gap-2 pt-2">
                   <input
                     id="policy"
                     ref="policyInputRef"
@@ -290,7 +296,7 @@
                   </label>
                 </div>
                 <p
-                  v-if="fieldError('agree_terms_and_policy')"
+                  v-if="showPolicy && fieldError('agree_terms_and_policy')"
                   :id="fieldErrorId('agree_terms_and_policy')"
                   class="contact-error"
                 >
@@ -307,7 +313,7 @@
 
                 <button
                   :disabled="contactStore.loading"
-                  class="contact-submit-btn"
+                  class="contact-submit-btn btn-shared-cta"
                   type="submit"
                 >
                   <span
@@ -329,6 +335,8 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any;
 }>();
@@ -350,6 +358,7 @@ const {
   informationItems,
   displayFields,
   mandatoryFields,
+  showPolicy,
   form,
   submitError,
   submitSuccess,
@@ -458,26 +467,14 @@ const {
 }
 
 .contact-submit-btn {
-  display: inline-flex;
   min-height: 3rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.75rem;
-  background: linear-gradient(135deg, rgb(0 124 195), rgb(20 23 108));
-  padding: 0.75rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: white;
-  box-shadow: 0 18px 40px rgb(37 99 235 / 0.28);
-  transition: all 0.2s ease;
 }
 
-.contact-submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 46px rgb(37 99 235 / 0.34);
-}
 
 .contact-submit-btn:disabled {
   cursor: not-allowed;
@@ -533,7 +530,6 @@ const {
 }
 
 .contact-secondary-btn:hover {
-  transform: translateY(-1px);
   border-color: rgb(56 189 248);
   background: white;
 }
@@ -546,7 +542,6 @@ const {
 .contact-fade-enter-from,
 .contact-fade-leave-to {
   opacity: 0;
-  transform: translateY(8px);
 }
 
 @keyframes contactSpin {

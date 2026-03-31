@@ -18,7 +18,13 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <UIcon :name="toUiIcon(item.icon)" class="size-5 text-primary" />
+        <img
+          v-if="item.icon_image"
+          :src="item.icon_image"
+          :alt="item.name || 'Icon'"
+          class="h-5 w-5 object-contain"
+        />
+        <UIcon v-else :name="iconName(item.icon)" class="size-5 text-primary" />
         <span class="flex-1">{{ item.name }}</span>
         <span class="text-[10px] font-black uppercase text-slate-400">{{ item.extension }}</span>
       </a>
@@ -27,11 +33,8 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
-
-const toUiIcon = (icon?: string) => {
-  if (!icon) return "i-lucide-file";
-  return `i-lucide-${icon.replace(/^ti ti-/, "")}`;
-};
 </script>

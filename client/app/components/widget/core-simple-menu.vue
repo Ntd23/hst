@@ -13,9 +13,15 @@
           :target="item.open_new_tab ? '_blank' : undefined"
           class="flex items-start gap-3 transition-colors hover:text-primary"
         >
+          <img
+            v-if="item.icon_image"
+            :src="item.icon_image"
+            :alt="item.label || 'Icon'"
+            class="mt-0.5 h-4 w-4 shrink-0 object-contain"
+          />
           <UIcon
-            v-if="item.icon"
-            :name="toUiIcon(item.icon)"
+            v-else-if="item.icon"
+            :name="iconName(item.icon)"
             class="mt-0.5 size-4 shrink-0 text-primary"
           />
           <span class="leading-relaxed" v-html="item.label" />
@@ -26,15 +32,11 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any;
 }>();
 
 const content = computed(() => props.data || {});
-
-const toUiIcon = (icon?: string) => {
-  if (!icon) return "i-lucide-circle";
-
-  return `i-lucide-${icon.replace(/^ti ti-/, "")}`;
-};
 </script>

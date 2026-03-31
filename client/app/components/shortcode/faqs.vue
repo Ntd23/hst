@@ -75,7 +75,10 @@
                   class="absolute -right-6 -top-12 z-20 hidden h-36 w-36 flex-col justify-center rounded-3xl border border-white/80 bg-white/60 p-5 shadow-2xl backdrop-blur-2xl animate-float-spin sm:flex lg:-right-12 lg:-top-20"
                 >
                   <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-indigo-600 text-white shadow-lg shadow-primary/20">
-                    <i :class="(sectionData.floating_block.icon || 'ti ti-24-hours') + ' text-lg text-white'" />
+                    <UIcon
+                      :name="iconName(sectionData.floating_block.icon || 'ti ti-24-hours')"
+                      class="size-5 text-white"
+                    />
                   </div>
                   <h4 class="mb-1 text-[10px] font-black uppercase tracking-tighter text-slate-900" v-html="sectionData.floating_block.title" />
                   <p class="line-clamp-2 text-[9px] leading-tight text-slate-500 opacity-70" v-html="sectionData.floating_block.description" />
@@ -116,6 +119,8 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any;
 }>();

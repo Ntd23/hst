@@ -22,6 +22,18 @@ const { mapWidgets } = useMappedWidgets();
 
 const mappedWidgets = computed(() => mapWidgets(props.widgets || []));
 
+if (import.meta.dev) {
+  watchEffect(() => {
+    const rendered = mappedWidgets.value.map((widget, index) => ({
+      widget: widget.meta?.widget,
+      position: widget.meta?.position ?? index,
+      hasData: Boolean(widget.data),
+    }));
+
+    console.log("Rendering sidebar widgets:", rendered);
+  });
+}
+
 const widgetKey = (widget: any, index: number) =>
   `${widget.meta?.widget || "widget"}-${widget.meta?.position ?? index}`;
 

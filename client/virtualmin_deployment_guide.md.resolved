@@ -1,45 +1,55 @@
-# 🚀 Deploy HST lên Virtualmin (Apache + Laravel + Nuxt 3 SSR)
+# Deploy HST len Virtualmin (Apache + Laravel + Nuxt 3 SSR)
 
-## Kiến trúc
+## Kien truc
 
 ```mermaid
 graph LR
-    Client["Browser<br/>hst.yourdomain.com"] --> Apache["Apache (port 80/443)"]
-    Apache -->|"/admin, /api, /storage, /vendor"| PHP["PHP-FPM<br/>(Laravel)"]
-    Apache -->|"/"| PM2["PM2 → Nuxt 3 SSR<br/>(port 3000)"]
+    Client["Browser<br/>demo.hisotechgroup.com"] --> Apache["Apache / Virtualmin (80/443)"]
+    Apache -->|"/admin, /api, /storage, /index.php"| Laravel["Laravel (PHP via FCGI)"]
+    Apache -->|"/"| Nuxt["Nuxt SSR via PM2<br/>127.0.0.1:3000"]
 ```
 
-> [!IMPORTANT]
-> - Production **KHÔNG** dùng `php artisan serve`. Laravel chạy qua **PHP-FPM** trực tiếp.
-> - Nuxt 3 chạy ở chế độ **SSR** → data fetch từ API mỗi request → **admin cập nhật content thì user reload là thấy**, không cần build lại.
-> - `pnpm build` chỉ chạy **1 lần khi deploy** hoặc **khi thay đổi code frontend**.
+> Luu y:
+> - Production khong dung `php artisan serve`.
+> - Laravel chay qua Apache + FCGI.
+> - Nuxt chay SSR qua PM2.
+> - Admin sua content thi khong can build lai Nuxt.
+> - Chi build lai Nuxt khi thay doi code frontend.
 
 ---
 
-## 1️⃣ Tạo Virtual Server trong Virtualmin
+## 1. Cau truc source khuyen nghi
 
-1. Virtualmin → **Create Virtual Server**
-2. Domain: `hst.yourdomain.com`
-3. Enable **Apache website**
+Vi du source thuc te:
 
----
-
-## 2️⃣ Upload code
-
-```bash
-# Cấu trúc trên server
-/home/hst/
-├── admin/          # Laravel
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/
+├── admin/
+│   ├── app/
 │   ├── public/
-├── client/         # Nuxt 3
-│   ├── .output/    # Nuxt build output (tạo sau khi build)
+│   └── vendor/
+└── client/
+    ├── app/
+    ├── .env
+    └── .output/
 ```
 
-```bash
-ssh user@your-server-ip
-cd /home/hst
-git clone <your-repo> admin
-git clone <your-repo> client
+Neu project cua anh nam trong thu muc `hisotech`, thi cac path Virtualmin/Apache phai tinh tu:
+
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/
+```
+
+nen `Website documents sub-directory` phai la:
+
+```text
+hisotech/admin/public
+```
+
+khong phai:
+
+```text
+admin/public
 ```
 
 ---

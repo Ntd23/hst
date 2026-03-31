@@ -19,9 +19,15 @@
         :key="`${item.title}-${index}`"
         class="flex items-start gap-3"
       >
+        <img
+          v-if="item.icon_image"
+          :src="item.icon_image"
+          :alt="item.title || 'Icon'"
+          class="mt-1 h-4 w-4 shrink-0 object-contain"
+        />
         <UIcon
-          v-if="item.icon"
-          :name="toUiIcon(item.icon)"
+          v-else-if="item.icon"
+          :name="iconName(item.icon)"
           class="mt-1 size-4 shrink-0 text-primary"
         />
         <div>
@@ -43,22 +49,24 @@
         target="_blank"
         class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-slate-200 transition hover:bg-primary hover:text-white"
       >
-        <span class="text-[10px] font-black uppercase">{{ social.network?.slice(0, 2) }}</span>
+        <img
+          v-if="social.icon_image"
+          :src="social.icon_image"
+          :alt="social.label || social.network || 'Social icon'"
+          class="h-4 w-4 object-contain"
+        />
+        <UIcon v-else :name="iconName(social.icon)" class="size-4" />
       </ULink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any;
 }>();
 
 const content = computed(() => props.data || {});
-
-const toUiIcon = (icon?: string) => {
-  if (!icon) return "i-lucide-circle";
-
-  return `i-lucide-${icon.replace(/^ti ti-/, "")}`;
-};
 </script>

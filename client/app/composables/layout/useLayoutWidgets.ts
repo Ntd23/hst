@@ -1,17 +1,18 @@
 /**
  * Layout widget composable backed by Pinia + useAsyncData for SSR.
  */
-export const useLayoutWidgets = () => {
+export const useLayoutWidgets = async () => {
   const store = useLayoutWidgetStore();
   const { localeCode } = useI18nText();
 
-  const asyncData = useAsyncData(
+  const asyncData = await useAsyncData(
     `widgets-layout-${localeCode.value}`,
-    async () => {
-      await store.fetchLayoutWidgets(localeCode.value);
-      return store.layoutWidgetData;
-    },
+    () => store.fetchLayoutWidgets(localeCode.value),
     { dedupe: "defer" }
+  );
+
+  const layoutWidgetData = computed(
+    () => asyncData.data.value ?? store.layoutWidgetData
   );
 
   if (import.meta.client) {
@@ -22,7 +23,7 @@ export const useLayoutWidgets = () => {
   }
 
   return {
-    layoutWidgetData: computed(() => store.layoutWidgetData),
+    layoutWidgetData,
     ...asyncData,
   };
 };

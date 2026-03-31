@@ -40,7 +40,7 @@ export const useServicesShortcode = (sourceData: MaybeRefOrGetter<any>) => {
     mediaQueryListener = null;
   };
 
-  const featuredInitial = { opacity: 0, scale: 0.93, y: 16, filter: "blur(6px)" };
+  const featuredInitial = { opacity: 0, scale: 0.97, y: 16 };
   const sliderInitial = (index: number) =>
     isMobile.value ? { opacity: 0, x: 60 + index * 20 } : { opacity: 0, y: 50 };
 

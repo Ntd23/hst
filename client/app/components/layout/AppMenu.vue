@@ -114,13 +114,6 @@
           </button>
         </div>
 
-        <NuxtLink
-          to="#"
-          class="hidden md:flex items-center px-4 py-2 rounded-xl text-[0.9375rem] font-semibold text-slate-700 hover:text-primary transition-colors duration-300 relative nav-login-btn"
-        >
-          {{ $t("nav.login") }}
-        </NuxtLink>
-
         <UButton
           :to="contactButtonLink"
           color="primary"
@@ -202,22 +195,64 @@
         <div
           class="pt-4 mt-3 border-t border-slate-200/50 dark:border-slate-700/50 grid grid-cols-1 sm:grid-cols-2 gap-3"
         >
-          <NuxtLink
-            to="#"
-            class="flex items-center justify-center px-4 py-3 rounded-xl text-base font-semibold text-slate-700 border border-slate-200 dark:border-slate-600 hover:border-primary hover:text-primary transition-all duration-300"
-          >
-            {{ $t("nav.login") }}
-          </NuxtLink>
           <UButton
             :to="contactButtonLink"
             color="primary"
             variant="solid"
             size="lg"
-            class="w-full rounded-xl font-semibold justify-center btn-primary-lift-sm"
+            class="w-full rounded-xl font-semibold justify-center btn-primary-lift-sm sm:col-span-2"
             @click="isMobileMenuOpen = false"
           >
             {{ $t("nav.contact") }}
           </UButton>
+        </div>
+
+        <div
+          v-if="headerStartItems.length || headerEndItems.length || menuSidebarSocials.length"
+          class="mt-4 space-y-4 rounded-2xl border border-slate-200/60 bg-slate-50/80 p-4"
+        >
+          <div v-if="headerStartItems.length || headerEndItems.length" class="space-y-3">
+            <NuxtLink
+              v-for="(item, index) in [...headerStartItems, ...headerEndItems]"
+              :key="`menu-contact-${index}`"
+              :to="item.url || '#'"
+              class="flex items-start gap-3 rounded-xl px-1 py-1 transition-colors hover:text-primary"
+              >
+                <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <img
+                    v-if="item.icon_image"
+                    :src="item.icon_image"
+                    :alt="item.title || 'Icon'"
+                    class="h-4 w-4 object-contain"
+                  />
+                  <UIcon v-else :name="iconName(item.icon)" class="size-4" />
+                </span>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-slate-800">
+                  {{ item.title }}
+                </p>
+              </div>
+            </NuxtLink>
+          </div>
+
+          <div v-if="menuSidebarSocials.length" class="flex flex-wrap gap-2 pt-1">
+            <NuxtLink
+              v-for="(social, index) in menuSidebarSocials"
+              :key="`menu-mobile-social-${social.network || index}`"
+              :to="social.url || '#'"
+              target="_blank"
+              rel="noreferrer"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
+            >
+              <img
+                v-if="social.icon_image"
+                :src="social.icon_image"
+                :alt="social.label || social.network || 'Social icon'"
+                class="h-4 w-4 object-contain"
+              />
+              <UIcon v-else :name="iconName(social.icon)" class="size-4" />
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </Transition>
@@ -226,6 +261,7 @@
 
 <script setup lang="ts">
 import { useAppMenu } from "~/composables/layout/useAppMenu";
+import { iconName } from "~/utils/iconName";
 
 const {
   isScrolled,
@@ -235,6 +271,9 @@ const {
   availableLocales,
   menuData,
   computedNavItems,
+  headerStartItems,
+  headerEndItems,
+  menuSidebarSocials,
   contactButtonLink,
   switchLocale,
 } = useAppMenu();
@@ -335,7 +374,6 @@ const {
 .nav-login-btn:hover::after {
   width: 60%;
 }
-
 .nav-dropdown {
   position: absolute;
   top: calc(100% + 10px);

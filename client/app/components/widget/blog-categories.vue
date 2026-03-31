@@ -10,7 +10,7 @@
           :to="{ path: '/blog', query: item.slug ? { category: item.slug } : {} }"
           class="group flex items-center justify-between text-slate-600 transition-colors hover:text-primary"
         >
-          <span class="line-clamp-2">{{ item.name }}</span>
+          <span class="line-clamp-2">{{ decodeHtml(item.name) }}</span>
           <span class="text-xs font-semibold text-slate-400">({{ item.posts_count }})</span>
         </NuxtLink>
       </li>
@@ -21,4 +21,5 @@
 <script setup lang="ts">
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
+const { decodeHtml } = useDecodeHtml();
 </script>

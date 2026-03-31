@@ -21,7 +21,7 @@
         </div>
         <div>
           <h5 class="line-clamp-2 text-sm font-bold text-slate-800 transition-colors group-hover:text-primary">
-            {{ item.name }}
+            {{ decodeHtml(item.name) }}
           </h5>
           <div v-if="item.created_at" class="mt-1 text-xs text-slate-400">
             {{ formatDate(item.created_at) }}
@@ -36,4 +36,5 @@
 const props = defineProps<{ data?: any }>();
 const content = computed(() => props.data || {});
 const { formatDate } = useCommonCardText();
+const { decodeHtml } = useDecodeHtml();
 </script>
