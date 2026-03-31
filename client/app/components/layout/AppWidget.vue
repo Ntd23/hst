@@ -1,5 +1,23 @@
 <template>
+  <div
+    v-if="pending && !isReady"
+    class="app-widget-footer-skeleton"
+    aria-hidden="true"
+  >
+    <UContainer class="app-widget-footer-skeleton__inner">
+      <div class="app-widget-footer-skeleton__hero" />
+      <div class="app-widget-footer-skeleton__grid">
+        <div
+          v-for="index in 3"
+          :key="`footer-skeleton-${index}`"
+          class="app-widget-footer-skeleton__card"
+        />
+      </div>
+    </UContainer>
+  </div>
+
   <footer
+    v-else
     class="app-widget-footer"
     :style="footerBackgroundStyle"
   >
@@ -169,12 +187,14 @@ import { useAppWidget } from "~/composables/layout/useAppWidget";
 import { iconName } from "~/utils/iconName";
 
 const {
+  pending,
+  isReady,
   footerSettings,
   newsletterWidget,
   orderedContentWidgets,
   copyrightText,
   socials,
-} = await useAppWidget();
+} = useAppWidget();
 
 if (import.meta.dev) {
   watchEffect(() => {
@@ -227,6 +247,36 @@ const contentCardClass = (widgetType?: string) => {
 </script>
 
 <style scoped>
+.app-widget-footer-skeleton {
+  margin-top: 3rem;
+  padding: 1.5rem 0 2.75rem;
+}
+
+.app-widget-footer-skeleton__inner {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-widget-footer-skeleton__hero,
+.app-widget-footer-skeleton__card {
+  border-radius: 1.9rem;
+  background: rgba(15, 23, 42, 0.08);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.app-widget-footer-skeleton__hero {
+  height: 11rem;
+}
+
+.app-widget-footer-skeleton__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-widget-footer-skeleton__card {
+  height: 14rem;
+}
+
 .app-widget-footer {
   position: relative;
   overflow: hidden;
@@ -496,6 +546,10 @@ const contentCardClass = (widgetType?: string) => {
 }
 
 @media (min-width: 768px) {
+  .app-widget-footer-skeleton__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .app-widget-footer {
     padding-top: 2rem;
     padding-bottom: 3.5rem;
@@ -530,6 +584,17 @@ const contentCardClass = (widgetType?: string) => {
 
   .footer-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
   }
 }
 </style>

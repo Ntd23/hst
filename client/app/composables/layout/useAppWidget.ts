@@ -10,8 +10,8 @@ type AppWidgetItem = {
   };
 };
 
-export const useAppWidget = async () => {
-  const { layoutWidgetData } = await useLayoutWidgets();
+export const useAppWidget = () => {
+  const { layoutWidgetData, pending, isReady } = useLayoutWidgets();
   const { mapWidgets } = useMappedWidgets();
   const resolveLayoutItems = (section: any) => section?.items ?? section ?? [];
 
@@ -56,6 +56,8 @@ export const useAppWidget = async () => {
   const socials = computed(() => socialWidget.value?.data?.socials || []);
 
   return {
+    pending,
+    isReady,
     footerSettings,
     newsletterWidget,
     orderedContentWidgets,

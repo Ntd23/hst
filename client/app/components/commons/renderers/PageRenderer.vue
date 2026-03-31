@@ -77,16 +77,22 @@
         </template>
       </div>
     </div>
-    <template v-else-if="Shortcodes.length > 0">
-      <component
-        v-for="(Shortcode, index) in Shortcodes"
-        :key="index"
-        :is="Shortcode.component"
-        :data="Shortcode.data"
-        v-bind="index >= 3 ? { 'hydrate-on-visible': true } : {}"
-      />
-    </template>
-    <div v-else class="py-24 text-center">
+    <Transition name="page-content-fade" mode="out-in">
+      <div
+        v-if="!pending && Shortcodes.length > 0"
+        key="page-content"
+        class="page-content-shell"
+      >
+        <component
+          v-for="(Shortcode, index) in Shortcodes"
+          :key="index"
+          :is="Shortcode.component"
+          :data="Shortcode.data"
+          v-bind="index >= 3 ? { 'hydrate-on-visible': true } : {}"
+        />
+      </div>
+    </Transition>
+    <div v-if="!pending && Shortcodes.length === 0" class="py-24 text-center">
       <h1 class="text-2xl font-bold text-gray-800">{{ notFoundTitle }}</h1>
       <p class="mt-2 text-gray-500">{{ notFoundDescription }}</p>
     </div>
@@ -137,3 +143,19 @@ const skeletonVariant = computed(() => {
   return "default";
 });
 </script>
+
+<style scoped>
+.page-content-shell {
+  min-height: 40vh;
+}
+
+.page-content-fade-enter-active,
+.page-content-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.page-content-fade-enter-from,
+.page-content-fade-leave-to {
+  opacity: 0;
+}
+</style>
