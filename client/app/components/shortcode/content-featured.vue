@@ -1,7 +1,7 @@
 <template>
-  <section class="flex flex-col md:flex-row gap-8 items-center bg-white/60 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-sm border border-white/80">
+  <section class="flex flex-col md:flex-row gap-8 items-center rounded-3xl border border-slate-100 bg-white p-6 sm:p-8 shadow-sm">
     <div class="w-full md:w-1/2">
-      <div v-if="sectionData.image" class="rounded-2xl overflow-hidden shadow-lg w-full h-64">
+      <div v-if="sectionData.image" class="rounded-2xl overflow-hidden shadow-sm w-full h-64">
         <NuxtImg
           :src="sectionData.image"
           :alt="sectionData.title || 'Featured image'"

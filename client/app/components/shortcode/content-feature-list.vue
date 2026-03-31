@@ -17,10 +17,20 @@
       <div
         v-for="(item, idx) in features"
         :key="idx"
-        class="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:-translate-y-1 transition-transform duration-300"
+        class="rounded-2xl border border-slate-100 bg-white p-6 flex items-start gap-4 shadow-sm"
       >
         <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
-          <i v-if="item?.icon" :class="item.icon + ' text-2xl'"></i>
+          <img
+            v-if="item?.icon_image"
+            :src="item.icon_image"
+            :alt="item?.title || 'Icon'"
+            class="h-6 w-6 object-contain"
+          />
+          <UIcon
+            v-else-if="item?.icon"
+            :name="iconName(item.icon)"
+            class="size-5"
+          />
           <UIcon v-else name="i-lucide-sparkles" class="size-5" />
         </div>
         <div>
@@ -33,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any
 }>()

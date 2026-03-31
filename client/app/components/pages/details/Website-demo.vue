@@ -213,6 +213,27 @@ const toAbsoluteUrl = (value?: string) => {
   return `${siteUrl.value}${value.startsWith("/") ? value : `/${value}`}`;
 };
 
+const websiteDemoSeo = computed(() => {
+  const seo = pageData.value?.__seo;
+
+  if (!seo) {
+    return null;
+  }
+
+  return {
+    title: seo.title || "",
+    description: seo.description || "",
+    image: seo.image || undefined,
+    type: "website" as const,
+    robots: typeof seo.index === "boolean"
+      ? seo.index
+        ? "index,follow"
+        : "noindex,nofollow"
+      : seo.robots || "",
+    favicon: seo.favicon || seo.icon || undefined,
+  };
+});
+
 const softwareSchema = computed(() => {
   if (!dataWeb.value?.name) {
     return null;
@@ -240,5 +261,6 @@ const softwareSchema = computed(() => {
   };
 });
 
+usePageSeo(websiteDemoSeo);
 useJsonLd(softwareSchema);
 </script>

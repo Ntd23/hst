@@ -41,11 +41,11 @@
           <div v-if="sectionData.button_label" class="mb-12">
             <NuxtLink
               :to="sectionData.button_url || '#'"
-              class="about-cta group"
+              class="btn-shared-cta"
             >
-              <span class="about-cta__text">{{ sectionData.button_label }}</span>
-              <span class="about-cta__icon">
-                <UIcon name="i-lucide-arrow-right" class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+              <span>{{ sectionData.button_label }}</span>
+              <span class="btn-shared-cta__icon">
+                <UIcon name="i-lucide-arrow-right" class="size-4" />
               </span>
             </NuxtLink>
           </div>
@@ -58,7 +58,7 @@
               class="feature-card"
             >
               <div class="feature-card__icon">
-                <UIcon :name="tab.icon || 'i-lucide-check-circle-2'" class="size-6 text-primary" />
+                <UIcon :name="iconName(tab.icon || 'i-tabler-circle-check')" class="size-6 text-primary" />
               </div>
               <h3 class="font-space mt-4 text-xl font-bold text-slate-900" v-html="tab.title" />
               <p v-if="tab.description" class="mt-2 text-sm text-slate-500 leading-relaxed" v-html="tab.description" />
@@ -100,7 +100,7 @@
               :style="{ animationDelay: `${idx * 0.8}s` }"
             >
               <div class="node-icon shrink-0 w-11 h-11 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-primary/10">
-                <UIcon :name="tab.icon || 'i-lucide-zap'" class="size-5 text-primary" />
+                <UIcon :name="iconName(tab.icon || 'i-tabler-bolt')" class="size-5 text-primary" />
               </div>
               <div class="flex flex-col">
                 <span class="text-sm font-black text-slate-900 whitespace-nowrap leading-tight" v-html="tab.title" />
@@ -118,6 +118,8 @@
 </template>
 
 <script setup lang="ts">
+import { iconName } from "~/utils/iconName";
+
 const props = defineProps<{
   data?: any
 }>()

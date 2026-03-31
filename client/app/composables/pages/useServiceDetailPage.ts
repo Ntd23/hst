@@ -1,4 +1,4 @@
-export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
+export const useServiceDetailPage = (slug: MaybeRefOrGetter<string>) => {
   const resolvedSlug = computed(() => toValue(slug));
   const { formatDate } = useCommonCardText();
   const { Shortcodes, mapSectionsToShortcodes } = useMappedShortcodes();
@@ -6,11 +6,11 @@ export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   const { sidebarWidgetData } = useSidebarWidgets(
     resolveSidebarTypeFromPage("service")
   );
-  const { data: pageData, pending } = await usePageDetail<any>(
+  const { data: pageData, pending } = usePageDetail<any>(
     resolvedSlug.value
   );
-  const { data: servicesPage } = await usePageSections<any>("services");
-  const { data: blogListing } = await useBlogListing<any>(
+  const { data: servicesPage } = usePageSections<any>("services");
+  const { data: blogListing } = useBlogListing<any>(
     computed(() => ({
       limit: 3,
     }))
@@ -19,13 +19,11 @@ export const useServiceDetailPage = async (slug: MaybeRefOrGetter<string>) => {
   watch(
     () => pageData.value?.sections,
     (sections) => {
-      const filteredSections = (sections || []).filter(
-        (section: any) => {
-          const shortcode = String(section?.shortcode || "");
+      const filteredSections = (sections || []).filter((section: any) => {
+        const shortcode = String(section?.shortcode || "");
 
-          return !shortcode.startsWith("services");
-        }
-      );
+        return shortcode !== "services";
+      });
 
       mapSectionsToShortcodes(filteredSections);
     },

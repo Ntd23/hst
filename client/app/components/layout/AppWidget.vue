@@ -100,13 +100,23 @@
                     ? 'footer-contact-list__item'
                     : undefined
                 "
-              >
-                <template v-if="hasIconItems(widget.data?.items)">
-                  <span class="footer-contact-list__icon">
-                    <UIcon :name="toUiIcon(item.icon)" class="size-4" />
-                  </span>
-                  <NuxtLink
-                    :to="item.url || '#'"
+                >
+                  <template v-if="hasIconItems(widget.data?.items)">
+                    <span class="footer-contact-list__icon">
+                      <img
+                        v-if="item.icon_image"
+                        :src="item.icon_image"
+                        :alt="item.label || 'Icon'"
+                        class="h-4 w-4 object-contain"
+                      />
+                      <UIcon
+                        v-else
+                        :name="iconName(item.icon)"
+                        class="size-4"
+                      />
+                    </span>
+                    <NuxtLink
+                      :to="item.url || '#'"
                     :target="item.open_new_tab ? '_blank' : undefined"
                     class="footer-contact-list__link"
                   >
@@ -144,9 +154,13 @@
             rel="noreferrer"
             class="footer-socials__item"
           >
-            <span class="text-[10px] font-black uppercase">
-              {{ social.network?.slice(0, 2) }}
-            </span>
+            <img
+              v-if="social.icon_image"
+              :src="social.icon_image"
+              :alt="social.label || social.network || 'Social icon'"
+              class="h-4 w-4 object-contain"
+            />
+            <UIcon v-else :name="iconName(social.icon)" class="size-4" />
           </NuxtLink>
         </div>
       </section>
@@ -156,6 +170,7 @@
 
 <script setup lang="ts">
 import { useAppWidget } from "~/composables/layout/useAppWidget";
+import { iconName } from "~/utils/iconName";
 
 const {
   footerSettings,
@@ -163,7 +178,29 @@ const {
   orderedContentWidgets,
   copyrightText,
   socials,
-} = useAppWidget();
+} = await useAppWidget();
+
+if (import.meta.dev) {
+  watchEffect(() => {
+    console.log("Rendering footer widgets:", {
+      newsletter: newsletterWidget.value
+        ? {
+            widget: newsletterWidget.value.meta?.widget,
+            position: newsletterWidget.value.meta?.position,
+          }
+        : null,
+      content: orderedContentWidgets.value.map((widget, index) => ({
+        widget: widget.meta?.widget,
+        position: widget.meta?.position ?? index,
+        hasData: Boolean(widget.data),
+      })),
+      bottom: {
+        hasCopyright: Boolean(copyrightText.value),
+        socialsCount: socials.value.length,
+      },
+    });
+  });
+}
 
 const newsletterContent = computed(() => newsletterWidget.value?.data || null);
 
@@ -176,12 +213,6 @@ const footerBackgroundStyle = computed(() => {
       }
     : undefined;
 });
-
-const toUiIcon = (icon?: string) => {
-  if (!icon) return "i-lucide-circle";
-
-  return `i-lucide-${icon.replace(/^ti ti-/, "")}`;
-};
 
 const hasIconItems = (items?: Array<{ icon?: string }>) =>
   Boolean(items?.some((item) => item.icon));
@@ -338,7 +369,6 @@ const contentCardClass = (widgetType?: string) => {
 }
 
 .footer-newsletter__button:hover {
-  transform: translateY(-1px);
   filter: brightness(1.06);
 }
 
@@ -433,7 +463,6 @@ const contentCardClass = (widgetType?: string) => {
 }
 
 .footer-socials__item:hover {
-  transform: translateY(-2px);
   border-color: rgba(34, 211, 238, 0.35);
 }
 

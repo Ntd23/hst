@@ -5,8 +5,6 @@ export const useDetailRoutePage = () => {
   const detail = computed(() => String(route.params.detail || ""));
   const { detailComponent } = useMappedDetailPage(page);
 
-  useEntitySeo(detail.value);
-
   return {
     page,
     detail,

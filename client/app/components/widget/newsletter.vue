@@ -32,7 +32,7 @@
         />
         <button
           type="submit"
-          class="shrink-0 bg-primary px-4 py-3 text-sm font-bold text-white transition hover:brightness-110"
+          class="btn-shared-cta shrink-0 rounded-none px-5 py-3 text-sm"
         >
           Subscribe
         </button>

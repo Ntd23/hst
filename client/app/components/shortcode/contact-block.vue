@@ -39,11 +39,11 @@
             <div v-if="sectionData.button_label">
               <NuxtLink
                 :to="sectionData.button_url || '#'"
-                class="cta-btn group/btn"
+                class="btn-shared-cta"
               >
-                <span class="cta-btn-text">{{ sectionData.button_label }}</span>
-                <span class="cta-btn-icon">
-                  <UIcon name="i-lucide-arrow-right" class="size-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                <span>{{ sectionData.button_label }}</span>
+                <span class="btn-shared-cta__icon">
+                  <UIcon name="i-lucide-arrow-right" class="size-4" />
                 </span>
               </NuxtLink>
             </div>

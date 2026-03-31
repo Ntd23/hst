@@ -1,9 +1,9 @@
 ﻿<template>
-  <main class="relative min-h-screen w-full overflow-hidden bg-slate-50 pb-16">
+  <main class="relative min-h-screen w-full overflow-hidden pb-16">
     <CommonsAppBreadcrumb :title="pageTitle" :items="[{ label: pageTitle }]" />
 
     <UContainer class="pt-8">
-      <div v-if="pending" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div v-if="loading" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div class="space-y-6 lg:col-span-8">
           <div
             v-for="index in 3"
@@ -60,18 +60,18 @@
 
               <div v-if="post.categories?.length" class="absolute left-4 top-4">
                 <UBadge color="primary" variant="solid" class="max-w-[150px] truncate shadow-sm">
-                  {{ post.categories[0].name }}
+                  {{ decodeHtml(post.categories[0].name) }}
                 </UBadge>
               </div>
             </div>
 
             <div class="flex flex-1 flex-col justify-center p-5 md:p-6">
               <h3 class="mb-3 line-clamp-2 text-xl font-bold leading-snug text-slate-900 transition-colors group-hover:text-primary">
-                {{ post.name }}
+                {{ decodeHtml(post.name) }}
               </h3>
 
               <p class="mb-4 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-600">
-                {{ post.description }}
+                {{ decodeHtml(post.description) }}
               </p>
 
               <div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
@@ -89,12 +89,13 @@
 
           <div v-if="pagination && pagination.last_page > 1" class="mt-6 flex justify-center">
             <UPagination
-              v-model="currentPage"
-              :page-count="pagination.per_page"
+              :page="currentPage"
+              :items-per-page="pagination.per_page"
               :total="pagination.total"
               :max="5"
               show-first
               show-last
+              @update:page="handlePageChange"
             />
           </div>
         </div>
@@ -124,7 +125,7 @@
                   <div @click="toggleCategory(cat.slug)" class="group flex cursor-pointer items-center justify-between">
                     <div class="flex items-center gap-2 text-slate-600 transition-colors group-hover:text-primary">
                       <UIcon name="i-lucide-arrow-right" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
-                      <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ cat.name }}</span>
+                      <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ decodeHtml(cat.name) }}</span>
                     </div>
                     <span class="text-xs font-semibold text-slate-400">({{ cat.posts_count }})</span>
                   </div>
@@ -153,7 +154,7 @@
                   </div>
                   <div class="flex flex-1 flex-col pb-1">
                     <h4 class="line-clamp-2 text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-primary">
-                      {{ recent.name }}
+                      {{ decodeHtml(recent.name) }}
                     </h4>
                     <div class="mt-auto flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">
                       {{ formatDate(recent.created_at) }}
@@ -176,7 +177,7 @@
                   :class="selectedTag === tag.slug ? 'bg-primary text-white' : 'cursor-pointer border border-slate-200/50 bg-slate-100/80 font-medium text-primary shadow-none transition-colors hover:bg-slate-200'"
                   variant="solid"
                 >
-                  #{{ tag.name }}
+                  #{{ decodeHtml(tag.name) }}
                 </UBadge>
               </div>
             </div>
@@ -194,10 +195,12 @@ import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets
 definePageMeta({ name: "blog-listing" });
 
 const { translate, localeCode } = useI18nText();
+const { decodeHtml } = useDecodeHtml();
 const { siteUrl, canonicalUrl } = useSeoContext();
 const {
   pageTitle,
   currentPage,
+  loading,
   searchQuery,
   selectedCategory,
   selectedTag,
@@ -209,6 +212,7 @@ const {
   recentPosts,
   tags,
   sidebarWidgets,
+  handlePageChange,
   handleSearch,
   toggleCategory,
   toggleTag,

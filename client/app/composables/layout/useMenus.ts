@@ -7,10 +7,7 @@ export const useMenus = () => {
 
   const asyncData = useAsyncData(
     `menus-${localeCode.value}`,
-    async () => {
-      await store.fetchMenus(localeCode.value);
-      return store.menuData;
-    },
+    () => store.fetchMenus(localeCode.value),
     { dedupe: "defer" }
   );
 
@@ -22,7 +19,7 @@ export const useMenus = () => {
   }
 
   return {
-    menuData: computed(() => store.menuData),
+    menuData: computed(() => asyncData.data.value ?? store.menuData),
     ...asyncData,
   };
 };

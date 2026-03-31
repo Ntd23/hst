@@ -25,9 +25,12 @@
           v-html="sectionData.description"
         />
         <div v-if="sectionData?.button?.label && sectionData?.button?.url" class="mt-8">
-          <UButton :to="sectionData.button.url" color="primary" variant="solid" size="lg" class="rounded-full px-8">
-            {{ sectionData.button.label }}
-          </UButton>
+          <NuxtLink :to="sectionData.button.url" class="btn-shared-cta">
+            <span>{{ sectionData.button.label }}</span>
+            <span class="btn-shared-cta__icon">
+              <UIcon name="i-lucide-arrow-right" class="size-4" />
+            </span>
+          </NuxtLink>
         </div>
       </div>
 
@@ -41,7 +44,7 @@
           v-motion
           :initial="featuredInitial"
           :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: 60 } }"
-          class="bento-card bento-featured group relative overflow-hidden h-[320px] lg:h-auto"
+          class="bento-card bento-featured group relative overflow-hidden h-[340px] lg:h-auto"
         >
           <!-- Full-height image filling the entire box -->
           <template v-if="services[0].image">
@@ -51,7 +54,7 @@
               :loading="imageLoading"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-1000"
             />
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
+            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/72 via-slate-900/16 to-transparent" />
           </template>
           <div v-else class="absolute inset-0 hero-fallback flex items-center justify-center">
             <div class="glass-icon-lg">
@@ -66,8 +69,8 @@
             <span class="text-[9px] uppercase font-black tracking-widest text-amber-700">{{ $t('services.premium') }}</span>
           </div>
 
-          <!-- Text overlay at bottom -->
-          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10">
+          <!-- Text panel at bottom -->
+          <div class="featured-panel absolute inset-x-4 bottom-4 z-10 rounded-[1.35rem] border border-white/20 bg-slate-950/72 p-5 shadow-2xl backdrop-blur-sm sm:inset-x-6 sm:bottom-6 sm:p-6">
             <h3
               class="text-lg sm:text-xl font-black text-white mb-2 tracking-tight leading-tight line-clamp-2"
               v-html="services[0].name"
@@ -76,9 +79,11 @@
               class="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4 font-medium max-w-lg"
               v-html="services[0].description"
             />
-            <span class="cta-pill">
-              {{ $t('services.explore') }}
-              <UIcon name="i-lucide-arrow-right" class="size-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+            <span class="btn-shared-cta">
+              <span>{{ $t('services.explore') }}</span>
+              <span class="btn-shared-cta__icon">
+                <UIcon name="i-lucide-arrow-right" class="size-3.5" />
+              </span>
             </span>
           </div>
         </NuxtLink>
@@ -152,7 +157,7 @@ const {
 .services-section h3,
 .services-kicker,
 .featured-badge,
-.cta-pill {
+.btn-shared-cta {
   font-family: var(--font-tech, sans-serif);
 }
 
@@ -193,23 +198,19 @@ const {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 0.625rem; /* space for scrollbar area */
-  /* Peek effect: bleed past container edges */
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  width: 100%;
+  padding-bottom: 0.625rem;
   scrollbar-width: none;
 }
 .cards-row::-webkit-scrollbar { display: none; }
 
 /* Each card in slider: fixed width so they don't shrink */
 .slider-card {
-  flex: 0 0 72%;
+  flex: 0 0 78%;
   scroll-snap-align: start;
 }
 @media (min-width: 480px) {
-  .slider-card { flex: 0 0 55%; }
+  .slider-card { flex: 0 0 60%; }
 }
 @media (min-width: 640px) {
   .slider-card { flex: 0 0 calc(50% - 0.5rem); }
@@ -350,5 +351,11 @@ const {
   border: 1px solid white;
   border-radius: 999px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.featured-panel :deep(.btn-shared-cta) {
+  padding: 0.7rem 1.2rem;
+  font-size: 0.875rem;
+  box-shadow: 0 12px 28px rgba(0, 124, 195, 0.24);
 }
 </style>

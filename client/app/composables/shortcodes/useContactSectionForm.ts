@@ -148,6 +148,24 @@ export const useContactSectionForm = (sourceData: MaybeRefOrGetter<any>) => {
     };
   });
 
+  const showPolicy = computed(() => {
+    const value = sectionData.value.display_policy;
+
+    if (value === undefined || value === null || value === "") {
+      return true;
+    }
+
+    if (typeof value === "boolean") {
+      return value;
+    }
+
+    if (typeof value === "number") {
+      return value === 1;
+    }
+
+    return !["0", "false", "no", "off"].includes(String(value).toLowerCase());
+  });
+
   const form = reactive({
     name: "",
     email: "",
@@ -295,6 +313,7 @@ export const useContactSectionForm = (sourceData: MaybeRefOrGetter<any>) => {
     informationItems,
     displayFields,
     mandatoryFields,
+    showPolicy,
     form,
     submitError,
     submitSuccess,

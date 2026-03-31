@@ -1,249 +1,450 @@
-# 🚀 Deploy HST lên Virtualmin (Apache + Laravel + Nuxt 3 SSR)
+# Deploy HST len Virtualmin (Apache + Laravel + Nuxt 3 SSR)
 
-## Kiến trúc
+## Kien truc
 
 ```mermaid
 graph LR
-    Client["Browser<br/>hst.yourdomain.com"] --> Apache["Apache (port 80/443)"]
-    Apache -->|"/admin, /api, /storage, /vendor"| PHP["PHP-FPM<br/>(Laravel)"]
-    Apache -->|"/"| PM2["PM2 → Nuxt 3 SSR<br/>(port 3000)"]
+    Client["Browser<br/>demo.hisotechgroup.com"] --> Apache["Apache / Virtualmin (80/443)"]
+    Apache -->|"/admin, /api, /storage, /index.php"| Laravel["Laravel (PHP via FCGI)"]
+    Apache -->|"/"| Nuxt["Nuxt SSR via PM2<br/>127.0.0.1:3000"]
 ```
 
-> [!IMPORTANT]
-> - Production **KHÔNG** dùng `php artisan serve`. Laravel chạy qua **PHP-FPM** trực tiếp.
-> - Nuxt 3 chạy ở chế độ **SSR** → data fetch từ API mỗi request → **admin cập nhật content thì user reload là thấy**, không cần build lại.
-> - `pnpm build` chỉ chạy **1 lần khi deploy** hoặc **khi thay đổi code frontend**.
+> Luu y:
+> - Production khong dung `php artisan serve`.
+> - Laravel chay qua Apache + FCGI.
+> - Nuxt chay SSR qua PM2.
+> - Admin sua content thi khong can build lai Nuxt.
+> - Chi build lai Nuxt khi thay doi code frontend.
 
 ---
 
-## 1️⃣ Tạo Virtual Server trong Virtualmin
+## 1. Cau truc source khuyen nghi
 
-1. Virtualmin → **Create Virtual Server**
-2. Domain: `hst.yourdomain.com`
-3. Enable **Apache website**
+Vi du source thuc te:
 
----
-
-## 2️⃣ Upload code
-
-```bash
-# Cấu trúc trên server
-/home/hst/
-├── admin/          # Laravel
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/
+├── admin/
+│   ├── app/
 │   ├── public/
-├── client/         # Nuxt 3
-│   ├── .output/    # Nuxt build output (tạo sau khi build)
+│   └── vendor/
+└── client/
+    ├── app/
+    ├── .env
+    └── .output/
 ```
 
-```bash
-ssh user@your-server-ip
-cd /home/hst
-git clone <your-repo> admin
-git clone <your-repo> client
+Neu project cua anh nam trong thu muc `hisotech`, thi cac path Virtualmin/Apache phai tinh tu:
+
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/
+```
+
+nen `Website documents sub-directory` phai la:
+
+```text
+hisotech/admin/public
+```
+
+khong phai:
+
+```text
+admin/public
 ```
 
 ---
 
-## 3️⃣ Setup Laravel
+## 2. Virtualmin
+
+### Website documents sub-directory
+
+Dien:
+
+```text
+hisotech/admin/public
+```
+
+Muc tieu la `DocumentRoot` thuc te sau cung phai tro toi:
+
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin/public
+```
+
+### SSL
+
+Cap SSL cho dung domain `demo.hisotechgroup.com`.
+
+Khi test HTTPS bang IP, phai dung `--resolve`, neu khong se gap loi SNI sai host.
+
+Vi du:
 
 ```bash
-cd /home/hst/admin
+curl -Ik --resolve demo.hisotechgroup.com:443:212.85.24.70 https://demo.hisotechgroup.com/api/menus?locale=vi
+```
+
+---
+
+## 3. Laravel
+
+```bash
+cd /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin
 composer install --no-dev --optimize-autoloader
 cp .env.example .env
-nano .env
+php artisan key:generate
+php artisan storage:link
+php artisan optimize:clear
 ```
+
+Permission can thiet:
+
+```bash
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+
+Neu can:
+
+```bash
+php artisan migrate --force
+```
+
+---
+
+## 4. Nuxt SSR
+
+### .env production
+
+Trong `client/.env`:
 
 ```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://hst.yourdomain.com
-DB_DATABASE=hst_db
-DB_USERNAME=hst_user
-DB_PASSWORD=your_password
+NUXT_PUBLIC_SITE_URL=https://demo.hisotechgroup.com
+NUXT_API_BASE_URL=https://demo.hisotechgroup.com/api
 ```
 
-```bash
-php artisan key:generate
-php artisan migrate --seed
-php artisan storage:link
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+Luu y:
+- khong them `/` cuoi `NUXT_PUBLIC_SITE_URL`
+- khong de `NUXT_API_BASE_URL=http://127.0.0.1/api` trong case Apache cua anh, vi request noi bo vao `127.0.0.1` se hit sai vhost va tra 404
 
-chown -R www-data:www-data /home/hst/admin
-chmod -R 775 /home/hst/admin/storage /home/hst/admin/bootstrap/cache
-```
-
----
-
-## 4️⃣ Setup Nuxt 3 (SSR)
+### Build
 
 ```bash
-cd /home/hst/client
-corepack enable
-corepack prepare pnpm@latest --activate
-pnpm install
-
-# Nếu pnpm cảnh báo ignored build scripts, approve các package build quan trọng
-pnpm approve-builds
-
-# Build 1 lần duy nhất (chỉ build lại khi thay đổi CODE, không phải content)
+cd /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/client
+pnpm install --frozen-lockfile
+rm -rf .output .nuxt
 pnpm build
 ```
 
-> [!TIP]
-> Khi chạy `pnpm approve-builds`, nên approve các package như:
-> - `esbuild`
-> - `sharp`
-> - `@parcel/watcher`
-
-### Chạy bằng PM2
+Kiem tra build output ton tai:
 
 ```bash
-pnpm add -g pm2
-
-# Start Nuxt 3 SSR server
-pm2 start .output/server/index.mjs --name "hst-client"
-
-# Auto-restart khi reboot
-pm2 save
-pm2 startup
+ls -la .output/server/index.mjs
+find .output/server -name "error-500.mjs"
+find .output/server -name "error-styles*.mjs"
 ```
-
-> [!TIP]
-> **Vì SSR**: Nuxt gọi API Laravel mỗi request → admin cập nhật nội dung → user reload trang là thấy ngay. **Không cần build lại, không cần restart PM2.**
 
 ---
 
-## 5️⃣ Cấu hình Apache
+## 5. PM2
 
-### Enable modules
+Khuyen nghi dung `ecosystem.config.cjs` thay vi start tay.
 
-```bash
-sudo a2enmod proxy proxy_http proxy_wstunnel rewrite
+### ecosystem.config.cjs
+
+```js
+module.exports = {
+  apps: [
+    {
+      name: "hst-client",
+      script: ".output/server/index.mjs",
+      cwd: "/home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/client",
+      env: {
+        NUXT_PUBLIC_SITE_URL: "https://demo.hisotechgroup.com",
+        NUXT_API_BASE_URL: "https://demo.hisotechgroup.com/api",
+      },
+    },
+  ],
+};
 ```
 
-### Virtual Host
+### Chay PM2
 
 ```bash
-sudo nano /etc/apache2/sites-available/hst.yourdomain.com.conf
+cd /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/client
+pm2 delete hst-client
+pm2 flush
+pm2 start ecosystem.config.cjs
+pm2 save
+pm2 env 0
 ```
+
+Trong `pm2 env 0` phai thay:
+
+```text
+NUXT_PUBLIC_SITE_URL: https://demo.hisotechgroup.com
+NUXT_API_BASE_URL: https://demo.hisotechgroup.com/api
+```
+
+Neu khong thay 2 bien nay, PM2 dang khong nhan env dung.
+
+---
+
+## 6. Apache / Virtualmin vhost
+
+### Muc tieu route
+
+| Request | Di dau |
+|---|---|
+| `/admin` | Laravel |
+| `/api/*` | Laravel |
+| `/storage/*` | Laravel/public storage |
+| `/index.php` | Laravel |
+| `/*` con lai | Nuxt SSR qua PM2 |
+
+### Modules can bat
+
+```bash
+a2enmod proxy proxy_http proxy_wstunnel rewrite headers
+```
+
+### FCGI wrapper
+
+Khong duoc doan mo path `php8.x.fcgi`.
+
+Phai kiem tra file ton tai that:
+
+```bash
+ls -la /home/hisotechgroup.com/domains/demo.hisotechgroup.com/fcgi-bin
+```
+
+Trong server vua deploy, wrapper dung la:
+
+```text
+/home/hisotechgroup.com/domains/demo.hisotechgroup.com/fcgi-bin/php8.4.fcgi
+```
+
+Neu config dung `php8.3.fcgi` khi file khong ton tai, Apache se khong reload duoc.
+
+### Mieng cau hinh quan trong
 
 ```apache
-<VirtualHost *:80>
-    ServerName hst.yourdomain.com
+DocumentRoot /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin/public
 
-    DocumentRoot /home/hst/admin/public
+<Directory /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin/public>
+    Options -Indexes +IncludesNOEXEC +SymLinksIfOwnerMatch +ExecCGI
+    Require all granted
+    AllowOverride All Options=ExecCGI,Includes,IncludesNOEXEC,Indexes,MultiViews,SymLinksIfOwnerMatch
 
-    <Directory /home/hst/admin/public>
-        AllowOverride All
-        Require all granted
-        Options -Indexes -MultiViews
-        RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteRule ^ index.php [L]
-    </Directory>
+    AddHandler fcgid-script .php
+    AddHandler fcgid-script .php8.4
+    FCGIWrapper /home/hisotechgroup.com/domains/demo.hisotechgroup.com/fcgi-bin/php8.4.fcgi .php
+    FCGIWrapper /home/hisotechgroup.com/domains/demo.hisotechgroup.com/fcgi-bin/php8.4.fcgi .php8.4
+</Directory>
 
-    # Laravel paths - KHÔNG proxy (PHP-FPM xử lý trực tiếp)
-    ProxyPassMatch "^/(admin|api|storage|vendor|build|favicon\.ico)(/.*)?" "!"
+ProxyPass /.well-known !
+ProxyPass /index.php !
+ProxyPass /admin !
+ProxyPass /api !
+ProxyPass /storage !
+ProxyPass /vendor !
+ProxyPass /build !
+ProxyPass /themes !
+ProxyPass /favicon.ico !
+ProxyPass /robots.txt !
 
-    # Tất cả còn lại → Nuxt 3 SSR
-    ProxyPreserveHost On
-    ProxyPass        /       http://127.0.0.1:3000/
-    ProxyPassReverse /       http://127.0.0.1:3000/
-
-    ErrorLog  /home/hst/logs/error.log
-    CustomLog /home/hst/logs/access.log combined
-</VirtualHost>
+ProxyPreserveHost On
+ProxyPass / http://127.0.0.1:3000/
+ProxyPassReverse / http://127.0.0.1:3000/
 ```
 
-| Request | Xử lý bởi | Cách thức |
-|---|---|---|
-| `/admin/*` | **Laravel (PHP-FPM)** | Apache serve trực tiếp |
-| `/api/*` | **Laravel (PHP-FPM)** | Apache serve trực tiếp |
-| `/storage/*` | **Laravel** | Symlink trong `public/` |
-| `/*` (còn lại) | **Nuxt 3 SSR (PM2)** | Proxy tới `127.0.0.1:3000` |
+### Luu y rat quan trong
+
+- Khong nhet custom rewrite `RewriteRule ^ index.php [L]` vao vhost neu da de Laravel xu ly qua `.htaccess`
+- Neu tu them rewrite sai, `/admin` co the bi doi thanh `/index.php` roi bi proxy nham sang Nuxt
+- Khong de `RemoveHandler .php` o cuoi block neu dang dung `AddHandler` + `FCGIWrapper`
+
+### Test Apache
+
+Test dung host:
 
 ```bash
-sudo systemctl restart apache2
+curl -I -H "Host: demo.hisotechgroup.com" http://212.85.24.70/admin
+curl -I -H "Host: demo.hisotechgroup.com" "http://212.85.24.70/api/menus?locale=vi"
+curl -Ik --resolve demo.hisotechgroup.com:443:212.85.24.70 "https://demo.hisotechgroup.com/api/widgets/layout?locale=vi"
 ```
+
+Neu `api` ra `200`, vhost da dung.
 
 ---
 
-## 6️⃣ SSL (Let's Encrypt)
+## 7. Trinh tu deploy dung
 
-Trong Virtualmin: **Server Configuration** → **SSL Certificate** → **Let's Encrypt** → **Request Certificate**
+### Khi deploy lan dau
 
-Hoặc:
+1. Upload source
+2. Cau hinh Virtualmin `hisotech/admin/public`
+3. Cau hinh vhost Apache
+4. Setup Laravel
+5. Setup `client/.env`
+6. `pnpm build`
+7. Start PM2 bang ecosystem
 
-```bash
-sudo apt install certbot python3-certbot-apache
-sudo certbot --apache -d hst.yourdomain.com
-```
-
----
-
-## 7️⃣ Database
-
-Virtualmin → **Edit Databases** → **Create Database**, hoặc:
+### Khi chi thay doi code frontend
 
 ```bash
-mysql -u root -p -e "
-CREATE DATABASE hst_db;
-CREATE USER 'hst_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON hst_db.* TO 'hst_user'@'localhost';
-FLUSH PRIVILEGES;"
-```
-
----
-
-## ⚠️ Lỗi thường gặp
-
-| Lỗi | Giải pháp |
-|---|---|
-| **403 Forbidden** | `chown -R www-data:www-data /home/hst/admin` |
-| **502 Bad Gateway** | `pm2 restart hst-client` |
-| **500 Server Error** | `php artisan config:clear && php artisan key:generate` |
-| **Content không cập nhật** | Do cache — `php artisan cache:clear` ở Laravel |
-
----
-
-## 8️⃣ Quy trình bảo trì & Cập nhật Code
-
-### Khi thay đổi code Frontend (Vue/Nuxt)
-*(Ví dụ: Sửa UI, thêm file `.vue`, đổi logic trong composables...)*
-Vì Nuxt 3 cần đóng gói các component Vue thành Javascript tối ưu hóa cho SSR, mỗi khi code frontend thay đổi bạn **bắt buộc phải build lại** dự án:
-
-```bash
-cd /home/hst/client
-git pull origin main       # Kéo code mới nhất từ git
-pnpm install               # Chạy nếu có thay đổi dependencies hoặc lockfile
-pnpm build                 # Build lại ứng dụng Vue/Nuxt
-pm2 restart hst-client     # Khởi động lại tiến trình SSR để code mới có hiệu lực
-```
-
-### Tóm tắt các trường hợp khác:
-
-| Thay đổi | Cần làm |
-|---|---|
-| Admin sửa nội dung, thông tin (Bài viết, Ảnh...) | **Không cần làm gì** — do SSR nên user F5 là thấy nội dung mới. |
-| Thay đổi code **backend API** (Laravel) | `cd admin` → `git pull` → `php artisan config:cache` |
-| Thêm database migration mới (Laravel) | `cd admin` → `git pull` → `php artisan migrate` |
-
----
-
-## 9️⃣ Ghi chú package manager
-
-Repo `client/` hiện đã có:
-- [pnpm-lock.yaml](/d:/Duong/src/laragon/www/hst/client/pnpm-lock.yaml)
-
-Khuyến nghị production:
-- dùng `pnpm`
-- không dùng song song `npm install`
-- nếu CI/deploy script cũ đang dùng npm, đổi sang:
-
-```bash
+cd /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/client
+git pull
 pnpm install --frozen-lockfile
+rm -rf .output .nuxt
 pnpm build
+pm2 restart hst-client --update-env
 ```
+
+### Khi chi thay doi content trong admin
+
+Khong can build lai Nuxt.
+
+Chi can reload trang vi SSR fetch API moi request.
+
+### Khi thay doi code backend Laravel
+
+```bash
+cd /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin
+git pull
+composer install --no-dev --optimize-autoloader
+php artisan optimize:clear
+```
+
+Neu co migration:
+
+```bash
+php artisan migrate --force
+```
+
+---
+
+## 8. Loi thuong gap
+
+### 1. PM2 log van goi `http://127.0.0.1/api/...`
+
+Nguyen nhan:
+- `.env` da doi nhung PM2/build chua an env moi
+
+Cach xu ly:
+- build lai sau khi export env dung
+- dung `ecosystem.config.cjs`
+- kiem tra `pm2 env 0`
+
+### 2. `curl http://127.0.0.1/api/...` tra 404
+
+Khong duoc ket luan ngay la Laravel hong.
+
+Voi Apache name-based vhost, `127.0.0.1` co the hit sai default vhost.
+Phai test voi host dung:
+
+```bash
+curl -I -H "Host: demo.hisotechgroup.com" "http://212.85.24.70/api/menus?locale=vi"
+```
+
+hoac HTTPS + `--resolve`.
+
+### 3. `/admin` bi nhay thanh `/index.php`
+
+Nguyen nhan:
+- vhost co custom rewrite sai
+
+Cach xu ly:
+- bo rewrite tu viet trong vhost
+- de Laravel `.htaccess` xu ly
+- dam bao `/index.php` va `/admin` duoc exclude khoi proxy
+
+### 4. Apache reload fail vi `php8.3.fcgi` khong ton tai
+
+Nguyen nhan:
+- wrapper dung sai version/path
+
+Cach xu ly:
+- `ls -la .../fcgi-bin`
+- dung dung file ton tai that, vi du `php8.4.fcgi`
+
+### 5. Tren Linux bi loi namespace, local Windows khong bi
+
+Vi du:
+
+```php
+use App\shortcode\Contracts\ShortcodeInterface;
+```
+
+tren Linux se sai neu namespace thuc te la:
+
+```php
+use App\Shortcode\Contracts\ShortcodeInterface;
+```
+
+Windows thuong khong lo do filesystem khong phan biet hoa thuong, Linux thi co.
+
+Can ra cac case nay:
+
+```bash
+grep -R "App\\\\shortcode" app -n
+```
+
+### 6. Endpoint backend mot minh bi `500`, local khong bi
+
+Thuong la do:
+- du lieu DB server khac local
+- media/storage server khac local
+- config/theme/widget cache khac local
+- namespace case-sensitive tren Linux
+
+Khong nen ket luan ngay la Nuxt loi.
+
+---
+
+## 9. Lenh debug huu ich
+
+### Apache
+
+```bash
+apachectl -t
+apachectl -S
+apachectl -M | grep rewrite
+systemctl reload apache2
+```
+
+### PM2
+
+```bash
+pm2 status
+pm2 logs hst-client --lines 100
+pm2 env 0
+pm2 flush
+```
+
+### Laravel/API
+
+```bash
+curl -Ik --resolve demo.hisotechgroup.com:443:212.85.24.70 "https://demo.hisotechgroup.com/api/menus?locale=vi"
+curl -Ik --resolve demo.hisotechgroup.com:443:212.85.24.70 "https://demo.hisotechgroup.com/api/widgets/layout?locale=vi"
+curl -Ik --resolve demo.hisotechgroup.com:443:212.85.24.70 "https://demo.hisotechgroup.com/api/pages/homepage/sections?locale=vi"
+```
+
+### Logs
+
+```bash
+tail -n 100 /var/log/virtualmin/demo.hisotechgroup.com_error_log
+find /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin/storage/logs -maxdepth 1 -type f
+tail -n 100 /home/hisotechgroup.com/domains/demo.hisotechgroup.com/hisotech/admin/storage/logs/*.log
+```
+
+---
+
+## 10. Checklist chot production
+
+- Virtualmin sub-directory dung: `hisotech/admin/public`
+- Apache vhost exclude dung cac route Laravel khoi proxy
+- FCGI wrapper dung file ton tai that
+- `NUXT_PUBLIC_SITE_URL` va `NUXT_API_BASE_URL` vao duoc PM2
+- `.output/server/index.mjs` ton tai sau build
+- `/api/menus` va `/api/widgets/layout` tra `200`
+- Nuxt homepage render duoc
+- khong con namespace sai hoa-thuong tren Linux

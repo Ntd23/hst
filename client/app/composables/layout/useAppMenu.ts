@@ -2,18 +2,62 @@ import type { MenuItem } from "~~/shared/navigation/types";
 import { flattenMenuItems } from "~~/shared/navigation/menu";
 import { resolveAppLocale } from "~~/shared/i18n/locale";
 import { useMenus } from "~/composables/layout/useMenus";
+import { useLayoutWidgetStore } from "~/stores/layout-widget";
+
+type ContactInfoItem = {
+  title?: string;
+  icon?: string;
+  icon_image?: string | null;
+  url?: string;
+};
+
+type SocialItem = {
+  network?: string;
+  label?: string;
+  url?: string;
+  icon?: string;
+};
 
 export const useAppMenu = () => {
   const isScrolled = ref(false);
   const isMobileMenuOpen = ref(false);
   const activeDropdown = ref<string | number | null>(null);
 
-  const { locale, locales: availableLocales } = useI18nText();
+  const { locale, locales: availableLocales, localeCode } = useI18nText();
   const switchLocalePath = useSwitchLocalePath();
   const { menuData } = useMenus();
+  const layoutWidgetStore = useLayoutWidgetStore();
+
+  const layoutWidgetsAsyncData = useAsyncData(
+    `widgets-layout-menu-${localeCode.value}`,
+    () => layoutWidgetStore.fetchLayoutWidgets(localeCode.value),
+    { dedupe: "defer" }
+  );
+
+  const layoutWidgetData = computed(
+    () => layoutWidgetsAsyncData.data.value ?? layoutWidgetStore.layoutWidgetData
+  );
 
   const computedNavItems = computed(
     () => (menuData.value?.main_menu?.items ?? []) as MenuItem[]
+  );
+
+  const resolveSectionItems = (section: any) => section?.items ?? [];
+
+  const headerStartItems = computed<ContactInfoItem[]>(() => {
+    const widget = resolveSectionItems(layoutWidgetData.value?.header_top_start)[0];
+    return widget?.content?.items ?? [];
+  });
+
+  const headerEndItems = computed<ContactInfoItem[]>(() => {
+    const widget = resolveSectionItems(layoutWidgetData.value?.header_top_end)[0];
+    return widget?.content?.items ?? [];
+  });
+
+  const menuSidebarItems = computed(() => resolveSectionItems(layoutWidgetData.value?.menu_sidebar));
+
+  const menuSidebarSocials = computed<SocialItem[]>(() =>
+    menuSidebarItems.value.find((item: any) => item.widget === "social-links")?.content?.socials ?? []
   );
 
   const switchLocale = (code: string) => {
@@ -72,6 +116,9 @@ export const useAppMenu = () => {
     availableLocales,
     menuData,
     computedNavItems,
+    headerStartItems,
+    headerEndItems,
+    menuSidebarSocials,
     contactButtonLink,
     switchLocale,
   };

@@ -18,15 +18,53 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
+
 const props = defineProps<{ data?: any }>();
 
 const content = computed(() => props.data || {});
 const query = ref("");
+const route = useRoute();
+const syncingFromRoute = ref(false);
 
 const handleSubmit = async () => {
+  const normalizedQuery = query.value.trim();
+
   await navigateTo({
     path: "/blog",
-    query: query.value ? { q: query.value } : {},
+    query: normalizedQuery ? { q: normalizedQuery } : {},
   });
 };
+
+const handleDebouncedSubmit = useDebounceFn(async () => {
+  await handleSubmit();
+}, 2000);
+
+watch(
+  () => route.query.q,
+  (value) => {
+    syncingFromRoute.value = true;
+    query.value = typeof value === "string" ? value : "";
+    nextTick(() => {
+      syncingFromRoute.value = false;
+    });
+  },
+  { immediate: true }
+);
+
+watch(query, (value) => {
+  if (syncingFromRoute.value) {
+    return;
+  }
+
+  const normalizedQuery = value.trim();
+  const currentQuery =
+    typeof route.query.q === "string" ? route.query.q.trim() : "";
+
+  if (normalizedQuery === currentQuery) {
+    return;
+  }
+
+  handleDebouncedSubmit();
+});
 </script>
