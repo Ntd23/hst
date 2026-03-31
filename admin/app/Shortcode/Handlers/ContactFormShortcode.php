@@ -1,6 +1,6 @@
 <?php 
 namespace App\Shortcode\Handlers;
-use App\shortcode\Contracts\ShortcodeInterface;
+use App\Shortcode\Contracts\ShortcodeInterface;
 use App\Http\Controllers\Api\Traits\ShortcodeApiTrait;
 
 class ContactFormShortcode implements ShortcodeInterface
