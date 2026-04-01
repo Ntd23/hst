@@ -1,5 +1,5 @@
 ﻿<template>
-  <section class="faq-vacuum relative overflow-hidden py-20 lg:py-32">
+  <section class="faq-vacuum relative overflow-hidden py-12 lg:py-32">
     <div class="pointer-events-none absolute inset-0 opacity-40">
       <div class="vacuum-blob blob-1" />
       <div class="vacuum-blob blob-2" />
@@ -9,25 +9,44 @@
     </div>
 
     <UContainer class="relative z-10">
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 800, ease: 'easeOut' } }"
-        class="mb-16 text-center lg:mb-24"
-      >
-        <h2
-          v-if="sectionData.title"
-          class="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 lg:text-6xl"
-          v-html="sectionData.title"
-        />
-        <p
-          v-if="sectionData.description"
-          class="mx-auto max-w-3xl text-lg leading-relaxed text-slate-500"
-          v-html="sectionData.description"
-        />
+      <CommonsSectionHeading
+        :title="sectionData.title"
+        :description="sectionData.description"
+        compact
+      />
+
+      <div class="lg:hidden">
+        <div class="faq-mobile-shell">
+          <div class="faq-mobile-list">
+            <article
+              v-for="(item, idx) in faqs"
+              :key="item.id || item.question"
+              class="faq-mobile-item"
+              :class="{ 'faq-mobile-item--active': activeFaq?.id === item.id }"
+            >
+              <button
+                type="button"
+                class="faq-mobile-item__trigger"
+                @click="setActiveFaq(item)"
+              >
+                <span class="faq-mobile-item__index">0{{ Number(idx) + 1 }}</span>
+                <span class="faq-mobile-item__question" v-html="item.question" />
+                <UIcon
+                  name="i-lucide-chevron-down"
+                  class="faq-mobile-item__chevron"
+                  :class="{ 'rotate-180': activeFaq?.id === item.id }"
+                />
+              </button>
+
+              <div v-show="activeFaq?.id === item.id" class="faq-mobile-item__answer">
+                <div class="faq-mobile-item__answer-copy" v-html="item.answer" />
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div class="hidden grid-cols-1 items-center gap-12 lg:grid lg:grid-cols-2 lg:gap-20">
         <div class="space-y-6">
           <div
             v-for="(item, idx) in faqs"
@@ -119,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 import { iconName } from "~/utils/iconName";
 
 const props = defineProps<{
@@ -186,6 +206,79 @@ useJsonLd(faqSchema);
 .faq-vacuum h4,
 .node-index {
   font-family: var(--font-tech, sans-serif);
+}
+.faq-mobile-shell {
+  border-radius: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  padding: 0.75rem;
+}
+.faq-mobile-list {
+  display: grid;
+  gap: 0.65rem;
+  max-height: min(62svh, 34rem);
+  overflow: auto;
+  padding-right: 0.15rem;
+}
+.faq-mobile-item {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: rgba(255, 255, 255, 0.88);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.faq-mobile-item--active {
+  border-color: rgba(14, 165, 233, 0.28);
+  box-shadow: 0 14px 32px rgba(14, 165, 233, 0.08);
+}
+.faq-mobile-item__trigger {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  text-align: left;
+}
+.faq-mobile-item__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.8rem;
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.faq-mobile-item__question {
+  color: #0f172a;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.faq-mobile-item__chevron {
+  color: #0284c7;
+  transition: transform 0.2s ease;
+}
+.faq-mobile-item__answer {
+  padding: 0 1rem 1rem 3.75rem;
+}
+.faq-mobile-item__answer-copy {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.faq-mobile-item__answer-copy :deep(*) {
+  color: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+.faq-mobile-item__answer-copy :deep(p:last-child) {
+  margin-bottom: 0;
 }
 .vacuum-blob {
   position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap items-center justify-center gap-3 md:justify-end">
+  <div class="flex flex-wrap items-center justify-center gap-3 md:justify-end sm:m-auto">
     <ULink
       v-for="social in content.socials || []"
       :key="social.network"

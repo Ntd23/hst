@@ -9,6 +9,11 @@ export const useFaqsShortcode = (sourceData: MaybeRefOrGetter<any>) => {
   const activeFaq = ref<any | null>(null);
 
   const setActiveFaq = (faq: any) => {
+    if (activeFaq.value?.id === faq?.id) {
+      activeFaq.value = null;
+      return;
+    }
+
     activeFaq.value = faq;
   };
 

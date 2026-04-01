@@ -3,6 +3,7 @@ use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\Pages\ShortcodeController;
 use App\Http\Controllers\Api\Pages\ContactController;
+use App\Http\Controllers\Api\Pages\SubcribeController;
 use App\Http\Controllers\Api\WidgetController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Pages\PageDetailController;
@@ -24,6 +25,7 @@ Route::prefix('pages')->group(function () {
     
     // Specific Post Actions
     Route::post('contact/section/form', [ContactController::class, 'submitSectionFormContact']);
+    Route::post('subscribe/widget/form', [SubcribeController::class, 'submitWidgetFormSubscribe']);
 
     //Pages Details
     Route::get('{slug}/details', [PageDetailController::class, 'getDetails']);   // ?locale=vi → trả tất cả sections

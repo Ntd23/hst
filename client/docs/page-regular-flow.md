@@ -5,7 +5,6 @@ Tài liệu này mô tả luồng của các trang "thường" sau refactor, t�
 Ví dụ:
 - `/`
 - `/services`
-- `/lien-he-voi-chung-toi`
 - các slug đơn không có `[detail]`
 
 ## 1. Route vào page

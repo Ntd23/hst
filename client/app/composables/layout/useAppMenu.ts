@@ -22,6 +22,7 @@ export const useAppMenu = () => {
   const isScrolled = ref(false);
   const isMobileMenuOpen = ref(false);
   const activeDropdown = ref<string | number | null>(null);
+  const activeMobileDropdown = ref<string | number | null>(null);
 
   const { locale, locales: availableLocales, localeCode } = useI18nText();
   const switchLocalePath = useSwitchLocalePath();
@@ -90,6 +91,7 @@ export const useAppMenu = () => {
   const handleResize = () => {
     if (window.innerWidth >= 1024) {
       isMobileMenuOpen.value = false;
+      activeMobileDropdown.value = null;
     }
   };
 
@@ -109,6 +111,7 @@ export const useAppMenu = () => {
     isScrolled,
     isMobileMenuOpen,
     activeDropdown,
+    activeMobileDropdown,
     isReady,
     locale,
     availableLocales,

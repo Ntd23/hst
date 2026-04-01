@@ -28,15 +28,27 @@
         <input
           type="email"
           class="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none"
-          placeholder="Email address"
+          :value="email"
+          :placeholder="labels.emailPlaceholder"
+          :disabled="newsletterStore.loading"
+          @input="email = String(($event.target as HTMLInputElement).value || '')"
         />
         <button
           type="submit"
           class="btn-shared-cta shrink-0 rounded-none px-5 py-3 text-sm"
+          :disabled="newsletterStore.loading"
         >
-          Subscribe
+          <span v-if="newsletterStore.loading">{{ labels.submitting }}</span>
+          <span v-else>{{ labels.subscribe }}</span>
         </button>
       </form>
+
+      <div v-if="submitSuccess" class="text-sm text-emerald-300">
+        {{ submitSuccess }}
+      </div>
+      <div v-else-if="submitError" class="text-sm text-rose-300">
+        {{ submitError }}
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +59,12 @@ const props = defineProps<{
 }>();
 
 const content = computed(() => props.data || {});
-
-const handleSubmit = () => {};
+const {
+  newsletterStore,
+  email,
+  labels,
+  submitSuccess,
+  submitError,
+  handleSubmit,
+} = useNewsletterWidgetForm();
 </script>

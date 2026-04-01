@@ -1,91 +1,84 @@
 <template>
-  <section ref="sectionRef" class="stats-section relative py-6 overflow-hidden">
-    <UContainer class="relative z-10">
-      <!-- Header -->
-      <div
-        v-if="sectionData?.title || sectionData?.subtitle"
-        v-motion
-        :initial="{ opacity: 0, y: 24 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-        class="text-center mb-12 sm:mb-16"
-      >
-        <div v-if="sectionData?.subtitle" class="inline-flex items-center gap-2 mb-3">
-          <span class="h-px w-6 bg-primary/50" />
-          <span class="text-primary font-bold tracking-widest uppercase text-xs">{{ sectionData.subtitle }}</span>
-          <span class="h-px w-6 bg-primary/50" />
-        </div>
-        <h2 v-if="sectionData?.title" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">
-          {{ sectionData.title }}
-        </h2>
-        <p v-if="sectionData?.description" class="mt-4 text-gray-500 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
-          {{ sectionData.description }}
-        </p>
-      </div>
+  <section class="stats-section">
+    <div class="stats-section__mesh stats-section__mesh--left" />
+    <div class="stats-section__mesh stats-section__mesh--right" />
 
-      <!-- Stats Bento Grid: 2 cols mobile → 4 cols desktop -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-        <div
-          v-for="(tab, index) in tabs"
-          :key="index"
-          v-motion
-          :initial="{ opacity: 0, y: 40, scale: 0.95 }"
-          :visible-once="{ opacity: 1, y: 0, scale: 1, transition: { duration: 550, delay: index * 90, ease: [0.16, 1, 0.3, 1] } }"
-          class="stat-card group"
-        >
-          <!-- 3D Icon container -->
-          <div class="icon-3d-wrap mb-4 sm:mb-5">
-            <div class="icon-3d-inner">
+    <UContainer>
+      <div class="stats-shell">
+        <header class="stats-head">
+          <div v-if="sectionData?.subtitle" class="stats-head__eyebrow">
+            {{ sectionData.subtitle }}
+          </div>
+
+          <div class="stats-head__row">
+            <div class="stats-head__content">
+              <h2 v-if="sectionData?.title" class="stats-head__title">
+                {{ sectionData.title }}
+              </h2>
+              <p
+                v-if="sectionData?.description"
+                class="stats-head__description"
+              >
+                {{ sectionData.description }}
+              </p>
+            </div>
+
+            <div
+              v-if="sectionData?.button?.label && sectionData?.button?.url"
+              class="stats-head__cta"
+            >
+              <UButton
+                :to="sectionData.button.url"
+                color="primary"
+                variant="solid"
+                size="lg"
+                class="stats-head__button"
+              >
+                {{ sectionData.button.label }}
+              </UButton>
+            </div>
+          </div>
+        </header>
+
+        <div class="stats-grid">
+          <article
+            v-for="(tab, index) in tabs"
+            :key="index"
+            class="stats-card"
+          >
+            <div class="stats-card__glow" />
+
+            <div class="stats-card__visual">
               <NuxtImg
                 v-if="tab.image"
                 :src="tab.image"
                 :alt="tab.title"
-                width="48"
-                height="48"
+                width="176"
+                height="176"
                 loading="lazy"
-                class="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-md group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-500"
+                class="stats-card__image"
               />
-              <UIcon v-else name="i-lucide-bar-chart-2" class="size-9 sm:size-11 text-white drop-shadow" />
+              <div v-else class="stats-card__fallback">
+                <UIcon name="i-lucide-shield-check" class="stats-card__fallback-icon" />
+              </div>
             </div>
-          </div>
 
-          <!-- Number + Unit -->
-          <div class="flex items-baseline justify-center gap-0.5">
-            <span class="stat-number text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight tabular-nums">
-              {{ animatedValues[index] ?? 0 }}
-            </span>
-            <span v-if="tab.unit" class="stat-unit text-lg sm:text-xl lg:text-2xl font-black">
-              {{ tab.unit }}
-            </span>
-          </div>
+            <div class="stats-card__body">
+              <div class="stats-card__value">
+                <span class="stats-card__number">
+                  {{ statisticValues[index] ?? 0 }}
+                </span>
+                <span v-if="tab.unit" class="stats-card__unit">
+                  {{ tab.unit }}
+                </span>
+              </div>
 
-          <!-- Divider -->
-          <div class="stat-divider my-3 sm:my-4" />
-
-          <!-- Label -->
-          <p class="text-gray-500 text-xs sm:text-sm font-medium text-center leading-snug line-clamp-2">
-            {{ tab.title }}
-          </p>
+              <h3 class="stats-card__title">
+                {{ tab.title }}
+              </h3>
+            </div>
+          </article>
         </div>
-      </div>
-
-      <!-- CTA -->
-      <div
-        v-if="sectionData?.button?.label && sectionData?.button?.url"
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: 500 } }"
-        class="text-center mt-12 sm:mt-16"
-      >
-        <UButton
-          :to="sectionData.button.url"
-          color="primary"
-          variant="solid"
-          size="lg"
-          trailing-icon="i-lucide-arrow-right"
-          class="rounded-full px-8 font-bold shadow-lg shadow-primary/25"
-        >
-          {{ sectionData.button.label }}
-        </UButton>
       </div>
     </UContainer>
   </section>
@@ -93,109 +86,253 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  data?: any
-}>()
+  data?: any;
+}>();
 
-const { sectionData, tabs, sectionRef, animatedValues } =
-  useSiteStatisticsShortcode(toRef(props, "data"))
+const { sectionData, tabs, statisticValues } = useSiteStatisticsShortcode(
+  toRef(props, "data")
+);
 </script>
 
 <style scoped>
+.stats-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
 
-/* ── Stat card: glassmorphism white card ── */
-.stat-card {
+.stats-section__mesh {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stats-section__mesh--left {
+  top: 4rem;
+  left: -8rem;
+  width: 22rem;
+  height: 22rem;
+}
+
+.stats-section__mesh--right {
+  right: -10rem;
+  bottom: 3rem;
+  width: 26rem;
+  height: 26rem;
+}
+
+.stats-shell {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  gap: clamp(2.25rem, 4vw, 3.25rem);
+}
+
+.stats-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.stats-head__eyebrow {
+  display: inline-flex;
+  align-self: flex-start;
+  min-height: 2.5rem;
   align-items: center;
-  padding: 1.25rem 1rem;
-  border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(200, 230, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-}
-.stat-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 20px 40px -8px rgba(14, 165, 233, 0.18),
-    0 0 0 1.5px rgba(125, 211, 252, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  font-family: var(--font-tech, "Monda", sans-serif);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0284c7;
 }
 
-@media (min-width: 640px) {
-  .stat-card { padding: 1.75rem 1.25rem; }
+.stats-head__row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
-/* ── 3D Icon wrapper ── */
-.icon-3d-wrap {
+.stats-head__content {
+  max-width: 48rem;
+}
+
+.stats-head__title {
+  margin: 0;
+  font-family: var(--font-tech, "Monda", sans-serif);
+  font-size: clamp(2.75rem, 5vw, 4.85rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+  color: #0f172a;
+  text-wrap: balance;
+}
+
+.stats-head__description {
+  margin: 1.4rem 0 0;
+  max-width: 40rem;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.stats-head__button {
+  border-radius: 999px;
+  padding-inline: 2rem;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.9rem 1.1rem;
+  padding-top: 0.25rem;
+}
+
+.stats-card {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 13rem;
+  padding: 0 1.1rem 1rem;
+  border-radius: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
 }
-.icon-3d-inner {
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 1.125rem;
+
+.stats-card__glow {
+  position: absolute;
+  top: 0.5rem;
+  left: 24%;
+  width: 52%;
+  height: 4.5rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.28), rgba(125, 211, 252, 0));
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.stats-card__visual {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #38bdf8, #6366f1);
-  box-shadow:
-    0 8px 20px rgba(99, 102, 241, 0.35),
-    0 2px 6px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.35),
-    inset 0 -2px 4px rgba(0,0,0,0.12);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-}
-.stat-card:hover .icon-3d-inner {
-  transform: translateY(-4px) rotate(-4deg);
-  box-shadow:
-    0 16px 32px rgba(99, 102, 241, 0.4),
-    0 4px 8px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.4);
+  min-height: 4.2rem;
+  margin-top: -1rem;
+  margin-bottom: 0.3rem;
 }
 
-@media (min-width: 640px) {
-  .icon-3d-inner { width: 4rem; height: 4rem; border-radius: 1.25rem; }
+.stats-card__image {
+  width: min(5.2rem, 22vw);
+  height: min(5.2rem, 22vw);
+  object-fit: contain;
+  filter: drop-shadow(0 14px 18px rgba(37, 99, 235, 0.12));
 }
 
-/* ── Tech number typography ── */
-.stat-number {
-  font-family: var(--font-tech, 'Monda', sans-serif);
-  background: linear-gradient(355deg, #0f172a 0%, #0ea5e9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-.stat-unit {
-  font-family: var(--font-tech, 'Monda', sans-serif);
-  background: linear-gradient(135deg, #0ea5e9, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-/* ── Divider with gradient ── */
-.stat-divider {
-  width: 2.5rem;
-  height: 2px;
+.stats-card__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.25rem;
+  height: 4.25rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
-  opacity: 0.5;
-  transition: width 0.3s ease, opacity 0.3s ease;
+  background: radial-gradient(circle at 30% 30%, #67e8f9, #3b82f6 68%, #4338ca);
+  box-shadow:
+    0 14px 24px rgba(37, 99, 235, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
 }
-.stat-card:hover .stat-divider {
-  width: 3.5rem;
-  opacity: 0.9;
+
+.stats-card__fallback-icon {
+  width: 1.7rem;
+  height: 1.7rem;
+  color: white;
+}
+
+.stats-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  padding-top: 0;
+}
+
+.stats-card__value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.16rem;
+}
+
+.stats-card__number,
+.stats-card__unit {
+  font-family: var(--font-tech, "Monda", sans-serif);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+.stats-card__number {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  color: #0f172a;
+}
+
+.stats-card__unit {
+  font-size: clamp(1.05rem, 2vw, 1.6rem);
+  color: #06b6d4;
+}
+
+.stats-card__title {
+  margin: 0;
+  max-width: 18ch;
+  align-self: center;
+  text-align: center;
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.42;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .stats-head__row {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.2rem 1.25rem;
+  }
+
+  .stats-card {
+    min-height: 13.75rem;
+    padding-inline: 1.2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.2rem 1.3rem;
+  }
+
+  .stats-card {
+    min-height: 14rem;
+    padding-inline: 1.2rem;
+  }
+
+  .stats-card__title {
+    max-width: 20ch;
+    font-size: 0.96rem;
+  }
 }
 </style>

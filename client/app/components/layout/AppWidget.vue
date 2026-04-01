@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="pending && !isReady"
+    v-if="pending || !isReady || !isBootReady"
     class="app-widget-footer-skeleton"
     aria-hidden="true"
   >
@@ -47,15 +47,75 @@
             />
           </div>
 
-          <form class="footer-newsletter__form" @submit.prevent>
-            <input
-              type="email"
-              class="footer-newsletter__input"
-              placeholder="Enter your email"
-            />
-            <button type="submit" class="footer-newsletter__button">
-              Subscribe
-            </button>
+          <form
+            class="footer-newsletter__form"
+            @submit.prevent="handleNewsletterSubmit"
+          >
+            <Transition name="footer-newsletter-fade" mode="out-in">
+              <div
+                v-if="newsletterSubmitSuccess"
+                key="newsletter-success"
+                class="footer-newsletter__success"
+                role="status"
+              >
+                <div class="footer-newsletter__success-icon">
+                  <UIcon name="solar:check-circle-bold" class="size-6" />
+                </div>
+                <div class="footer-newsletter__success-copy">
+                  <p class="footer-newsletter__success-title">
+                    {{ newsletterLabels.successTitle }}
+                  </p>
+                  <p class="footer-newsletter__success-message">
+                    {{ newsletterSubmitSuccess }}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="footer-newsletter__secondary"
+                  @click="resetNewsletterForm"
+                >
+                  {{ newsletterLabels.retry }}
+                </button>
+              </div>
+
+              <div v-else key="newsletter-form" class="footer-newsletter__form-shell">
+                <div
+                  class="footer-newsletter__field"
+                  :class="{ 'footer-newsletter__field--error': newsletterSubmitError }"
+                >
+                  <input
+                    v-model="newsletterEmail"
+                    type="email"
+                    class="footer-newsletter__input"
+                    :placeholder="newsletterLabels.emailPlaceholder"
+                    :disabled="newsletterStore.loading"
+                    autocomplete="email"
+                  />
+                  <button
+                    type="submit"
+                    class="footer-newsletter__button"
+                    :disabled="newsletterStore.loading"
+                  >
+                    <span
+                      v-if="newsletterStore.loading"
+                      class="footer-newsletter__button-inner"
+                    >
+                      <span class="footer-newsletter__spinner" />
+                      <span>{{ newsletterLabels.submitting }}</span>
+                    </span>
+                    <span v-else>{{ newsletterLabels.subscribe }}</span>
+                  </button>
+                </div>
+
+                <p
+                  v-if="newsletterSubmitError"
+                  class="footer-newsletter__error"
+                  role="alert"
+                >
+                  {{ newsletterSubmitError }}
+                </p>
+              </div>
+            </Transition>
           </form>
         </div>
       </section>
@@ -195,6 +255,16 @@ const {
   copyrightText,
   socials,
 } = useAppWidget();
+const { isBootReady } = useAppBoot();
+const {
+  newsletterStore,
+  email: newsletterEmail,
+  labels: newsletterLabels,
+  submitSuccess: newsletterSubmitSuccess,
+  submitError: newsletterSubmitError,
+  handleSubmit: handleNewsletterSubmit,
+  resetForm: resetNewsletterForm,
+} = useNewsletterWidgetForm();
 
 if (import.meta.dev) {
   watchEffect(() => {
@@ -387,15 +457,48 @@ const contentCardClass = (widgetType?: string) => {
   align-self: center;
 }
 
-.footer-newsletter__input {
-  width: 100%;
-  min-height: 3.6rem;
+.footer-newsletter__form-shell {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.footer-newsletter__field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 4rem;
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.88);
-  padding: 0 1.2rem;
+  padding: 0.35rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.footer-newsletter__field:focus-within {
+  border-color: rgba(34, 211, 238, 0.32);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.footer-newsletter__field--error {
+  border-color: rgba(248, 113, 113, 0.55);
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.18);
+}
+
+.footer-newsletter__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 3.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  padding: 0 1rem 0 1.15rem;
   color: #f8fafc;
   outline: none;
+}
+
+.footer-newsletter__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.78;
 }
 
 .footer-newsletter__input::placeholder {
@@ -403,20 +506,121 @@ const contentCardClass = (widgetType?: string) => {
 }
 
 .footer-newsletter__button {
-  min-height: 3.4rem;
-  border: 0;
+  flex: 0 0 auto;
+  min-width: 8.75rem;
+  min-height: 3.2rem;
+  padding: 0 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  background: linear-gradient(90deg, #22d3ee, #34d399);
-  color: #04121d;
+  background: linear-gradient(135deg, #22d3ee, #34d399);
+  color: #052033;
   font-family: var(--font-tech);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 14px 30px rgba(34, 211, 238, 0.2);
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.footer-newsletter__button:disabled {
+  cursor: not-allowed;
+  transform: none;
+  filter: saturate(0.8);
+  opacity: 0.9;
 }
 
 .footer-newsletter__button:hover {
   transform: translateY(-1px);
   filter: brightness(1.06);
+  box-shadow: 0 18px 34px rgba(34, 211, 238, 0.28);
+}
+
+.footer-newsletter__button-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.footer-newsletter__spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(4, 18, 29, 0.22);
+  border-top-color: rgba(4, 18, 29, 0.92);
+  border-radius: 999px;
+  animation: footerSpin 0.8s linear infinite;
+}
+
+.footer-newsletter__error {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  background:
+    linear-gradient(90deg, rgba(127, 29, 29, 0.18), rgba(30, 41, 59, 0.18));
+  padding: 0.85rem 1rem 0.9rem;
+  color: #fecaca;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.footer-newsletter__success {
+  display: grid;
+  gap: 0.9rem;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  background:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(6, 78, 59, 0.65), rgba(8, 47, 73, 0.78));
+  padding: 1.15rem 1.15rem 1.2rem;
+}
+
+.footer-newsletter__success-icon {
+  display: inline-flex;
+  height: 2.9rem;
+  width: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #6ee7b7;
+}
+
+.footer-newsletter__success-copy {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.footer-newsletter__success-title {
+  color: #f8fafc;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.footer-newsletter__success-message {
+  color: #cbd5e1;
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.footer-newsletter__secondary {
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.72rem 1rem;
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-newsletter__secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.26);
 }
 
 .footer-grid {
@@ -561,6 +765,11 @@ const contentCardClass = (widgetType?: string) => {
     padding: 2rem;
   }
 
+  .footer-newsletter__field {
+    min-height: 4.2rem;
+    padding: 0.4rem;
+  }
+
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
@@ -595,6 +804,23 @@ const contentCardClass = (widgetType?: string) => {
 
   50% {
     opacity: 1;
+  }
+}
+
+.footer-newsletter-fade-enter-active,
+.footer-newsletter-fade-leave-active {
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.footer-newsletter-fade-enter-from,
+.footer-newsletter-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@keyframes footerSpin {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

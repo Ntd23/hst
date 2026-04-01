@@ -17,12 +17,6 @@
   box-shadow: 0 8px 32px 0 rgba(0, 124, 195, 0.1);
 }
 
-.dark .glass-panel {
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-}
-
 /* ===========================
    Card Hover — Gradient Border Glow (NO translate)
    =========================== */
@@ -107,10 +101,6 @@
   background: #d1ebf8f6;
 }
 
-.dark .bg-pastel-gradient {
-  background: #dceaf5;
-}
-
 .icon-glow {
   filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.3));
 }
@@ -127,16 +117,6 @@
 .glass-nav-scrolled {
   background: rgba(248, 250, 252, 0.9);
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
-}
-
-.dark .glass-nav {
-  background: rgba(15, 23, 42, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.35);
-}
-
-.dark .glass-nav-scrolled {
-  background: rgba(15, 23, 42, 0.9);
 }
 
 /* ===========================
@@ -169,21 +149,9 @@
   left: 0;
 }
 
-.dark .nav-link {
-  color: #e2e8f0;
-}
-
-.dark .nav-link:hover {
-  color: #93c5fd;
-}
-
 .nav-muted {
   color: #334155;
   transition: color 0.2s ease;
-}
-
-.dark .nav-muted {
-  color: #cbd5e1;
 }
 
 .nav-muted:hover {

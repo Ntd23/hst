@@ -1,19 +1,15 @@
 <template>
   <section class="py-16">
     <UContainer>
-      <!-- Header -->
       <div
-        v-motion
-        :initial="{ opacity: 0, x: -40 }"
-        :visible-once="{ opacity: 1, x: 0, transition: { duration: 600 } }"
         class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-8 sm:mb-10"
       >
-        <div>
-          <span class="text-secondary font-semibold tracking-wide uppercase text-sm">{{ $t("news.subtitle") }}</span>
-          <h2 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            {{ $t("news.title") }}
-          </h2>
-        </div>
+        <CommonsSectionHeading
+          :subtitle="$t('news.subtitle')"
+          :title="$t('news.title')"
+          align="left"
+          compact
+        />
         <ULink
           class="hidden md:flex items-center text-primary font-medium hover:text-secondary transition-colors"
           to="/blog"
@@ -53,7 +49,7 @@
                 {{ cat.name }}
               </UBadge>
             </div>
-            <NuxtLink :to="article.url || '/blog'" class="text-base font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            <NuxtLink :to="article.url || '/blog'" class="mb-2 line-clamp-2 text-base font-bold text-slate-900 transition-colors group-hover:text-primary">
               {{ article.name }}
             </NuxtLink>
             <p class="text-sm text-slate-500 line-clamp-2 flex-1 mb-3">{{ article.description }}</p>
@@ -119,7 +115,7 @@
               <span class="text-xs font-bold text-primary uppercase mb-1">
                 {{ article.categories?.[0]?.name ?? $t('common.defaultCategory') }}
               </span>
-              <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+              <h3 class="mb-1 line-clamp-2 text-sm font-bold text-slate-900 transition-colors group-hover:text-primary sm:text-base">
                 {{ article.name }}
               </h3>
               <span class="text-xs text-slate-400">{{ formatDate(article.created_at) }}</span>
@@ -151,6 +147,8 @@ h2, h3, .text-secondary, .text-primary {
 </style>
 
 <script setup lang="ts">
+import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
+
 const props = defineProps<{
   data?: any
 }>()

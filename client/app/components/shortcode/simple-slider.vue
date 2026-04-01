@@ -1,5 +1,53 @@
 <template>
   <header
+    v-if="!sliderItems.length"
+    class="relative h-screen min-h-[560px] max-h-[960px] overflow-hidden bg-slate-950"
+  >
+    <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-300/70 via-slate-200/45 to-slate-400/65" />
+    <div
+      class="relative z-10 flex h-full items-center px-5 py-16 sm:px-8 sm:py-20"
+    >
+      <div class="mx-auto flex h-full w-full max-w-6xl items-center">
+        <div class="grid w-full gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.8fr)] lg:items-center">
+          <div class="flex flex-col justify-center">
+            <div class="mb-6 h-4 w-40 rounded-full bg-white/30 sm:w-52" />
+            <div class="space-y-4">
+              <div class="h-14 w-full max-w-3xl rounded-[1.75rem] bg-white/55 sm:h-16 lg:h-20" />
+              <div class="h-14 w-[92%] max-w-[42rem] rounded-[1.75rem] bg-white/50 sm:h-16 lg:h-20" />
+            </div>
+            <div class="mt-8 space-y-3">
+              <div class="h-4 w-full max-w-2xl rounded-full bg-white/28" />
+              <div class="h-4 w-[88%] max-w-xl rounded-full bg-white/22" />
+              <div class="h-4 w-[72%] max-w-lg rounded-full bg-white/18" />
+            </div>
+            <div class="mt-10 flex items-center gap-4">
+              <div class="h-14 w-52 rounded-full bg-white/40" />
+              <div class="hidden h-14 w-14 rounded-full bg-white/22 sm:block" />
+            </div>
+          </div>
+
+          <div class="hidden lg:flex lg:justify-end">
+            <div class="w-full max-w-md space-y-5">
+              <div class="h-72 rounded-[2rem] bg-white/18 backdrop-blur-sm xl:h-80" />
+              <div class="grid grid-cols-2 gap-4">
+                <div class="h-24 rounded-[1.5rem] bg-white/16" />
+                <div class="h-24 rounded-[1.5rem] bg-white/12" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-3 sm:bottom-10">
+        <div class="h-1.5 w-16 rounded-full bg-white/45" />
+        <div class="h-1.5 w-8 rounded-full bg-white/25" />
+        <div class="h-1.5 w-8 rounded-full bg-white/25" />
+      </div>
+    </div>
+  </header>
+
+  <header
+    v-else
     class="relative h-screen min-h-[560px] max-h-[960px] overflow-hidden bg-slate-950"
   >
     <!-- ====== Background images — crossfade ====== -->
@@ -24,10 +72,6 @@
         />
       </div>
 
-      <!-- Base overlay -->
-      <div
-        class="absolute inset-0 z-[3] bg-gradient-to-b from-slate-950/50 via-slate-950/25 to-slate-950/60"
-      />
     </div>
 
     <!-- ====== Center content ====== -->
