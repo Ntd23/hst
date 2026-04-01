@@ -11,137 +11,162 @@
         isScrolled ? 'glass-nav-scrolled' : '',
       ]"
     >
-      <div class="flex items-center gap-2">
-        <NuxtLink :to="menuData?.logo?.home_url || '/'">
-          <img
-            v-if="menuData?.logo?.logo"
-            :src="menuData.logo.logo"
-            :alt="menuData?.logo?.site_title"
-            class="h-7 sm:h-10 w-auto"
-          />
-          <span
-            v-else
-            class="text-xl sm:text-2xl font-black tracking-tighter text-primary"
-          >
-            {{ menuData?.logo?.site_title || "HISOTECH" }}
-          </span>
-        </NuxtLink>
-      </div>
-
-      <ul class="hidden lg:flex items-center gap-1">
-        <li
-          v-for="item in computedNavItems"
-          :key="item.id || item.title"
-          class="relative"
-          @mouseenter="activeDropdown = item.id ?? item.title"
-          @mouseleave="activeDropdown = null"
-        >
-          <template v-if="item.has_children && item.children?.length">
-            <NuxtLink
-              :to="item.url || item.to"
-              class="nav-item-desktop flex items-center"
-            >
-              <span
-                class="nav-item-text"
-                :data-text="item.title || item.label"
-                >{{ item.title || item.label }}</span
-              >
-              <UIcon
-                name="i-heroicons-chevron-down-20-solid"
-                class="w-4 h-4 ml-1 opacity-50 transition-transform duration-200"
-                :class="
-                  activeDropdown === (item.id ?? item.title) ? 'rotate-180' : ''
-                "
-              />
-            </NuxtLink>
-
-            <Transition
-              enter-active-class="transition-all duration-200 ease-out"
-              enter-from-class="opacity-0 translate-y-1"
-              enter-to-class="opacity-100 translate-y-0"
-              leave-active-class="transition-all duration-150 ease-in"
-              leave-from-class="opacity-100 translate-y-0"
-              leave-to-class="opacity-0 translate-y-1"
-            >
-              <ul
-                v-show="activeDropdown === (item.id ?? item.title)"
-                class="nav-dropdown"
-              >
-                <li v-for="child in item.children" :key="child.id">
-                  <NuxtLink :to="child.url" class="nav-dropdown-item">
-                    <UIcon
-                      name="i-heroicons-chevron-right-20-solid"
-                      class="nav-dropdown-icon"
-                    />
-                    <span>{{ child.title }}</span>
-                  </NuxtLink>
-                </li>
-              </ul>
-            </Transition>
-          </template>
-
-          <NuxtLink v-else :to="item.url || item.to" class="nav-item-desktop">
-            <span class="nav-item-text" :data-text="item.title || item.label">{{
-              item.title || item.label
-            }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
-
-      <div class="flex items-center gap-3 lg:gap-4">
-        <div
-          class="hidden md:flex items-center relative bg-slate-100 dark:bg-slate-800 rounded-full p-0.5 border border-slate-200/60 dark:border-slate-700/60"
-        >
-          <div
-            class="absolute top-0.5 h-[calc(100%-4px)] rounded-full bg-white dark:bg-slate-700 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-            :style="{
-              width: 'calc(50% - 2px)',
-              left: locale === 'vi' ? '2px' : 'calc(50% + 2px)',
-            }"
-          />
-          <button
-            v-for="loc in availableLocales"
-            :key="loc.code"
-            class="relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors duration-300"
-            :class="
-              locale === loc.code
-                ? 'text-primary'
-                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
-            "
-            @click="switchLocale(loc.code)"
-          >
-            {{ loc.code.toUpperCase() }}
-          </button>
+      <template v-if="!isReady">
+        <div class="flex items-center gap-3">
+          <div class="h-7 w-28 animate-pulse rounded-xl bg-slate-200/80 sm:h-10 sm:w-36" />
         </div>
 
-        <UButton
-          :to="contactButtonLink"
-          color="primary"
-          variant="solid"
-          size="md"
-          class="hidden md:block rounded-xl font-semibold whitespace-nowrap btn-primary-lift-sm"
-        >
-          {{ $t("nav.contact") }}
-        </UButton>
+        <div class="hidden lg:flex items-center gap-3">
+          <div
+            v-for="index in 4"
+            :key="`nav-skeleton-${index}`"
+            class="h-5 w-16 animate-pulse rounded-lg bg-slate-200/70"
+          />
+        </div>
 
-        <button
-          class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg border border-primary/40 text-[11px] font-bold text-primary hover:bg-primary/10 transition-all duration-200 active:scale-90"
-          @click="switchLocale(locale === 'vi' ? 'en' : 'vi')"
-        >
-          {{ locale === "vi" ? "EN" : "VN" }}
-        </button>
+        <div class="flex items-center gap-3">
+          <div class="hidden md:block h-9 w-20 animate-pulse rounded-full bg-slate-200/70" />
+          <div class="h-9 w-24 animate-pulse rounded-xl bg-slate-200/80" />
+        </div>
+      </template>
 
-        <UButton
-          color="neutral"
-          variant="ghost"
-          :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
-          size="lg"
-          class="lg:hidden"
-          :aria-expanded="isMobileMenuOpen"
-          aria-label="Toggle mobile menu"
-          @click="isMobileMenuOpen = !isMobileMenuOpen"
-        />
-      </div>
+      <template v-else>
+        <div class="flex items-center gap-2">
+          <NuxtLink
+            :to="menuData?.logo?.home_url || '/'"
+            class="block max-w-[170px] shrink-0"
+          >
+            <img
+              v-if="menuData?.logo?.logo && !logoLoadFailed"
+              :src="menuData.logo.logo"
+              :alt="menuData?.logo?.site_title"
+              class="h-7 sm:h-10 max-w-[170px] w-auto object-contain"
+              @error="logoLoadFailed = true"
+            />
+            <span
+              v-else
+              class="text-xl sm:text-2xl font-black tracking-tighter text-primary"
+            >
+              {{ menuData?.logo?.site_title}}
+            </span>
+          </NuxtLink>
+        </div>
+
+        <ul class="hidden lg:flex items-center gap-1">
+          <li
+            v-for="item in computedNavItems"
+            :key="item.id || item.title"
+            class="relative"
+            @mouseenter="activeDropdown = item.id ?? item.title"
+            @mouseleave="activeDropdown = null"
+          >
+            <template v-if="item.has_children && item.children?.length">
+              <NuxtLink
+                :to="item.url || item.to"
+                class="nav-item-desktop flex items-center"
+              >
+                <span
+                  class="nav-item-text"
+                  :data-text="item.title || item.label"
+                  >{{ item.title || item.label }}</span
+                >
+                <UIcon
+                  name="i-heroicons-chevron-down-20-solid"
+                  class="w-4 h-4 ml-1 opacity-50 transition-transform duration-200"
+                  :class="
+                    activeDropdown === (item.id ?? item.title) ? 'rotate-180' : ''
+                  "
+                />
+              </NuxtLink>
+
+              <Transition
+                enter-active-class="transition-all duration-200 ease-out"
+                enter-from-class="opacity-0 translate-y-1"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition-all duration-150 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 translate-y-1"
+              >
+                <ul
+                  v-show="activeDropdown === (item.id ?? item.title)"
+                  class="nav-dropdown"
+                >
+                  <li v-for="child in item.children" :key="child.id">
+                    <NuxtLink :to="child.url" class="nav-dropdown-item">
+                      <UIcon
+                        name="i-heroicons-chevron-right-20-solid"
+                        class="nav-dropdown-icon"
+                      />
+                      <span>{{ child.title }}</span>
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </Transition>
+            </template>
+
+            <NuxtLink v-else :to="item.url || item.to" class="nav-item-desktop">
+              <span class="nav-item-text" :data-text="item.title || item.label">{{
+                item.title || item.label
+              }}</span>
+            </NuxtLink>
+          </li>
+        </ul>
+
+        <div class="flex items-center gap-3 lg:gap-4">
+          <div
+            class="hidden md:flex items-center relative rounded-full border border-slate-200/60 bg-slate-100 p-0.5"
+          >
+            <div
+              class="absolute top-0.5 h-[calc(100%-4px)] rounded-full bg-white shadow-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+              :style="{
+                width: 'calc(50% - 2px)',
+                left: locale === 'vi' ? '2px' : 'calc(50% + 2px)',
+              }"
+            />
+            <button
+              v-for="loc in availableLocales"
+              :key="loc.code"
+              class="relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors duration-300"
+              :class="
+                locale === loc.code
+                  ? 'text-primary'
+                  : 'text-slate-400 hover:text-slate-600'
+              "
+              @click="switchLocale(loc.code)"
+            >
+              {{ loc.code.toUpperCase() }}
+            </button>
+          </div>
+
+          <UButton
+            :to="contactButtonLink"
+            color="primary"
+            variant="solid"
+            size="md"
+            class="hidden md:block rounded-xl font-semibold whitespace-nowrap text-white hover:text-white btn-primary-lift-sm"
+          >
+            {{ $t("nav.contact") }}
+          </UButton>
+
+          <button
+            class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg border border-primary/40 text-[11px] font-bold text-primary hover:bg-primary/10 transition-all duration-200 active:scale-90"
+            @click="switchLocale(locale === 'vi' ? 'en' : 'vi')"
+          >
+            {{ locale === "vi" ? "EN" : "VN" }}
+          </button>
+
+          <UButton
+            color="neutral"
+            variant="ghost"
+            :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
+            size="lg"
+            class="lg:hidden"
+            :aria-expanded="isMobileMenuOpen"
+            aria-label="Toggle mobile menu"
+            @click="isMobileMenuOpen = !isMobileMenuOpen"
+          />
+        </div>
+      </template>
     </div>
 
     <Transition
@@ -154,28 +179,48 @@
     >
       <div
         v-if="isMobileMenuOpen"
-        class="lg:hidden mt-3 glass-panel glass-nav rounded-2xl mx-auto p-5 sm:p-6"
+        class="mobile-menu-panel lg:hidden mt-3 rounded-2xl mx-auto p-5 sm:p-6"
       >
         <ul class="space-y-1">
           <li v-for="item in computedNavItems" :key="item.id || item.title">
             <template v-if="item.has_children && item.children?.length">
-              <div
-                class="nav-item-mobile flex justify-between items-center opacity-80"
+              <button
+                type="button"
+                class="nav-item-mobile nav-item-mobile--toggle w-full justify-between"
+                :class="{
+                  'nav-item-mobile--active':
+                    activeMobileDropdown === (item.id ?? item.title),
+                }"
+                @click="
+                  activeMobileDropdown =
+                    activeMobileDropdown === (item.id ?? item.title)
+                      ? null
+                      : (item.id ?? item.title)
+                "
               >
                 <span>{{ item.title || item.label }}</span>
                 <UIcon
                   name="i-heroicons-chevron-down-20-solid"
-                  class="w-5 h-5"
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="
+                    activeMobileDropdown === (item.id ?? item.title)
+                      ? 'rotate-180'
+                      : ''
+                  "
                 />
-              </div>
+              </button>
               <ul
-                class="pl-4 border-l border-slate-200/50 dark:border-slate-700/50 mt-1 space-y-1"
+                v-show="activeMobileDropdown === (item.id ?? item.title)"
+                class="nav-mobile-submenu"
               >
                 <li v-for="child in item.children" :key="child.id">
                   <NuxtLink
-                    :to="child.url"
-                    class="nav-item-mobile !text-[1rem] !py-2"
-                    @click="isMobileMenuOpen = false"
+                    :to="child.url || child.to"
+                    class="nav-mobile-submenu__link"
+                    @click="
+                      isMobileMenuOpen = false;
+                      activeMobileDropdown = null;
+                    "
                   >
                     {{ child.title }}
                   </NuxtLink>
@@ -186,14 +231,17 @@
               v-else
               :to="item.url || item.to"
               class="nav-item-mobile"
-              @click="isMobileMenuOpen = false"
+              @click="
+                isMobileMenuOpen = false;
+                activeMobileDropdown = null;
+              "
             >
               {{ item.title || item.label }}
             </NuxtLink>
           </li>
         </ul>
         <div
-          class="pt-4 mt-3 border-t border-slate-200/50 dark:border-slate-700/50 grid grid-cols-1 sm:grid-cols-2 gap-3"
+          class="pt-4 mt-3 grid grid-cols-1 gap-3 border-t border-slate-200/50 sm:grid-cols-2"
         >
           <UButton
             :to="contactButtonLink"
@@ -267,6 +315,8 @@ const {
   isScrolled,
   isMobileMenuOpen,
   activeDropdown,
+  activeMobileDropdown,
+  isReady,
   locale,
   availableLocales,
   menuData,
@@ -277,9 +327,17 @@ const {
   contactButtonLink,
   switchLocale,
 } = useAppMenu();
+const logoLoadFailed = ref(false);
 </script>
 
 <style scoped>
+.mobile-menu-panel {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(12px);
+}
+
 .nav-item-desktop {
   display: flex;
   align-items: center;
@@ -347,6 +405,9 @@ const {
   transition: all 0.25s ease;
   position: relative;
   border-left: 3px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
 }
 
 .nav-item-mobile:hover,
@@ -356,6 +417,47 @@ const {
   background: rgba(0, 124, 195, 0.06);
   border-left-color: var(--color-primary);
   padding-left: 1.25rem;
+}
+
+.nav-item-mobile--toggle {
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-item-mobile--active {
+  color: var(--color-primary);
+  font-weight: 600;
+  background: rgba(0, 124, 195, 0.06);
+  border-left-color: var(--color-primary);
+  padding-left: 1.25rem;
+}
+
+.nav-mobile-submenu {
+  margin-top: 0.35rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(0, 124, 195, 0.16);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.nav-mobile-submenu__link {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.75rem;
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-mobile-submenu__link:hover,
+.nav-mobile-submenu__link:active {
+  color: var(--color-primary);
+  background: rgba(0, 124, 195, 0.06);
 }
 
 .nav-login-btn::after {

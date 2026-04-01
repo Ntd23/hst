@@ -9,13 +9,15 @@ export const useMenuStore = defineStore("menu", () => {
 
   async function fetchMenus(locale: string) {
     if (hasData.value && currentLocale.value === locale) {
-      return;
+      return menuData.value;
     }
 
     currentLocale.value = locale;
     menuData.value = await $fetch("/api/menus", {
       query: { locale },
     });
+
+    return menuData.value;
   }
 
   function $reset() {

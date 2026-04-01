@@ -5,7 +5,7 @@
 </style>
 <template>
   <div
-    class="font-sans antialiased text-slate-700 dark:text-slate-200 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300"
+    class="font-sans antialiased text-slate-700 bg-pastel-gradient min-h-screen selection:bg-secondary selection:text-white transition-colors duration-300"
   >
     <div class="menu-top">
       <LayoutAppMenu />

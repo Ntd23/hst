@@ -23,18 +23,11 @@
           class="w-full"
           :class="[isImageRight ? 'lg:order-1' : 'lg:order-2']"
         >
-          <div v-if="sectionData.subtitle" class="section-kicker mb-6" v-html="sectionData.subtitle" />
-
-          <h2
-            v-if="sectionData.title"
-            class="font-space text-3xl font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl xl:text-6xl mb-8"
-            v-html="sectionData.title"
-          />
-
-          <p
-            v-if="sectionData.description"
-            class="text-base sm:text-lg leading-relaxed text-slate-500 mb-10 max-w-2xl"
-            v-html="sectionData.description"
+          <CommonsSectionHeading
+            :title="sectionData.title"
+            :subtitle="sectionData.subtitle"
+            :description="sectionData.description"
+            align="left"
           />
 
           <!-- Premium CTA Button -->
@@ -118,6 +111,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 import { iconName } from "~/utils/iconName";
 
 const props = defineProps<{

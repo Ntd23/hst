@@ -53,8 +53,8 @@ Guard 404 som cho system prefix:
 Trong `app/pages/[...slug].vue`, thu tu map component:
 
 1. Map theo `css_class`:
-   - `page-contact` -> `ContactPage`
-   - `contact` -> `ContactPage`
+   - `page-contact`
+   - `contact`
 2. Map theo `reference_id`:
    - `13` -> `app/pages/website-demo/index.vue`
    - `21` -> `app/pages/website-demos/index.vue`
@@ -62,12 +62,10 @@ Trong `app/pages/[...slug].vue`, thu tu map component:
    - `/contact`
    - `/lien-he`
    - `/lien-he-voi-chung-toi`
-   -> `ContactPage`
 4. Neu khong roi vao case nao -> `MenuFallbackPage`.
 
 Component lien quan:
 
-- `app/components/pages/contact-page.vue`
 - `app/components/pages/menu-fallback.vue`
 
 ## 4) Vi sao co luc thay loading bar, co luc khong

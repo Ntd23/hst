@@ -1,29 +1,12 @@
 <template>
   <section class="services-section relative py-12 overflow-hidden">
     <UContainer class="relative z-10">
-      <!-- Header -->
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: 24 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-        class="text-center mb-12 sm:mb-18"
-      >
-        <div v-if="sectionData?.subtitle" class="inline-flex items-center gap-2 mb-4">
-          <span class="subtitle-pill">
-            <span class="subtitle-dot" />
-            <span class="text-xs font-bold uppercase tracking-widest text-emerald-700" v-html="sectionData.subtitle" />
-          </span>
-        </div>
-        <h2
-          v-if="sectionData?.title"
-          class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.15] tracking-tight"
-          v-html="sectionData.title"
-        />
-        <p
-          v-if="sectionData?.description"
-          class="mt-5 text-gray-500 max-w-2xl mx-auto text-sm sm:text-[15px] leading-relaxed"
-          v-html="sectionData.description"
-        />
+      <CommonsSectionHeading
+        :title="sectionData?.title"
+        :subtitle="sectionData?.subtitle"
+        :description="sectionData?.description"
+      />
+      <div class="text-center">
         <div v-if="sectionData?.button?.label && sectionData?.button?.url" class="mt-8">
           <NuxtLink :to="sectionData.button.url" class="btn-shared-cta">
             <span>{{ sectionData.button.label }}</span>
@@ -41,9 +24,6 @@
         <NuxtLink
           v-if="services[0]"
           :to="services[0].slug ? '/services/' + services[0].slug : '#'"
-          v-motion
-          :initial="featuredInitial"
-          :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: 60 } }"
           class="bento-card bento-featured group relative overflow-hidden h-[340px] lg:h-auto"
         >
           <!-- Full-height image filling the entire box -->
@@ -94,9 +74,6 @@
             v-for="(service, i) in services.slice(1)"
             :key="service.name"
             :to="service.slug ? '/services/' + service.slug : '#'"
-            v-motion
-            :initial="sliderInitial(Number(i))"
-            :visible-once="{ opacity: 1, x: 0, y: 0, transition: { duration: 550, delay: 80 * Number(i), ease: [0.22, 1, 0.36, 1] } }"
             class="bento-card slider-card group relative overflow-hidden h-[260px] lg:h-[320px]"
           >
             <!-- Background Image filling the entire box -->
@@ -136,6 +113,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
+
 const props = defineProps<{
   data?: any
 }>()
@@ -144,8 +123,6 @@ const {
   sectionData,
   services,
   imageLoading,
-  featuredInitial,
-  sliderInitial,
 } = useServicesShortcode(toRef(props, "data"))
 </script>
 
@@ -247,12 +224,10 @@ const {
   background: #f8fafc;
   border-radius: 1.5rem;
   padding: 0 !important; /* Image fills the entire card */
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-shadow: 0 4px 15px rgba(0,0,0,0.04);
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 .bento-card:hover {
-  transform: translateY(-8px);
   box-shadow:
     0 32px 64px -12px rgba(16, 185, 129, 0.2),
     0 10px 30px rgba(0, 0, 0, 0.08);
@@ -331,7 +306,6 @@ const {
   color: #065f46;
   background: white;
   border-radius: 999px;
-  transition: all 0.3s ease;
   box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 .group:hover .cta-pill {

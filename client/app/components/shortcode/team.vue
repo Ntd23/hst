@@ -1,23 +1,10 @@
 <template>
   <section class="team-section relative overflow-hidden py-14 sm:py-18">
     <UContainer class="relative z-10">
-      <div
-        v-if="sectionData.title || sectionData.subtitle"
-        v-motion
-        :initial="{ opacity: 0, y: 22 }"
-        :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-        class="mx-auto mb-10 max-w-3xl text-center"
-      >
-        <div v-if="sectionData.subtitle" class="team-kicker">
-          <span class="team-kicker__dot" />
-          <span v-html="sectionData.subtitle" />
-        </div>
-        <h2
-          v-if="sectionData.title"
-          class="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl"
-          v-html="sectionData.title"
-        />
-      </div>
+      <CommonsSectionHeading
+        :title="sectionData.title"
+        :subtitle="sectionData.subtitle"
+      />
 
       <div class="team-grid">
         <article
@@ -84,6 +71,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
+
 const props = defineProps<{
   data?: any
 }>()
@@ -99,31 +88,8 @@ const { sectionData, team, socialEntries, socialIcon } = useTeamShortcode(
   font-family: var(--font-body, sans-serif);
 }
 .team-section h2,
-.team-section h3,
-.team-kicker {
+.team-section h3 {
   font-family: var(--font-tech, sans-serif);
-}
-
-.team-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid rgba(125, 211, 252, 0.4);
-  color: #0369a1;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  background: white;
-}
-
-.team-kicker__dot {
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: #0ea5e9;
 }
 
 .team-grid {

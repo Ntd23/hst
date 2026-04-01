@@ -2,7 +2,7 @@ import type { MenuItem } from "~~/shared/navigation/types";
 import { flattenMenuItems } from "~~/shared/navigation/menu";
 import { resolveAppLocale } from "~~/shared/i18n/locale";
 import { useMenus } from "~/composables/layout/useMenus";
-import { useLayoutWidgetStore } from "~/stores/layout-widget";
+import { useLayoutWidgets } from "~/composables/layout/useLayoutWidgets";
 
 type ContactInfoItem = {
   title?: string;
@@ -22,20 +22,18 @@ export const useAppMenu = () => {
   const isScrolled = ref(false);
   const isMobileMenuOpen = ref(false);
   const activeDropdown = ref<string | number | null>(null);
+  const activeMobileDropdown = ref<string | number | null>(null);
 
   const { locale, locales: availableLocales, localeCode } = useI18nText();
   const switchLocalePath = useSwitchLocalePath();
-  const { menuData } = useMenus();
-  const layoutWidgetStore = useLayoutWidgetStore();
-
-  const layoutWidgetsAsyncData = useAsyncData(
-    `widgets-layout-menu-${localeCode.value}`,
-    () => layoutWidgetStore.fetchLayoutWidgets(localeCode.value),
-    { dedupe: "defer" }
-  );
-
-  const layoutWidgetData = computed(
-    () => layoutWidgetsAsyncData.data.value ?? layoutWidgetStore.layoutWidgetData
+  const { menuData, pending: menuPending } = useMenus();
+  const { layoutWidgetData, pending: layoutPending } = useLayoutWidgets();
+  const isReady = computed(
+    () =>
+      !menuPending.value &&
+      !layoutPending.value &&
+      Boolean(menuData.value) &&
+      Boolean(layoutWidgetData.value)
   );
 
   const computedNavItems = computed(
@@ -93,6 +91,7 @@ export const useAppMenu = () => {
   const handleResize = () => {
     if (window.innerWidth >= 1024) {
       isMobileMenuOpen.value = false;
+      activeMobileDropdown.value = null;
     }
   };
 
@@ -112,6 +111,8 @@ export const useAppMenu = () => {
     isScrolled,
     isMobileMenuOpen,
     activeDropdown,
+    activeMobileDropdown,
+    isReady,
     locale,
     availableLocales,
     menuData,
