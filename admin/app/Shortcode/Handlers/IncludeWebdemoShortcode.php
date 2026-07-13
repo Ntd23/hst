@@ -12,13 +12,16 @@ class IncludeWebdemoShortcode implements ShortcodeInterface
     {
         return 'include-webdemo';
     }
-    public function handle (array $attrs, string $locale): array
+    public function handle(array $attrs, string $locale): array|string|null
     {
+        $limit = max(1, min(12, (int) ($attrs['limit'] ?? 6)));
+
         $websites = DemoWebsite::query()
             ->whereNull('web_id')
+            ->wherePublished()
             ->with('translations')
             ->orderBy('created_at', 'desc')
-            ->take(6)
+            ->take($limit)
             ->get();
 
         if ($websites->isEmpty()) {
@@ -43,6 +46,8 @@ class IncludeWebdemoShortcode implements ShortcodeInterface
 
         return [
             'locale' => $locale,
+            'title' => $attrs['title'] ?? null,
+            'subtitle' => $attrs['subtitle'] ?? null,
             'items' => $items,
         ];
     }
