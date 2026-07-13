@@ -24,7 +24,7 @@
 
       <ul class="space-y-3">
         <li v-for="(item, idx) in features" :key="idx" class="flex items-start gap-3 text-slate-700">
-          <UIcon name="i-lucide-arrow-right-circle" class="size-5 text-primary" />
+          <CommonsBotbleIcon icon="i-heroicons-arrow-right-circle-20-solid" class="size-5 text-primary" />
           <div>
             <span class="font-medium" v-html="item?.title"></span>
             <p v-if="item?.description" class="text-sm text-slate-500" v-html="item.description"></p>
@@ -36,6 +36,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
+
 const props = defineProps<{
   data?: any
 }>()

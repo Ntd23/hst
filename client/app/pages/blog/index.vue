@@ -35,10 +35,38 @@
         <p class="mt-2 text-slate-500">{{ error.message }}</p>
       </div>
 
-      <div v-else class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div v-else class="space-y-8">
+        <div
+          v-if="hasSearchSidebarWidget"
+          class="lg:hidden"
+        >
+          <CommonsSidebarWidgets :widgets="searchSidebarWidgets" />
+        </div>
+
+        <div
+          v-else-if="showDefaultSidebar"
+          class="rounded-2xl border border-slate-100 bg-white p-1 shadow-sm lg:hidden"
+        >
+          <div class="relative">
+            <CommonsBotbleIcon
+              icon="i-heroicons-magnifying-glass-20-solid"
+              class="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400"
+            />
+            <UInput
+              v-model="searchQuery"
+              color="white"
+              variant="none"
+              :placeholder="searchPlaceholder"
+              class="h-11 w-full pl-9"
+              @keyup.enter="handleSearch"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div class="flex flex-col gap-6 lg:col-span-8">
           <div v-if="!posts.length" class="rounded-2xl border border-slate-100 bg-white py-12 text-center shadow-sm">
-            <UIcon name="i-lucide-inbox" class="mx-auto mb-3 size-12 text-slate-300" />
+            <CommonsBotbleIcon icon="i-lucide-inbox" class="mx-auto mb-3 size-12 text-slate-300" />
             <p class="text-slate-500">{{ emptyPostsLabel }}</p>
           </div>
 
@@ -52,10 +80,11 @@
               <NuxtImg
                 v-if="post.image"
                 :src="post.image"
+                :alt="post.name"
                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-slate-100">
-                <UIcon name="i-lucide-image" class="size-8 text-slate-300" />
+                <CommonsBotbleIcon icon="i-lucide-image" class="size-8 text-slate-300" />
               </div>
 
               <div v-if="post.categories?.length" class="absolute left-4 top-4">
@@ -77,10 +106,10 @@
               <div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
                 <div class="flex items-center text-sm font-semibold tracking-wide text-primary transition-colors group-hover:text-secondary">
                   {{ readMoreLabel }}
-                  <UIcon name="i-lucide-arrow-right" class="ml-1 size-4" />
+                  <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="ml-1 size-4" />
                 </div>
                 <div class="flex items-center text-xs font-medium text-slate-500">
-                  <UIcon name="i-lucide-calendar" class="mr-1 size-3.5" />
+                  <CommonsBotbleIcon icon="i-lucide-calendar" class="mr-1 size-3.5" />
                   {{ formatDate(post.created_at) }}
                 </div>
               </div>
@@ -88,31 +117,89 @@
           </NuxtLink>
 
           <div v-if="pagination && pagination.last_page > 1" class="mt-6 flex justify-center">
-            <UPagination
-              :page="currentPage"
-              :items-per-page="pagination.per_page"
-              :total="pagination.total"
-              :max="5"
-              show-first
-              show-last
-              @update:page="handlePageChange"
-            />
+            <div class="flex items-center gap-2">
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="currentPage <= 1"
+                class="h-9 w-9 justify-center rounded-lg p-0"
+                @click="handlePageChange(1)"
+              >
+                <CommonsBotbleIcon icon="i-lucide-chevrons-left" class="size-4" />
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="currentPage <= 1"
+                class="h-9 w-9 justify-center rounded-lg p-0"
+                @click="handlePageChange(currentPage - 1)"
+              >
+                <CommonsBotbleIcon icon="i-lucide-chevron-left" class="size-4" />
+              </UButton>
+
+              <UButton
+                v-for="page in visiblePages"
+                :key="page"
+                :color="page === currentPage ? 'primary' : 'neutral'"
+                :variant="page === currentPage ? 'solid' : 'outline'"
+                class="h-9 min-w-9 justify-center rounded-lg px-3"
+                @click="handlePageChange(page)"
+              >
+                {{ page }}
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="currentPage >= pagination.last_page"
+                class="h-9 w-9 justify-center rounded-lg p-0"
+                @click="handlePageChange(currentPage + 1)"
+              >
+                <CommonsBotbleIcon icon="i-lucide-chevron-right" class="size-4" />
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="currentPage >= pagination.last_page"
+                class="h-9 w-9 justify-center rounded-lg p-0"
+                @click="handlePageChange(pagination.last_page)"
+              >
+                <CommonsBotbleIcon icon="i-lucide-chevrons-right" class="size-4" />
+              </UButton>
+            </div>
           </div>
         </div>
 
         <aside class="flex flex-col gap-8 lg:col-span-4">
-          <CommonsSidebarWidgets v-if="sidebarWidgets.length" :widgets="sidebarWidgets" />
+          <template v-if="sidebarWidgets.length">
+            <CommonsSidebarWidgets
+              class="hidden lg:block"
+              :widgets="sidebarWidgets"
+            />
+            <CommonsSidebarWidgets
+              v-if="remainingSidebarWidgets.length"
+              class="lg:hidden"
+              :widgets="remainingSidebarWidgets"
+            />
+          </template>
           <template v-else>
-            <div class="rounded-2xl border border-slate-100 bg-white p-1 shadow-sm">
-              <UInput
-                v-model="searchQuery"
-                icon="i-heroicons-magnifying-glass-20-solid"
-                color="white"
-                variant="none"
-                :placeholder="searchPlaceholder"
-                class="h-11 w-full"
-                @keyup.enter="handleSearch"
-              />
+            <div class="hidden rounded-2xl border border-slate-100 bg-white p-1 shadow-sm lg:block">
+              <div class="relative">
+                <CommonsBotbleIcon
+                  icon="i-heroicons-magnifying-glass-20-solid"
+                  class="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400"
+                />
+                <UInput
+                  v-model="searchQuery"
+                  color="white"
+                  variant="none"
+                  :placeholder="searchPlaceholder"
+                  class="h-11 w-full pl-9"
+                  @keyup.enter="handleSearch"
+                />
+              </div>
             </div>
 
             <div v-if="categories.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
@@ -124,7 +211,7 @@
                 <li v-for="cat in categories" :key="cat.id">
                   <div @click="toggleCategory(cat.slug)" class="group flex cursor-pointer items-center justify-between">
                     <div class="flex items-center gap-2 text-slate-600 transition-colors group-hover:text-primary">
-                      <UIcon name="i-lucide-arrow-right" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
+                      <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-3 text-slate-300 transition-colors group-hover:text-primary" />
                       <span :class="{ 'font-bold text-primary': selectedCategory === cat.slug }" class="text-[15px] decoration-primary/30 underline-offset-4 hover:underline">{{ decodeHtml(cat.name) }}</span>
                     </div>
                     <span class="text-xs font-semibold text-slate-400">({{ cat.posts_count }})</span>
@@ -149,6 +236,7 @@
                     <NuxtImg
                       v-if="recent.image"
                       :src="recent.image"
+                      :alt="recent.name"
                       class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
@@ -183,12 +271,14 @@
             </div>
           </template>
         </aside>
+        </div>
       </div>
     </UContainer>
   </main>
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsAppBreadcrumb from "~/components/commons/navigation/AppBreadcrumb.vue";
 import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets.vue";
 
@@ -238,6 +328,29 @@ const recentPostsLabel = computed(() =>
   translate("blogListing.recentPosts", localeCode.value === "en" ? "Recent posts" : "Bài viết mới")
 );
 const tagsLabel = computed(() => translate("blogDetail.tags", localeCode.value === "en" ? "Tags" : "Thẻ"));
+const showDefaultSidebar = computed(() => !sidebarWidgets.value.length);
+const searchSidebarWidgets = computed(() =>
+  sidebarWidgets.value.filter((widget: any) => widget.widget === "blog-search")
+);
+const remainingSidebarWidgets = computed(() =>
+  sidebarWidgets.value.filter((widget: any) => widget.widget !== "blog-search")
+);
+const hasSearchSidebarWidget = computed(() => searchSidebarWidgets.value.length > 0);
+const visiblePages = computed(() => {
+  if (!pagination.value?.last_page) {
+    return [];
+  }
+
+  const totalPages = pagination.value.last_page;
+  const start = Math.max(1, currentPage.value - 2);
+  const end = Math.min(totalPages, start + 4);
+  const adjustedStart = Math.max(1, end - 4);
+
+  return Array.from(
+    { length: end - adjustedStart + 1 },
+    (_, index) => adjustedStart + index
+  );
+});
 
 const blogListingSchema = computed(() => ({
   "@context": "https://schema.org",

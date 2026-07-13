@@ -19,9 +19,9 @@
             :alt="item.label || 'Icon'"
             class="mt-0.5 h-4 w-4 shrink-0 object-contain"
           />
-          <UIcon
+          <CommonsBotbleIcon
             v-else-if="item.icon"
-            :name="iconName(item.icon)"
+            :icon="item.icon"
             class="mt-0.5 size-4 shrink-0 text-primary"
           />
           <span class="leading-relaxed" v-html="item.label" />
@@ -32,8 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import { iconName } from "~/utils/iconName";
-
 const props = defineProps<{
   data?: any;
 }>();

@@ -1,3 +1,7 @@
+# Description: Defines the single Nuxt client package workspace and allowed dependency build scripts.
+packages:
+  - .
+
 allowBuilds:
   '@parcel/watcher': false
   esbuild: false

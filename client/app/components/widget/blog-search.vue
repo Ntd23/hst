@@ -5,19 +5,25 @@
     </h4>
 
     <form class="rounded-2xl border border-slate-200 bg-white p-1" @submit.prevent="handleSubmit">
-      <UInput
-        v-model="query"
-        icon="i-heroicons-magnifying-glass-20-solid"
-        color="white"
-        variant="none"
-        :placeholder="content.placeholder || 'Search...'"
-        class="h-11 w-full"
-      />
+      <div class="relative">
+        <CommonsBotbleIcon
+          icon="i-heroicons-magnifying-glass-20-solid"
+          class="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-400"
+        />
+        <UInput
+          v-model="query"
+          color="white"
+          variant="none"
+          :placeholder="content.placeholder || 'Search...'"
+          class="h-11 w-full pl-9"
+        />
+      </div>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import { useDebounceFn } from "@vueuse/core";
 
 const props = defineProps<{ data?: any }>();

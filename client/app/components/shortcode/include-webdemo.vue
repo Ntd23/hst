@@ -11,8 +11,12 @@
           compact
         />
         <div class="flex gap-2 mt-1 sm:mt-0">
-          <UButton color="neutral" variant="outline" icon="i-lucide-chevron-left" square class="btn-icon-circle btn-icon-circle-outline" />
-          <UButton color="primary" variant="solid" icon="i-lucide-chevron-right" square class="btn-icon-circle btn-icon-circle-primary" />
+          <UButton color="neutral" variant="outline" square class="btn-icon-circle btn-icon-circle-outline">
+            <CommonsBotbleIcon icon="i-lucide-chevron-left" class="size-4" />
+          </UButton>
+          <UButton color="primary" variant="solid" square class="btn-icon-circle btn-icon-circle-primary">
+            <CommonsBotbleIcon icon="i-lucide-chevron-right" class="size-4" />
+          </UButton>
         </div>
       </div>
 
@@ -34,8 +38,10 @@
             <template v-if="product.img_full || product.img_featured">
               <NuxtImg
                 :src="product.img_full || product.img_featured"
+
                 loading="lazy"
                 class="webdemo-preview__image absolute inset-x-0 top-0 z-10 w-full h-auto min-h-full object-cover"
+
               />
             </template>
             <div v-else class="text-slate-400">{{ $t('common.noImage') }}</div>
@@ -49,7 +55,7 @@
                 </h3>
               </div>
               <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 ml-2">
-                <UIcon name="i-lucide-arrow-up-right" class="size-4 sm:size-5" />
+                <CommonsBotbleIcon icon="i-lucide-arrow-up-right" class="size-4 sm:size-5" />
               </div>
             </div>
           </div>
@@ -139,6 +145,7 @@ h2, h3 {
 </style>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 
 type WebdemoProduct = {

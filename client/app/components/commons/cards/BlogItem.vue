@@ -1,7 +1,11 @@
 ﻿<template>
   <div>
     <NuxtLink :to="`/blog/${props.slug}`">
-      <NuxtImg :src="props.image" class="h-52 w-full object-cover" />
+      <NuxtImg
+        :src="props.image"
+        :alt="props.title || 'Blog post '"
+        class="h-52 w-full object-cover"
+      />
     </NuxtLink>
     <h3 class="mt-4 line-clamp-2 text-lg font-bold leading-snug">
       {{ props.title }}
@@ -13,10 +17,10 @@
         class="flex rounded bg-blue-600 px-6 py-2 text-sm font-semibold uppercase text-white transition hover:bg-blue-700"
       >
         <span>{{ blogReadMoreLabel }}</span>
-        <UIcon name="solar:arrow-right-outline" class="size-5" />
+        <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
       </NuxtLink>
       <div v-if="formattedDate" class="flex items-center gap-2 text-sm text-gray-500">
-        <UIcon name="solar:calendar-broken" class="size-5" />
+        <CommonsBotbleIcon icon="i-lucide-calendar" class="size-5" />
         <span>{{ formattedDate }}</span>
       </div>
     </div>
@@ -26,6 +30,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
+
 const props = defineProps<{
   title: string;
   image: string;

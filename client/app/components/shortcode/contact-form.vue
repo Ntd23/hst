@@ -18,7 +18,7 @@
                 class="flex items-start gap-4"
               >
                 <div
-                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-primary"
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 text-primary"
                 >
                   <img
                     v-if="item.icon_image"
@@ -26,7 +26,7 @@
                     :alt="item.title || 'Icon'"
                     class="h-7 w-7 object-contain"
                   />
-                  <UIcon v-else :name="iconName(item.icon)" class="size-7" />
+                  <CommonsBotbleIcon v-else :icon="item.icon" class="size-7" />
                 </div>
                 <div>
                   <h3 class="text-lg font-bold text-slate-900">
@@ -76,7 +76,7 @@
                 role="status"
               >
                 <div class="contact-success-state__icon">
-                  <UIcon name="solar:check-circle-bold" class="size-9" />
+                  <CommonsBotbleIcon icon="i-heroicons-check-circle-20-solid" class="size-9" />
                 </div>
                 <div class="space-y-2">
                   <h3 class="text-2xl font-bold text-slate-900">
@@ -335,7 +335,7 @@
 </template>
 
 <script setup lang="ts">
-import { iconName } from "~/utils/iconName";
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 
 const props = defineProps<{
   data?: any;
