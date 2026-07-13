@@ -133,11 +133,11 @@ jobs:
           printf '%s\n' "${SSH_KEY}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          echo "Adding server host key"
-          ssh-keyscan -T 20 -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts
+          echo "Testing SSH connection"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -i ~/.ssh/deploy_key -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "echo SSH connection OK"
 
           echo "Starting remote deploy"
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i ~/.ssh/deploy_key -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "bash -se" <<EOF
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -i ~/.ssh/deploy_key -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "bash -se" <<EOF
           set -euo pipefail
 
           echo "Deploy path: ${DEPLOY_PATH}"
