@@ -34,6 +34,10 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   ssr: true,
+  sourcemap: {
+    server: true,
+    client: true,
+  },
 
   devServer: {
     host: DEV_HOST,
@@ -47,6 +51,9 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
 
   vite: {
+    define: {
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: true,
+    },
     server: {
       allowedHosts: ["hst.test"],
       // Avoid HMR/WebSocket auto-detection issues on Windows custom hosts.

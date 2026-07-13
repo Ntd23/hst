@@ -131,10 +131,10 @@
                   currentItem.button_label
                 }}</span>
                 <span class="hero-cta-icon">
-                  <UIcon
-                    name="i-heroicons-arrow-right-20-solid"
-                    class="w-4 h-4"
-                  />
+                    <CommonsBotbleIcon
+                      icon="i-heroicons-arrow-right-20-solid"
+                      class="w-4 h-4"
+                    />
                 </span>
               </button>
             </NuxtLink>
@@ -158,6 +158,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 const props = defineProps<{
   data?: any
 }>()

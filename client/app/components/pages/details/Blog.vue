@@ -90,7 +90,7 @@
                   </div>
 
                   <div class="flex items-center gap-2 rounded-2xl border border-slate-200/80 bg-white px-4 py-3">
-                    <UIcon name="solar:calendar-broken" class="size-4 text-primary" />
+                    <CommonsBotbleIcon icon="i-lucide-calendar" class="size-4 text-primary" />
                     <span>{{ post.formatted_published_at }}</span>
                   </div>
                 </div>
@@ -136,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsAppBreadcrumb from "~/components/commons/navigation/AppBreadcrumb.vue";
 import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets.vue";
 

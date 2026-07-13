@@ -1,7 +1,11 @@
 ﻿<template>
-  <div v-if="ready" class="container grid grid-cols-12 gap-10">
-    <div class="relative col-span-12 lg:col-span-8" v-motion="leftMotion">
-      <NuxtImg :src="posts.post_1.image" class="h-[450px] w-full object-cover" />
+  <div class="container grid grid-cols-12 gap-10">
+    <div class="relative col-span-12 lg:col-span-8">
+      <NuxtImg
+        :src="posts.post_1.image"
+        :alt="posts.post_1.name || 'Featured blog post image'"
+        class="h-[450px] w-full object-cover"
+      />
 
       <div class="absolute right-0 top-[400px] w-[85%] bg-[#e9e4d6] p-8 shadow-lg">
         <h2 class="text-3xl font-extrabold leading-tight">
@@ -18,11 +22,11 @@
             class="flex rounded bg-blue-600 px-6 py-2 text-sm font-semibold uppercase text-white transition hover:bg-blue-700"
           >
             <span>{{ readMoreLabel }}</span>
-            <UIcon name="solar:arrow-right-outline" class="size-5" />
+            <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
           </NuxtLink>
 
           <div class="flex items-center gap-2 text-sm text-gray-500">
-            <UIcon name="solar:calendar-broken" class="size-5" />
+            <CommonsBotbleIcon icon="i-lucide-calendar" class="size-5" />
             <span>{{ formattedPrimaryDate }}</span>
           </div>
         </div>
@@ -30,7 +34,7 @@
     </div>
 
     <div class="col-span-12 space-y-8 lg:col-span-4">
-      <div v-for="(item, i) in postsRight" :key="item.id" v-motion="cardMotion(i)">
+      <div v-for="item in postsRight" :key="item.id">
         <CommonsBlogItem
           :title="item.name"
           :image="item.image"
@@ -43,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsBlogItem from "~/components/commons/cards/BlogItem.vue";
 
 const props = defineProps({
@@ -54,7 +59,7 @@ const props = defineProps({
 
 const { localeCode, translate } = useI18nText();
 const { formatDate } = useCommonCardText();
-const { posts, postsRight, preview, ready, leftMotion, cardMotion } =
+const { posts, postsRight, preview } =
   useBlogPostFeaturedShortcode(toRef(props, "data"));
 
 const readMoreLabel = computed(() =>

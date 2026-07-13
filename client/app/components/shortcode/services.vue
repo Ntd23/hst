@@ -11,7 +11,7 @@
           <NuxtLink :to="sectionData.button.url" class="btn-shared-cta">
             <span>{{ sectionData.button.label }}</span>
             <span class="btn-shared-cta__icon">
-              <UIcon name="i-lucide-arrow-right" class="size-4" />
+              <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4" />
             </span>
           </NuxtLink>
         </div>
@@ -45,7 +45,7 @@
 
           <!-- Badge -->
           <div class="absolute top-4 left-4 featured-badge z-10">
-            <UIcon name="i-lucide-award" class="size-3 text-amber-500" />
+            <CommonsBotbleIcon icon="i-heroicons-trophy-20-solid" class="size-3 text-amber-500" />
             <span class="text-[9px] uppercase font-black tracking-widest text-amber-700">{{ $t('services.premium') }}</span>
           </div>
 
@@ -62,7 +62,7 @@
             <span class="btn-shared-cta">
               <span>{{ $t('services.explore') }}</span>
               <span class="btn-shared-cta__icon">
-                <UIcon name="i-lucide-arrow-right" class="size-3.5" />
+                <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-3.5" />
               </span>
             </span>
           </div>
@@ -113,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 
 const props = defineProps<{

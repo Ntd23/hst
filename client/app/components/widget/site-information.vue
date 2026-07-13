@@ -25,9 +25,9 @@
           :alt="item.title || 'Icon'"
           class="mt-1 h-4 w-4 shrink-0 object-contain"
         />
-        <UIcon
+        <CommonsBotbleIcon
           v-else-if="item.icon"
-          :name="iconName(item.icon)"
+          :icon="item.icon"
           class="mt-1 size-4 shrink-0 text-primary"
         />
         <div>
@@ -55,15 +55,13 @@
           :alt="social.label || social.network || 'Social icon'"
           class="h-4 w-4 object-contain"
         />
-        <UIcon v-else :name="iconName(social.icon)" class="size-4" />
+        <CommonsBotbleIcon v-else :icon="social.icon" class="size-4" />
       </ULink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { iconName } from "~/utils/iconName";
-
 const props = defineProps<{
   data?: any;
 }>();

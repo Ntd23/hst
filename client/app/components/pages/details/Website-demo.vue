@@ -55,21 +55,21 @@
           :to="dataWeb.url_client"
         >
           <span>{{ webDemoLabel }}</span>
-          <UIcon name="solar:arrow-right-linear" class="size-5" />
+          <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
         </NuxtLink>
         <NuxtLink
           class="flex translate-y-0 items-center space-x-2 rounded-xl border border-primary/20 bg-white px-8 py-3 font-bold text-primary shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-md dark:bg-slate-800"
           :to="dataWeb.url_admin"
         >
           <span>{{ adminDemoLabel }}</span>
-          <UIcon name="solar:arrow-right-linear" class="size-5" />
+          <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
         </NuxtLink>
         <NuxtLink
           class="flex translate-y-0 items-center space-x-2 rounded-xl bg-slate-900 px-8 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600"
           :to="{ path: '/contact', query: { slug: route.params.detail } }"
         >
           <span>{{ contactNowLabel }}</span>
-          <UIcon name="solar:arrow-right-linear" class="size-5" />
+          <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
         </NuxtLink>
       </div>
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
@@ -100,7 +100,7 @@
                   {{ lastUpdatedLabel }}
                 </div>
                 <div class="flex items-center font-medium text-slate-800 dark:text-slate-200">
-                  <UIcon name="solar:calendar-broken" class="mx-2 size-5" />
+                  <CommonsBotbleIcon icon="i-lucide-calendar" class="mx-2 size-5" />
                   {{ dataWeb.formatted_date }}
                 </div>
               </div>
@@ -146,6 +146,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsProductItem from "~/components/commons/cards/ProductItem.vue";
 
 const props = defineProps<{

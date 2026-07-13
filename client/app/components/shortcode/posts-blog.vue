@@ -1,26 +1,15 @@
 ﻿<template>
   <div class="container py-10">
     <h3
-      v-if="ready"
-      v-motion
-      :initial="{ opacity: 0, y: -30 }"
-      :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
       class="py-10 text-4xl font-semibold leading-snug text-gray-900 transition-colors"
     >
       {{ sectionData.title }}
     </h3>
 
-    <div v-if="ready" class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div
-        v-for="(item, i) in posts"
+        v-for="item in posts"
         :key="item.id"
-        v-motion
-        :initial="{ opacity: 0, y: 40 }"
-        :visible-once="{
-          opacity: 1,
-          y: 0,
-          transition: { duration: 600, delay: i * 120 },
-        }"
       >
         <CommonsBlogItem
           :title="item.name"
@@ -43,7 +32,7 @@ const props = defineProps({
   },
 });
 
-const { sectionData, posts, ready } = usePostsBlogShortcode(
+const { sectionData, posts } = usePostsBlogShortcode(
   toRef(props, "data")
 );
 </script>

@@ -17,7 +17,7 @@
               to="/"
               class="flex items-center gap-1 font-medium transition-colors duration-200 hover:text-primary"
             >
-              <UIcon name="i-lucide-home" class="size-4" />
+              <CommonsBotbleIcon icon="i-lucide-home" class="size-4" />
               <span>{{ resolvedHomeLabel }}</span>
             </NuxtLink>
           </li>
@@ -27,7 +27,7 @@
             :key="index"
             class="flex items-center gap-1.5"
           >
-            <UIcon name="i-lucide-chevron-right" class="size-4 text-slate-300" />
+            <CommonsBotbleIcon icon="i-lucide-chevron-right" class="size-4 text-slate-300" />
             <NuxtLink
               v-if="item.to"
               :to="item.to"
@@ -49,6 +49,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
+
 interface BreadcrumbItem {
   label: string;
   to?: string;

@@ -10,9 +10,6 @@
         <article
           v-for="(member, i) in team"
           :key="member.id || member.name || i"
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible-once="{ opacity: 1, y: 0, transition: { duration: 560, delay: Number(i) * 60 } }"
           class="member-bento group"
         >
           <div class="bento-main__media">
@@ -24,7 +21,7 @@
               loading="lazy"
             />
             <div v-else class="bento-main__fallback">
-              <UIcon name="i-lucide-user-round" class="size-8 text-white/90" />
+              <CommonsBotbleIcon icon="i-lucide-user-round" class="size-8 text-white/90" />
             </div>
 
             <div class="bento-main__overlay opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
@@ -39,13 +36,13 @@
                 class="bento-social"
                 :aria-label="social.name"
               >
-                <UIcon :name="socialIcon(social.name)" class="size-3.5" />
+                <CommonsBotbleIcon :icon="socialIcon(social.name)" class="size-3.5" />
               </a>
             </div>
 
             <div class="bento-main__content p-3 sm:p-4">
               <div v-if="member.location" class="bento-location mb-1">
-                <UIcon name="i-lucide-map-pinned" class="size-3" />
+                <CommonsBotbleIcon icon="i-lucide-map-pinned" class="size-3" />
                 <span class="text-[9px]">{{ member.location }}</span>
               </div>
 
@@ -71,6 +68,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 
 const props = defineProps<{

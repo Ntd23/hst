@@ -1,49 +1,25 @@
 <template>
-  <div
-    v-if="pending || !isReady || !isBootReady"
-    class="app-widget-footer-skeleton"
-    aria-hidden="true"
-  >
-    <UContainer class="app-widget-footer-skeleton__inner">
-      <div class="app-widget-footer-skeleton__hero" />
-      <div class="app-widget-footer-skeleton__grid">
-        <div
-          v-for="index in 3"
-          :key="`footer-skeleton-${index}`"
-          class="app-widget-footer-skeleton__card"
-        />
-      </div>
-    </UContainer>
-  </div>
-
   <footer
-    v-else
     class="app-widget-footer"
     :style="footerBackgroundStyle"
   >
     <div class="app-widget-footer__noise" aria-hidden="true" />
     <UContainer class="app-widget-footer__inner">
-      <section
-        v-if="newsletterContent"
-        class="footer-card footer-card--newsletter"
-      >
+      <section class="footer-card footer-card--newsletter">
         <div class="footer-card__glow" aria-hidden="true" />
         <div class="footer-newsletter">
           <div class="footer-newsletter__copy">
             <p
-              v-if="newsletterContent.subtitle"
               class="footer-kicker"
-              v-html="newsletterContent.subtitle"
+              v-html="resolvedNewsletterContent.subtitle"
             />
             <h2
-              v-if="newsletterContent.title"
               class="footer-newsletter__title"
-              v-html="newsletterContent.title"
+              v-html="resolvedNewsletterContent.title"
             />
             <p
-              v-if="newsletterContent.description"
               class="footer-newsletter__description"
-              v-html="newsletterContent.description"
+              v-html="resolvedNewsletterContent.description"
             />
           </div>
 
@@ -59,7 +35,7 @@
                 role="status"
               >
                 <div class="footer-newsletter__success-icon">
-                  <UIcon name="solar:check-circle-bold" class="size-6" />
+                  <CommonsBotbleIcon icon="i-heroicons-check-circle-20-solid" class="size-6" />
                 </div>
                 <div class="footer-newsletter__success-copy">
                   <p class="footer-newsletter__success-title">
@@ -183,9 +159,9 @@
                       :alt="item.label || 'Icon'"
                       class="h-4 w-4 object-contain"
                     />
-                    <UIcon
+                    <CommonsBotbleIcon
                       v-else
-                      :name="iconName(item.icon)"
+                      :icon="item.icon"
                       class="size-4"
                     />
                   </span>
@@ -212,10 +188,7 @@
         </article>
       </section>
 
-      <section
-        v-if="copyrightText || socials.length"
-        class="footer-bottom"
-      >
+      <section class="footer-bottom">
         <p class="footer-bottom__copyright">
           {{ copyrightText }}
         </p>
@@ -234,7 +207,7 @@
               :alt="social.label || social.network || 'Social icon'"
               class="h-4 w-4 object-contain"
             />
-            <UIcon v-else :name="iconName(social.icon)" class="size-4" />
+            <CommonsBotbleIcon v-else :icon="social.icon" class="size-4" />
           </NuxtLink>
         </div>
       </section>
@@ -244,7 +217,6 @@
 
 <script setup lang="ts">
 import { useAppWidget } from "~/composables/layout/useAppWidget";
-import { iconName } from "~/utils/iconName";
 
 const {
   pending,
@@ -255,7 +227,7 @@ const {
   copyrightText,
   socials,
 } = useAppWidget();
-const { isBootReady } = useAppBoot();
+useAppBoot();
 const {
   newsletterStore,
   email: newsletterEmail,
@@ -266,29 +238,8 @@ const {
   resetForm: resetNewsletterForm,
 } = useNewsletterWidgetForm();
 
-if (import.meta.dev) {
-  watchEffect(() => {
-    console.log("Rendering footer widgets:", {
-      newsletter: newsletterWidget.value
-        ? {
-            widget: newsletterWidget.value.meta?.widget,
-            position: newsletterWidget.value.meta?.position,
-          }
-        : null,
-      content: orderedContentWidgets.value.map((widget, index) => ({
-        widget: widget.meta?.widget,
-        position: widget.meta?.position ?? index,
-        hasData: Boolean(widget.data),
-      })),
-      bottom: {
-        hasCopyright: Boolean(copyrightText.value),
-        socialsCount: socials.value.length,
-      },
-    });
-  });
-}
-
 const newsletterContent = computed(() => newsletterWidget.value?.data || null);
+const resolvedNewsletterContent = computed(() => newsletterContent.value || {});
 
 const footerBackgroundStyle = computed(() => {
   const backgroundImage = footerSettings.value?.background_image;

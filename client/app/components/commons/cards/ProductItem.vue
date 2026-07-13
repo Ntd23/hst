@@ -23,6 +23,7 @@
       <div class="group relative h-56 overflow-hidden">
         <NuxtImg
           :src="props.image"
+          :alt="props.title || 'Product image'"
           class="absolute left-0 top-0 w-full transition-all duration-[5500ms] ease-linear group-hover:top-[-800%]"
         />
       </div>
@@ -76,7 +77,7 @@
           </span>
         </NuxtLink>
         <div v-if="formattedDate" class="flex items-center text-xs text-slate-400">
-          <UIcon name="solar:calendar-broken" class="size-5" />
+          <CommonsBotbleIcon icon="i-lucide-calendar" class="size-5" />
           {{ formattedDate }}
         </div>
       </div>
@@ -85,13 +86,14 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
+
 const props = defineProps<{
   title: string;
   image: string;
   slug: string;
   date?: string;
 }>();
-
 const { byLabel, detailLabel, formatDate } = useCommonCardText();
 const formattedDate = computed(() => formatDate(props.date));
 </script>

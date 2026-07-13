@@ -31,8 +31,8 @@
               >
                 <span class="faq-mobile-item__index">0{{ Number(idx) + 1 }}</span>
                 <span class="faq-mobile-item__question" v-html="item.question" />
-                <UIcon
-                  name="i-lucide-chevron-down"
+                <CommonsBotbleIcon
+                  icon="i-lucide-chevron-down"
                   class="faq-mobile-item__chevron"
                   :class="{ 'rotate-180': activeFaq?.id === item.id }"
                 />
@@ -51,9 +51,6 @@
           <div
             v-for="(item, idx) in faqs"
             :key="item.id || item.question"
-            v-motion
-            :initial="{ opacity: 0, x: -30 }"
-            :visible-once="{ opacity: 1, x: 0, transition: { duration: 600, delay: Number(idx) * 100 } }"
             class="question-node group"
             :class="{ 'is-active': activeFaq?.id === item.id }"
             @mouseenter="setActiveFaq(item)"
@@ -68,7 +65,7 @@
                 v-html="item.question"
               />
               <div class="node-arrow ml-auto translate-x-4 text-primary opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
-                <UIcon name="i-lucide-arrow-right" class="size-6" />
+                <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-6" />
               </div>
             </div>
           </div>
@@ -94,8 +91,8 @@
                   class="absolute -right-6 -top-12 z-20 hidden h-36 w-36 flex-col justify-center rounded-3xl border border-white/80 bg-white/60 p-5 shadow-2xl backdrop-blur-2xl animate-float-spin sm:flex lg:-right-12 lg:-top-20"
                 >
                   <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-indigo-600 text-white shadow-lg shadow-primary/20">
-                    <UIcon
-                      :name="iconName(sectionData.floating_block.icon || 'ti ti-24-hours')"
+                    <CommonsBotbleIcon
+                      :icon="sectionData.floating_block.icon || 'ti ti-24-hours'"
                       class="size-5 text-white"
                     />
                   </div>
@@ -120,7 +117,7 @@
                   class="h-full w-full object-cover grayscale-[0.2]"
                 />
                 <div v-else class="flex h-full w-full items-center justify-center bg-slate-900">
-                  <UIcon name="i-lucide-help-circle" class="size-20 text-slate-800" />
+                  <CommonsBotbleIcon icon="i-lucide-help-circle" class="size-20 text-slate-800" />
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/40 to-transparent" />
               </div>
@@ -138,8 +135,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
-import { iconName } from "~/utils/iconName";
 
 const props = defineProps<{
   data?: any;

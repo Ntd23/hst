@@ -32,10 +32,10 @@
             <div class="highlight-card h-full rounded-[2.25rem] p-6 sm:p-8 lg:p-10 relative group transition-all duration-700">
               <!-- Rating Stars -->
               <div class="flex gap-1 mb-2 justify-center"> 
-                <UIcon 
+                <CommonsBotbleIcon
                   v-for="star in 5" 
                   :key="star" 
-                  :name="star <= getRating(item) ? 'i-heroicons-star-20-solid' : 'i-heroicons-star'"
+                  :icon="star <= getRating(item) ? 'i-heroicons-star-20-solid' : 'i-heroicons-star'"
                   class="size-4 transition-transform duration-500"
                   :class="[star <= getRating(item) ? 'text-amber-400 scale-110' : 'text-slate-200']"
                 />
@@ -61,11 +61,11 @@
                   <NuxtImg
                     v-if="item.image"
                     :src="item.image"
-                    :alt="item.name"
-                    class="w-14 h-14 sm:w-16 sm:h-16 rounded-[1rem] object-cover shadow-2xl border-4 border-white transition-all duration-700 active-author-img"
-                  />
+                  :alt="item.name"
+                  class="w-14 h-14 sm:w-16 sm:h-16 rounded-[1rem] object-cover shadow-2xl border-4 border-white transition-all duration-700 active-author-img"
+                />
                   <div v-else class="w-14 h-14 sm:w-16 sm:h-16 rounded-[1rem] bg-indigo-50 border-2 border-white flex items-center justify-center">
-                    <UIcon name="i-lucide-user" class="size-6 text-indigo-300" />
+                    <CommonsBotbleIcon icon="i-lucide-user" class="size-6 text-indigo-300" />
                   </div>
                 </div>
                 <div>
@@ -95,6 +95,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 
 const props = defineProps<{
