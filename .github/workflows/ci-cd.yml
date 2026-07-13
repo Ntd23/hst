@@ -19,7 +19,7 @@ concurrency:
 
 env:
   NODE_VERSION: "22"
-  PNPM_VERSION: "9"
+  PNPM_VERSION: "11.7.0"
   PHP_VERSION: "8.3"
   CLIENT_DIR: client
   ADMIN_DIR: admin
