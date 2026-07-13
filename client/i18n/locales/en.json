@@ -161,6 +161,8 @@
             },
     "common":  {
                    "noImage":  "No image",
+                   "close":  "Close",
+                   "openWebsite":  "Open website",
                    "service":  "Service",
                    "defaultCategory":  "News",
                    "viewAllNews":  "View all news"

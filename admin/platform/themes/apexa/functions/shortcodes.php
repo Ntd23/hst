@@ -6,6 +6,7 @@ use Botble\Base\Forms\FieldOptions\CoreIconFieldOption;
 use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
 use Botble\Base\Forms\FieldOptions\HtmlFieldOption;
 use Botble\Base\Forms\FieldOptions\MediaImageFieldOption;
+use Botble\Base\Forms\FieldOptions\NumberFieldOption;
 use Botble\Base\Forms\FieldOptions\OnOffFieldOption;
 use Botble\Base\Forms\FieldOptions\TextareaFieldOption;
 use Botble\Base\Forms\FieldOptions\TextFieldOption;
@@ -15,6 +16,7 @@ use Botble\Base\Forms\Fields\ColorField;
 use Botble\Base\Forms\Fields\CoreIconField;
 use Botble\Base\Forms\Fields\HtmlField;
 use Botble\Base\Forms\Fields\MediaImageField;
+use Botble\Base\Forms\Fields\NumberField;
 use Botble\Base\Forms\Fields\OnOffField;
 use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\Fields\TextField;
@@ -904,7 +906,49 @@ app()->booted(function (): void {
     });
 
 
-    //web demo
+    // Web demos used by the Nuxt homepage. This shortcode still needs to be
+    // registered here so the CMS editor can resolve and edit its attributes.
+    Shortcode::register(
+        'include-webdemo',
+        __('Homepage Web Demos'),
+        __('Display the latest web demos on the homepage'),
+        fn (ShortcodeCompiler $shortcode): ?string => null,
+    );
+
+    Shortcode::setPreviewImage(
+        'include-webdemo',
+        asset('vendor/core/packages/shortcode/images/placeholder-code.jpg')
+    );
+
+    Shortcode::setAdminConfig('include-webdemo', function (array $attributes) {
+        return ShortcodeForm::createFromArray($attributes)
+            ->add(
+                'title',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Title'))
+                    ->toArray()
+            )
+            ->add(
+                'subtitle',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Subtitle'))
+                    ->toArray()
+            )
+            ->add(
+                'limit',
+                NumberField::class,
+                NumberFieldOption::make()
+                    ->label(__('Limit'))
+                    ->defaultValue(6)
+                    ->min(1)
+                    ->max(12)
+                    ->toArray()
+            );
+    });
+
+    // Web demo listing page.
     Shortcode::register('web-demos', __('Web Demo'), __('Web Demo'), function (ShortcodeCompiler $shortcode): ?string {
         return Theme::partial('shortcodes.blog-post-featured.index', compact('shortcode'));
     });

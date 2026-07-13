@@ -161,6 +161,8 @@
             },
     "common":  {
                    "noImage":  "Không có ảnh",
+                   "close":  "Đóng",
+                   "openWebsite":  "Mở website",
                    "service":  "Dịch vụ",
                    "defaultCategory":  "Tin tức",
                    "viewAllNews":  "Xem tất cả tin tức"
