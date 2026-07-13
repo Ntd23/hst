@@ -51,15 +51,17 @@
       </div>
       <div class="mb-16 flex flex-wrap justify-center gap-4 md:justify-start">
         <NuxtLink
+          v-if="webDemoUrl"
           class="flex translate-y-0 items-center space-x-2 rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/30 transition hover:-translate-y-1 hover:bg-sky-600"
-          :to="dataWeb.url_client"
+          :to="webDemoUrl"
         >
           <span>{{ webDemoLabel }}</span>
           <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
         </NuxtLink>
         <NuxtLink
+          v-if="adminDemoUrl"
           class="flex translate-y-0 items-center space-x-2 rounded-xl border border-primary/20 bg-white px-8 py-3 font-bold text-primary shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-md dark:bg-slate-800"
-          :to="dataWeb.url_admin"
+          :to="adminDemoUrl"
         >
           <span>{{ adminDemoLabel }}</span>
           <CommonsBotbleIcon icon="i-lucide-arrow-right" class="size-5" />
@@ -158,6 +160,15 @@ const { siteUrl, canonicalUrl } = useSeoContext();
 const { route, pageData, dataWeb } = await useWebsiteDemoDetailPage(
   toRef(props, "slug")
 );
+
+const cleanUrl = (value?: string | null) => {
+  const url = String(value || "").trim();
+
+  return url || undefined;
+};
+
+const webDemoUrl = computed(() => cleanUrl(dataWeb.value.url_client));
+const adminDemoUrl = computed(() => cleanUrl(dataWeb.value.url_admin));
 
 const heroImageAlt = computed(() => `${dataWeb.value.name || "Demo"} preview`);
 const userExperienceTitle = computed(() =>
@@ -258,7 +269,7 @@ const softwareSchema = computed(() => {
       name: "HISOTECH Group",
       url: siteUrl.value,
     },
-    sameAs: [dataWeb.value.url_client, dataWeb.value.url_admin].filter(Boolean),
+    sameAs: [webDemoUrl.value, adminDemoUrl.value].filter(Boolean),
   };
 });
 

@@ -33,7 +33,9 @@
     <img src="{{ url('/') }}/storage/{{$website->img_feautrer}}" alt="" class="col-md-12 mt-4">
     <div class="col-md-12">
         <div class="btn-demo mt-3 d-flex flex-wrap gap-2 justify-content-start justify-content-center-sm">
-            <a href="{{ $website->url_client }}" class="btn btn-success" target="_blank">{{ trans('core/base::layouts.web_demo') }}</a>
+            @if ($website->url_client)
+                <a href="{{ $website->url_client }}" class="btn btn-success" target="_blank">{{ trans('core/base::layouts.web_demo') }}</a>
+            @endif
             @if ($website->url_admin)
                 <a href="{{ $website->url_admin }}" class="btn border-btn" target="_blank">{{ trans('core/base::layouts.admin_demo') }}</a>
             @endif

@@ -11,6 +11,14 @@ class DemoWebsiteRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'url_client' => $this->filled('url_client') ? $this->input('url_client') : null,
+            'url_admin' => $this->filled('url_admin') ? $this->input('url_admin') : null,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
