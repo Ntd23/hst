@@ -15,7 +15,7 @@
           to="/blog"
         >
           {{ $t("news.viewAll") }}
-          <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
+          <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4 ml-1" />
         </ULink>
       </div>
 
@@ -32,6 +32,7 @@
             <NuxtImg
               v-if="article.image"
               :src="article.image"
+              :alt="article.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             <div v-else class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20" />
@@ -72,6 +73,7 @@
             <NuxtImg
               v-if="articles[0]?.image"
               :src="articles[0].image"
+              :alt="articles[0]?.name"
               class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
@@ -88,7 +90,7 @@
               <div class="flex items-center justify-between">
                 <span class="text-xs text-white/50">{{ formatDate(articles[0]?.created_at) }}</span>
                 <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white">
-                  <UIcon name="i-lucide-arrow-up-right" class="size-4 sm:size-5" />
+                  <CommonsBotbleIcon icon="i-lucide-arrow-up-right" class="size-4 sm:size-5" />
                 </div>
               </div>
             </div>
@@ -107,6 +109,7 @@
               <NuxtImg
                 v-if="article.image"
                 :src="article.image"
+                :alt="article.name"
                 class="absolute inset-0 w-full h-full object-cover"
               />
               <div v-else class="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30" />
@@ -130,7 +133,7 @@
           to="/blog"
         >
           {{ $t('common.viewAllNews') }}
-          <UIcon name="i-lucide-arrow-right" class="size-4 ml-1" />
+          <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4 ml-1" />
         </ULink>
       </div>
     </UContainer>
@@ -147,6 +150,7 @@ h2, h3, .text-secondary, .text-primary {
 </style>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
 
 const props = defineProps<{

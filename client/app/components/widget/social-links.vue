@@ -13,14 +13,12 @@
         :alt="social.label || social.network || 'Social icon'"
         class="h-4 w-4 object-contain"
       />
-      <UIcon v-else :name="iconName(social.icon)" class="size-4" />
+      <CommonsBotbleIcon v-else :icon="social.icon" class="size-4" />
     </ULink>
   </div>
 </template>
 
 <script setup lang="ts">
-import { iconName } from "~/utils/iconName";
-
 const props = defineProps<{
   data?: any;
 }>();

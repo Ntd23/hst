@@ -26,9 +26,9 @@
             :alt="item?.title || 'Icon'"
             class="h-6 w-6 object-contain"
           />
-          <UIcon
+          <CommonsBotbleIcon
             v-else-if="item?.icon"
-            :name="iconName(item.icon)"
+            :icon="item.icon"
             class="size-5"
           />
           <UIcon v-else name="i-lucide-sparkles" class="size-5" />
@@ -43,8 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { iconName } from "~/utils/iconName";
-
 const props = defineProps<{
   data?: any
 }>()

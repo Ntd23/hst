@@ -273,7 +273,7 @@
                     :alt="item.title || 'Icon'"
                     class="h-4 w-4 object-contain"
                   />
-                  <UIcon v-else :name="iconName(item.icon)" class="size-4" />
+                  <CommonsBotbleIcon v-else :icon="item.icon" class="size-4" />
                 </span>
               <div class="min-w-0">
                 <p class="text-sm font-semibold text-slate-800">
@@ -298,7 +298,7 @@
                 :alt="social.label || social.network || 'Social icon'"
                 class="h-4 w-4 object-contain"
               />
-              <UIcon v-else :name="iconName(social.icon)" class="size-4" />
+              <CommonsBotbleIcon v-else :icon="social.icon" class="size-4" />
             </NuxtLink>
           </div>
         </div>
@@ -309,7 +309,6 @@
 
 <script setup lang="ts">
 import { useAppMenu } from "~/composables/layout/useAppMenu";
-import { iconName } from "~/utils/iconName";
 
 const {
   isScrolled,
@@ -328,6 +327,7 @@ const {
   switchLocale,
 } = useAppMenu();
 const logoLoadFailed = ref(false);
+
 </script>
 
 <style scoped>

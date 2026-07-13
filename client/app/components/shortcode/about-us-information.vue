@@ -17,9 +17,6 @@
       >
         <!-- CONTENT SIDE -->
         <div
-          v-motion
-          :initial="{ opacity: 0, x: isImageRight ? -40 : 40 }"
-          :visible-once="{ opacity: 1, x: 0, transition: { duration: 800, ease: 'easeOut' } }"
           class="w-full"
           :class="[isImageRight ? 'lg:order-1' : 'lg:order-2']"
         >
@@ -38,7 +35,7 @@
             >
               <span>{{ sectionData.button_label }}</span>
               <span class="btn-shared-cta__icon">
-                <UIcon name="i-lucide-arrow-right" class="size-4" />
+                <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4" />
               </span>
             </NuxtLink>
           </div>
@@ -51,7 +48,7 @@
               class="feature-card"
             >
               <div class="feature-card__icon">
-                <UIcon :name="iconName(tab.icon || 'i-tabler-circle-check')" class="size-6 text-primary" />
+                <CommonsBotbleIcon :icon="resolveFeatureIcon(tab.icon, idx)" class="size-6 text-primary" />
               </div>
               <h3 class="font-space mt-4 text-xl font-bold text-slate-900" v-html="tab.title" />
               <p v-if="tab.description" class="mt-2 text-sm text-slate-500 leading-relaxed" v-html="tab.description" />
@@ -61,9 +58,6 @@
 
         <!-- IMAGE SIDE & FLOATING TABS -->
         <div
-          v-motion
-          :initial="{ opacity: 0, x: isImageRight ? 40 : -40 }"
-          :visible-once="{ opacity: 1, x: 0, transition: { duration: 800, ease: 'easeOut' } }"
           class="relative w-full max-w-xl mx-auto lg:mx-0"
           :class="[isImageRight ? 'lg:order-2' : 'lg:order-1']"
         >
@@ -86,14 +80,11 @@
             <div 
               v-for="(tab, idx) in tabs.slice(0, 3)" 
               :key="idx"
-              v-motion
-              :initial="{ opacity: 0, y: 30 }"
-              :visible-once="{ opacity: 1, y: 0, transition: { delay: 400 + (idx * 150) } }"
               class="floating-node flex items-center gap-4 p-4 pr-7 rounded-2xl animate-float"
               :style="{ animationDelay: `${idx * 0.8}s` }"
             >
               <div class="node-icon shrink-0 w-11 h-11 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-primary/10">
-                <UIcon :name="iconName(tab.icon || 'i-tabler-bolt')" class="size-5 text-primary" />
+                <CommonsBotbleIcon :icon="resolveFloatingIcon(tab.icon, idx)" class="size-5 text-primary" />
               </div>
               <div class="flex flex-col">
                 <span class="text-sm font-black text-slate-900 whitespace-nowrap leading-tight" v-html="tab.title" />
@@ -111,8 +102,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 import CommonsSectionHeading from "~/components/commons/SectionHeading.vue";
-import { iconName } from "~/utils/iconName";
 
 const props = defineProps<{
   data?: any
@@ -120,6 +111,24 @@ const props = defineProps<{
 
 const { sectionData, tabs, isImageRight, isFloatingMode } =
   useAboutUsInformationShortcode(toRef(props, "data"))
+
+const featureFallbackIcons = [
+  "ti ti-briefcase",
+  "ti ti-chart-bar",
+  "ti ti-bolt",
+];
+
+const floatingFallbackIcons = [
+  "ti ti-users",
+  "ti ti-chart-infographic",
+  "ti ti-rocket",
+];
+
+const resolveFeatureIcon = (icon?: string | null, index = 0) =>
+  icon || featureFallbackIcons[index % featureFallbackIcons.length];
+
+const resolveFloatingIcon = (icon?: string | null, index = 0) =>
+  icon || floatingFallbackIcons[index % floatingFallbackIcons.length];
 </script>
 
 <style scoped>
@@ -199,7 +208,6 @@ const { sectionData, tabs, isImageRight, isFloatingMode } =
   background: linear-gradient(135deg, #10b981, #3b82f6);
   color: white;
   border-color: transparent;
-  transform: translateY(-2px);
   box-shadow: 0 12px 24px rgba(16, 185, 129, 0.35);
 }
 
@@ -218,7 +226,6 @@ const { sectionData, tabs, isImageRight, isFloatingMode } =
 .about-cta:hover .about-cta__icon {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
-  transform: translateX(2px);
 }
 
 /* ── Floating Nodes (Glass) ── */
@@ -244,7 +251,6 @@ const { sectionData, tabs, isImageRight, isFloatingMode } =
   transition: all 0.4s ease;
 }
 .feature-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 15px 30px rgba(0,0,0,0.05);
   border-color: rgba(14, 165, 233, 0.3);
 }

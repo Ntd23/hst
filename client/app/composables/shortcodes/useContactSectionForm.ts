@@ -89,15 +89,15 @@ export const useContactSectionForm = (sourceData: MaybeRefOrGetter<any>) => {
         : legacyTabs.value;
 
     const fallbackIcons = [
-      "solar:map-point-bold",
-      "solar:phone-bold",
-      "solar:letter-bold",
+      "i-lucide-map-pin",
+      "i-lucide-phone-call",
+      "i-lucide-mail",
     ];
 
     return tabs.map((item: ContactSectionTab, index: number) => ({
       title: item.title || "",
       description: item.description || "",
-      icon: item.icon || fallbackIcons[index] || "solar:widget-bold",
+      icon: item.icon || fallbackIcons[index] || "i-lucide-circle-help",
     }));
   });
 

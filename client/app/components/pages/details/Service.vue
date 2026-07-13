@@ -36,7 +36,7 @@
             <h1 class="mb-2 text-3xl font-bold text-slate-900 sm:text-4xl">{{ detailTitle }}</h1>
             <div class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
               <NuxtLink to="/">{{ homeLabel }}</NuxtLink>
-              <UIcon name="i-lucide-chevron-right" class="size-4 text-slate-300" />
+              <CommonsBotbleIcon icon="i-lucide-chevron-right" class="size-4 text-slate-300" />
               <span class="font-medium text-primary">{{ pageData.name }}</span>
             </div>
           </div>
@@ -59,14 +59,14 @@
                       ]"
                     >
                       <span class="line-clamp-2">{{ service.name }}</span>
-                      <UIcon name="i-lucide-arrow-right" class="size-4 shrink-0" />
+                      <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4 shrink-0" />
                     </NuxtLink>
                   </nav>
                 </div>
 
                 <div v-if="handbookItems.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
                   <div class="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <UIcon name="i-lucide-book-open" class="size-5 text-primary" />
+                    <CommonsBotbleIcon icon="i-lucide-book-open" class="size-5 text-primary" />
                     <h3 class="font-bold text-slate-800">{{ handbookLabel }}</h3>
                   </div>
                   <p class="mb-4 text-sm text-slate-500">
@@ -85,9 +85,9 @@
                         :alt="item.label || 'Icon'"
                         class="h-5 w-5 object-contain"
                       />
-                      <UIcon
+                      <CommonsBotbleIcon
                         v-else
-                        :name="iconName(item.icon)"
+                        :icon="item.icon"
                         :class="['size-5', item.color]"
                       />
                       <span class="text-sm font-medium text-slate-700">{{ item.label }}</span>
@@ -97,7 +97,7 @@
 
                 <div v-if="recentPosts.length" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
                   <div class="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <UIcon name="i-lucide-rss" class="size-5 text-primary" />
+                    <CommonsBotbleIcon icon="i-lucide-rss" class="size-5 text-primary" />
                     <h3 class="font-bold text-slate-800">{{ recentPostsLabel }}</h3>
                   </div>
                   <div class="space-y-4">
@@ -119,7 +119,7 @@
                           {{ post.name }}
                         </h4>
                         <div class="mt-1 flex items-center gap-1 text-xs text-slate-400">
-                          <UIcon name="i-lucide-calendar" class="size-4" />
+                          <CommonsBotbleIcon icon="i-lucide-calendar" class="size-4" />
                           <span>{{ post.formatted_published_at }}</span>
                         </div>
                       </div>
@@ -129,7 +129,7 @@
 
                 <div class="relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-slate-900 shadow-sm">
                   <div class="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 transform p-8 opacity-10">
-                    <UIcon name="i-lucide-headset" class="size-24 text-slate-300" />
+                    <CommonsBotbleIcon icon="i-heroicons-chat-bubble-left-right-20-solid" class="size-24 text-slate-300" />
                   </div>
                   <h3 class="relative z-10 mb-2 text-xl font-bold">{{ supportTitle }}</h3>
                   <p class="relative z-10 mb-6 text-sm text-slate-500">{{ supportDescription }}</p>
@@ -137,7 +137,7 @@
                     class="btn-shared-cta relative z-10 flex w-full items-center justify-center gap-2"
                     type="button"
                   >
-                    <UIcon name="i-lucide-phone" class="size-5" />
+                    <CommonsBotbleIcon icon="i-heroicons-phone-20-solid" class="size-5" />
                     +84 973 73 56 79
                   </button>
                 </div>
@@ -189,7 +189,6 @@
 <script setup lang="ts">
 import CommonsSidebarWidgets from "~/components/commons/renderers/SidebarWidgets.vue";
 import WidgetContactForm from "~/components/widget/contact-form.vue";
-import { iconName } from "~/utils/iconName";
 
 const props = defineProps<{
   slug: string;

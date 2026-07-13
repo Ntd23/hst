@@ -25,7 +25,7 @@
     <Transition name="contact-fade" mode="out-in">
       <div v-if="submitSuccess" key="success" class="space-y-3" role="status">
         <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500 text-white">
-          <UIcon name="solar:check-circle-bold" class="size-7" />
+          <CommonsBotbleIcon icon="i-heroicons-check-circle-20-solid" class="size-7" />
         </div>
         <div class="space-y-2">
           <h5 class="text-lg font-bold text-slate-900">
@@ -129,6 +129,8 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
+
 const props = defineProps<{ data?: any }>();
 const { translate, localeCode } = useI18nText();
 

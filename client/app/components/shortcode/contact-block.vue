@@ -2,9 +2,6 @@
   <section class="py-10 sm:py-14">
     <UContainer>
       <div
-        v-motion
-        :initial="{ opacity: 0, y: 30, scale: 0.97 }"
-        :visible-once="{ opacity: 1, y: 0, scale: 1, transition: { duration: 700, ease: [0.16, 1, 0.3, 1] } }"
         class="cta-card relative overflow-hidden"
       >
         <!-- Background image (if provided) -->
@@ -43,7 +40,7 @@
               >
                 <span>{{ sectionData.button_label }}</span>
                 <span class="btn-shared-cta__icon">
-                  <UIcon name="i-lucide-arrow-right" class="size-4" />
+                  <CommonsBotbleIcon icon="i-heroicons-arrow-right-20-solid" class="size-4" />
                 </span>
               </NuxtLink>
             </div>
@@ -57,7 +54,7 @@
                 <div class="glass-ring glass-ring-inner">
                   <!-- Core sphere -->
                   <div class="glass-sphere">
-                    <UIcon name="i-lucide-zap" class="size-7 text-white drop-shadow-lg" />
+                    <CommonsBotbleIcon icon="i-lucide-zap" class="size-7 text-white drop-shadow-lg" />
                   </div>
                 </div>
               </div>
@@ -74,6 +71,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonsBotbleIcon from "~/components/commons/BotbleIcon.vue";
 const props = defineProps<{
   data?: any
 }>()
