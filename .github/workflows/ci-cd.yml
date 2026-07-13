@@ -1,17 +1,13 @@
-# Description: CI validates the Nuxt client and Laravel admin; CD deploys approved pushes to the production server over SSH.
+# Description: CI builds the Nuxt client and validates the Botble Laravel admin, then deploys main to the server over SSH.
 name: CI/CD
 
 on:
   push:
     branches:
       - main
-      - master
-      - dung
   pull_request:
     branches:
       - main
-      - master
-      - dung
   workflow_dispatch:
 
 permissions:
@@ -30,8 +26,12 @@ env:
 
 jobs:
   client-ci:
-    name: Client build
+    name: Nuxt client
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.CLIENT_DIR }}
 
     steps:
       - name: Checkout source
@@ -50,17 +50,21 @@ jobs:
           cache: pnpm
           cache-dependency-path: ${{ env.CLIENT_DIR }}/pnpm-lock.yaml
 
-      - name: Install client dependencies
-        working-directory: ${{ env.CLIENT_DIR }}
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build client
-        working-directory: ${{ env.CLIENT_DIR }}
+      - name: Build Nuxt
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm run build
 
   admin-ci:
-    name: Admin checks
+    name: Laravel admin
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.ADMIN_DIR }}
 
     steps:
       - name: Checkout source
@@ -70,27 +74,29 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: curl, gd, mbstring, pdo_mysql, pdo_sqlite, sqlite3, zip
+          extensions: curl, gd, mbstring, pdo, pdo_mysql, pdo_sqlite, sqlite3, zip
           coverage: none
 
-      - name: Validate composer file
-        working-directory: ${{ env.ADMIN_DIR }}
+      - name: Validate Composer files
         run: composer validate --no-check-publish
 
-      - name: Prepare Laravel environment
-        working-directory: ${{ env.ADMIN_DIR }}
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ runner.os }}-${{ hashFiles('admin/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Prepare environment
         run: cp .env.example .env
 
-      - name: Install admin dependencies
-        working-directory: ${{ env.ADMIN_DIR }}
+      - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Generate app key
-        working-directory: ${{ env.ADMIN_DIR }}
         run: php artisan key:generate --force
 
-      - name: Run admin tests
-        working-directory: ${{ env.ADMIN_DIR }}
+      - name: Run tests
         run: php artisan test
 
   deploy:
@@ -99,23 +105,22 @@ jobs:
     needs:
       - client-ci
       - admin-ci
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     environment: production
 
     steps:
       - name: Deploy over SSH
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          PM2_APP_NAME: ${{ secrets.PM2_APP_NAME || 'hst-client' }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          PNPM_VERSION: ${{ env.PNPM_VERSION }}
         run: |
           set -euo pipefail
-
-          if [ -z "${SSH_PORT}" ]; then
-            SSH_PORT="22"
-          fi
 
           mkdir -p ~/.ssh
           printf '%s\n' "${SSH_KEY}" > ~/.ssh/deploy_key
@@ -127,23 +132,26 @@ jobs:
 
           cd "${DEPLOY_PATH}"
           git fetch --prune origin
-          git checkout "${GITHUB_REF_NAME}"
-          git reset --hard "origin/${GITHUB_REF_NAME}"
+          git checkout "${BRANCH_NAME}"
+          git reset --hard "origin/${BRANCH_NAME}"
 
           cd admin
           composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
+          php artisan optimize:clear
           php artisan migrate --force
+          php artisan storage:link || true
+          php artisan cms:publish:assets || true
           php artisan config:cache
-          php artisan route:cache
           php artisan view:cache
 
           cd ../client
           corepack enable
-          corepack prepare pnpm@${PNPM_VERSION} --activate
+          corepack prepare "pnpm@${PNPM_VERSION}" --activate
           pnpm install --frozen-lockfile
-          pnpm run build
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
           if command -v pm2 >/dev/null 2>&1; then
-            pm2 reload hst-client || pm2 start .output/server/index.mjs --name hst-client
+            pm2 reload "${PM2_APP_NAME}" --update-env || pm2 start .output/server/index.mjs --name "${PM2_APP_NAME}" --update-env
+            pm2 save
           fi
           EOF
