@@ -5,6 +5,7 @@ const DEV_PORT = Number(process.env.NUXT_DEV_PORT || 3000);
 const API_BASE_URL = process.env.NUXT_API_BASE_URL || "http://127.0.0.1:8000/api";
 const PUBLIC_SITE_URL =
   process.env.NUXT_PUBLIC_SITE_URL || `http://${DEV_HOST}:${DEV_PORT}`;
+const ENABLE_SOURCEMAP = process.env.NUXT_ENABLE_SOURCEMAP === "true";
 
 
 const APP_HEAD = {
@@ -35,8 +36,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: true,
   sourcemap: {
-    server: true,
-    client: true,
+    server: ENABLE_SOURCEMAP,
+    client: ENABLE_SOURCEMAP,
   },
 
   devServer: {
