@@ -127,7 +127,9 @@ jobs:
             cd "${DEPLOY_PATH}"
             echo "Syncing branch: ${BRANCH_NAME}"
             git fetch --prune origin
-            git checkout "${BRANCH_NAME}"
+            git reset --hard
+            git clean -fd -- admin client
+            git checkout -B "${BRANCH_NAME}" "origin/${BRANCH_NAME}"
             git reset --hard "origin/${BRANCH_NAME}"
 
             echo "Installing admin dependencies"
