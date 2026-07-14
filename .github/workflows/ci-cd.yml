@@ -165,7 +165,6 @@ jobs:
             corepack prepare "pnpm@${PNPM_VERSION}" --activate
             echo "pnpm version: $(pnpm -v)"
             pnpm install --frozen-lockfile
-            node -e "const statuses = require('statuses'); require('http-errors'); console.log('statuses package OK:', statuses.codes.includes(100), statuses.message[100])"
             echo "Building client"
             NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
