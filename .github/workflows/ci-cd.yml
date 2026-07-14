@@ -147,7 +147,7 @@ jobs:
             echo "Installing client dependencies"
             cd ../client
             echo "Cleaning stale client dependencies and build output"
-            npx nuxi cleanup
+            rm -rf node_modules .pnpm-store .nuxt .output
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             if [ -s "$NVM_DIR/nvm.sh" ]; then
               . "$NVM_DIR/nvm.sh"
@@ -165,6 +165,7 @@ jobs:
             corepack prepare "pnpm@${PNPM_VERSION}" --activate
             echo "pnpm version: $(pnpm -v)"
             pnpm install --frozen-lockfile
+            node -e "const statuses = require('statuses'); require('http-errors'); console.log('statuses package OK:', statuses.codes.includes(100), statuses.message[100])"
             echo "Building client"
             NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
