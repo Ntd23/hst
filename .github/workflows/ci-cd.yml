@@ -166,7 +166,8 @@ jobs:
             echo "pnpm version: $(pnpm -v)"
             pnpm install --frozen-lockfile
             echo "Building client"
-            NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
+            free -h || true
+            NODE_OPTIONS="--max-old-space-size=3072" pnpm run build
 
             if command -v pm2 >/dev/null 2>&1; then
               echo "Reloading pm2 app"
