@@ -35,6 +35,11 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   ssr: true,
+  features: {
+    // Keep the initial render styled even when a fresh mobile session cannot
+    // reuse (or briefly fails to fetch) the hashed global stylesheet.
+    inlineStyles: true,
+  },
   sourcemap: {
     server: ENABLE_SOURCEMAP,
     client: ENABLE_SOURCEMAP,
