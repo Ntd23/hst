@@ -55,22 +55,12 @@
       <div
         v-for="(item, index) in sliderItems"
         :key="item.id ?? index"
-        class="absolute inset-0 transition-opacity duration-[1200ms] ease-in-out"
+        class="hero-slide absolute inset-0 transition-opacity duration-[1200ms] ease-in-out"
         :class="index === activeSlide ? 'opacity-100 z-[2]' : 'opacity-0 z-[1]'"
-      >
-        <NuxtImg
-          :src="item.image"
-          :alt="item.title"
-          width="1920"
-          height="1080"
-          sizes="100vw"
-          :loading="index === 0 ? 'eager' : 'lazy'"
-          :preload="index === 0"
-          placeholder
-          class="w-full h-full object-cover"
-          :class="index === activeSlide ? 'animate-slow-zoom' : ''"
-        />
-      </div>
+        :style="{ backgroundImage: toBackgroundImage(item.image) }"
+        role="img"
+        :aria-label="item.title || ''"
+      />
 
     </div>
 
@@ -171,6 +161,9 @@ const {
   isTyping,
   slideInterval,
 } = useSimpleSliderShortcode(toRef(props, "data"))
+
+const toBackgroundImage = (source?: string | null) =>
+  source ? `url(${JSON.stringify(source)})` : "none";
 </script>
 
 <style scoped>
@@ -279,18 +272,14 @@ const {
   transform: translateY(0);
 }
 
-/* ===== Ken Burns ===== */
-.animate-slow-zoom {
-  animation: slowZoom 7s ease-out forwards;
-}
-
-@keyframes slowZoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.06);
-  }
+/* Use a CSS background instead of a transformed <img>. Safari/WebKit can
+   collapse an object-fit image into a thin horizontal compositing layer. */
+.hero-slide {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* ===== Progress bar ===== */
