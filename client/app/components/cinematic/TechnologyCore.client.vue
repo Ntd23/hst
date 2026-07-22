@@ -113,6 +113,7 @@ let dragVelocityX = 0;
 let dragVelocityY = 0;
 let pulsePhase = 1;
 let baseResponsiveScale = 1;
+let orbitResponsiveScale = 1;
 let canvas: HTMLCanvasElement | null = null;
 
 const ringObjects: Object3D[] = [];
@@ -122,8 +123,9 @@ type GeoPoint = readonly [longitude: number, latitude: number];
 
 const createDigitalEarthTexture = (compact: boolean) => {
   const canvasElement = document.createElement("canvas");
-  canvasElement.width = compact ? 768 : 1024;
-  canvasElement.height = compact ? 384 : 512;
+  const qualityScale = compact ? 1 : 2;
+  canvasElement.width = compact ? 768 : 2048;
+  canvasElement.height = compact ? 384 : 1024;
   const context = canvasElement.getContext("2d");
 
   if (!context) {
@@ -190,18 +192,18 @@ const createDigitalEarthTexture = (compact: boolean) => {
 
   context.save();
   context.shadowColor = "rgba(35, 220, 255, 0.72)";
-  context.shadowBlur = compact ? 4 : 7;
+  context.shadowBlur = (compact ? 1 : 0.75) * qualityScale;
   context.fillStyle = "rgba(41, 174, 224, 0.12)";
   context.fill(landPath);
-  context.lineWidth = compact ? 0.7 : 0.95;
-  context.strokeStyle = "rgba(128, 235, 255, 0.68)";
+  context.lineWidth = (compact ? 0.7 : 0.95) * qualityScale;
+  context.strokeStyle = "rgba(145, 241, 255, 0.82)";
   context.stroke(landPath);
   context.restore();
 
   context.save();
   context.shadowColor = "rgba(60, 225, 255, 0.8)";
-  context.shadowBlur = compact ? 3 : 5;
-  context.fillStyle = "rgba(111, 238, 255, 0.78)";
+  context.shadowBlur = (compact ? 0.8 : 0.5) * qualityScale;
+  context.fillStyle = "rgba(130, 244, 255, 0.9)";
   continents.forEach((continent) => {
     continent.forEach((point, index) => {
       const nextPoint = continent[(index + 1) % continent.length];
@@ -211,15 +213,25 @@ const createDigitalEarthTexture = (compact: boolean) => {
       const start = project(point);
       const end = project(nextPoint);
       const segmentLength = Math.hypot(end.x - start.x, end.y - start.y);
-      const sampleCount = Math.max(1, Math.round(segmentLength / (compact ? 5 : 6)));
+      const sampleCount = Math.max(
+        1,
+        Math.round(segmentLength / ((compact ? 5 : 6) * qualityScale))
+      );
 
       for (let sample = 0; sample < sampleCount; sample += 1) {
         const progress = sample / sampleCount;
-        const jitter = Math.sin((index + 1) * 13.7 + sample * 4.3) * (compact ? 0.75 : 1.05);
+        const jitter = Math.sin((index + 1) * 13.7 + sample * 4.3) *
+          (compact ? 0.75 : 1.05) * qualityScale;
         const x = start.x + (end.x - start.x) * progress + jitter;
         const y = start.y + (end.y - start.y) * progress - jitter * 0.45;
         context.beginPath();
-        context.arc(x, y, compact ? 0.55 : 0.72, 0, Math.PI * 2);
+        context.arc(
+          x,
+          y,
+          (compact ? 0.55 : 0.72) * qualityScale,
+          0,
+          Math.PI * 2
+        );
         context.fill();
       }
     });
@@ -244,13 +256,14 @@ const createDigitalEarthTexture = (compact: boolean) => {
       dataNodes.push({
         x,
         y,
-        radius: (compact ? 0.34 : 0.42) + random() * (compact ? 0.68 : 0.92),
+        radius: ((compact ? 0.34 : 0.42) + random() * (compact ? 0.68 : 0.92)) *
+          qualityScale,
       });
     }
   }
 
-  context.lineWidth = compact ? 0.28 : 0.4;
-  context.strokeStyle = "rgba(71, 224, 255, 0.16)";
+  context.lineWidth = (compact ? 0.28 : 0.4) * qualityScale;
+  context.strokeStyle = "rgba(71, 224, 255, 0.24)";
   dataNodes.forEach((node, index) => {
     if (index % 3 !== 0) {
       return;
@@ -266,7 +279,7 @@ const createDigitalEarthTexture = (compact: boolean) => {
   });
 
   context.shadowColor = "rgba(111, 242, 255, 1)";
-  context.shadowBlur = compact ? 2.5 : 4;
+  context.shadowBlur = (compact ? 0.65 : 0.35) * qualityScale;
   dataNodes.forEach((node, index) => {
     context.beginPath();
     context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
@@ -439,7 +452,7 @@ const animate = (time: number) => {
   orbitGroup.rotation.y = elapsed * 0.018 + dragRotationY * 0.16;
   orbitGroup.rotation.x = Math.sin(elapsed * 0.19) * 0.025 + dragRotationX * 0.12;
   orbitGroup.position.y = coreGroup.position.y;
-  orbitGroup.scale.setScalar(baseResponsiveScale);
+  orbitGroup.scale.setScalar(orbitResponsiveScale);
 
   if (innerCore) {
     innerCore.rotation.y += delta * 0.035;
@@ -555,16 +568,17 @@ const resizeRenderer = () => {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 1.25));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 2.5 : 2));
   renderer.setSize(width, height, false);
 
   baseResponsiveScale = isMobile
-    ? Math.max(1, Math.min(1.12, width / 350))
+    ? Math.max(1.18, Math.min(1.3, width / 300))
     : width < 720
       ? 0.9
       : 1;
+  orbitResponsiveScale = isMobile ? baseResponsiveScale * 0.88 : baseResponsiveScale;
   coreGroup.scale.setScalar(baseResponsiveScale);
-  orbitGroup.scale.setScalar(baseResponsiveScale);
+  orbitGroup.scale.setScalar(orbitResponsiveScale);
 
   renderStaticFrame();
 };
@@ -802,10 +816,10 @@ const initializeScene = async () => {
 
     renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: false,
+      antialias: true,
       powerPreference: "high-performance",
       premultipliedAlpha: true,
-      precision: "mediump",
+      precision: "highp",
       stencil: false,
     });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -826,8 +840,8 @@ const initializeScene = async () => {
 
     const shellGeometry = new THREE.SphereGeometry(
       1.2,
-      isMobile ? 32 : 48,
-      isMobile ? 22 : 32
+      64,
+      48
     );
     fresnelMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -874,15 +888,10 @@ const initializeScene = async () => {
     shell.renderOrder = 6;
     coreGroup.add(shell);
 
-    const globeMaterial = new THREE.MeshStandardMaterial({
+    const globeMaterial = new THREE.MeshBasicMaterial({
       color: new THREE.Color("#020d24"),
-      emissive: new THREE.Color("#04245d"),
-      emissiveIntensity: 0.68,
-      metalness: 0.08,
-      roughness: 0.62,
-      transparent: true,
-      opacity: 0.84,
       depthWrite: true,
+      toneMapped: false,
     });
     const globe = new THREE.Mesh(shellGeometry, globeMaterial);
     globe.renderOrder = 1;
@@ -892,16 +901,21 @@ const initializeScene = async () => {
     innerCore.rotation.set(0.04, -1.92, -0.025);
     coreGroup.add(innerCore);
 
-    const earthTexture = new THREE.CanvasTexture(createDigitalEarthTexture(isMobile));
+    const earthTexture = new THREE.CanvasTexture(createDigitalEarthTexture(false));
     earthTexture.colorSpace = THREE.SRGBColorSpace;
-    earthTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+    earthTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    earthTexture.minFilter = THREE.LinearMipmapLinearFilter;
+    earthTexture.magFilter = THREE.LinearFilter;
+    earthTexture.generateMipmaps = true;
     earthLandMaterial = new THREE.MeshBasicMaterial({
       map: earthTexture,
-      color: new THREE.Color("#b7f8ff"),
+      color: new THREE.Color("#9ff5ff"),
       transparent: true,
-      opacity: 0.86,
-      blending: THREE.AdditiveBlending,
+      opacity: 1,
+      alphaTest: 0.06,
+      blending: THREE.NormalBlending,
       depthWrite: false,
+      toneMapped: false,
     });
     const landSurface = new THREE.Mesh(shellGeometry, earthLandMaterial);
     landSurface.scale.setScalar(1.008);
@@ -909,15 +923,16 @@ const initializeScene = async () => {
     innerCore.add(landSurface);
 
     earthGridMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color("#59dfff"),
+      color: new THREE.Color("#65e6ff"),
       transparent: true,
-      opacity: 0.2,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.48,
+      blending: THREE.NormalBlending,
       depthWrite: false,
       depthTest: true,
+      toneMapped: false,
     });
     const gridRadius = 1.216;
-    const gridSegments = isMobile ? 54 : 80;
+    const gridSegments = isMobile ? 96 : 112;
 
     for (let latitude = -60; latitude <= 60; latitude += 20) {
       const latitudeRadians = THREE.MathUtils.degToRad(latitude);
@@ -961,9 +976,10 @@ const initializeScene = async () => {
     const equatorMaterial = new THREE.LineBasicMaterial({
       color: new THREE.Color("#c8fbff"),
       transparent: true,
-      opacity: 0.58,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.78,
+      blending: THREE.NormalBlending,
       depthWrite: false,
+      toneMapped: false,
     });
     const equatorPoints: InstanceType<typeof THREE.Vector3>[] = [];
     for (let segment = 0; segment < gridSegments; segment += 1) {
@@ -983,16 +999,17 @@ const initializeScene = async () => {
 
     const geodesicGeometry = new THREE.IcosahedronGeometry(
       1.225,
-      isMobile ? 2 : 3
+      3
     );
     const geodesicMaterial = new THREE.MeshBasicMaterial({
       color: new THREE.Color("#4bcfff"),
       transparent: true,
-      opacity: isMobile ? 0.1 : 0.15,
+      opacity: isMobile ? 0.18 : 0.22,
       wireframe: true,
-      blending: THREE.AdditiveBlending,
+      blending: THREE.NormalBlending,
       depthWrite: false,
       depthTest: true,
+      toneMapped: false,
     });
     const geodesicMesh = new THREE.Mesh(geodesicGeometry, geodesicMaterial);
     geodesicMesh.rotation.set(0.12, -0.2, 0.08);

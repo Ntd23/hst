@@ -300,6 +300,76 @@ const { sectionData, tabs, statisticValues } = useSiteStatisticsShortcode(
   text-wrap: balance;
 }
 
+@media (max-width: 767px) {
+  .stats-shell {
+    gap: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+    padding-top: 0.75rem;
+  }
+
+  .stats-card {
+    min-width: 0;
+    min-height: 8.5rem;
+    padding: 0 0.2rem 0.65rem;
+    border-radius: 1.15rem;
+  }
+
+  .stats-card__glow {
+    top: 0.25rem;
+    left: 10%;
+    width: 80%;
+    height: 2.75rem;
+    filter: blur(12px);
+  }
+
+  .stats-card__visual {
+    min-height: 2.9rem;
+    margin-top: -0.75rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .stats-card__image {
+    width: clamp(2.35rem, 10.5vw, 3.1rem);
+    height: clamp(2.35rem, 10.5vw, 3.1rem);
+    filter: drop-shadow(0 7px 10px rgba(37, 99, 235, 0.1));
+  }
+
+  .stats-card__fallback {
+    width: clamp(2.35rem, 10.5vw, 3.1rem);
+    height: clamp(2.35rem, 10.5vw, 3.1rem);
+  }
+
+  .stats-card__fallback-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .stats-card__body {
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+
+  .stats-card__number {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  .stats-card__unit {
+    font-size: clamp(0.62rem, 2.8vw, 0.8rem);
+  }
+
+  .stats-card__title {
+    width: 100%;
+    max-width: none;
+    overflow-wrap: anywhere;
+    font-size: clamp(0.56rem, 2.45vw, 0.68rem);
+    line-height: 1.28;
+  }
+}
+
 @media (min-width: 768px) {
   .stats-head__row {
     flex-direction: row;
