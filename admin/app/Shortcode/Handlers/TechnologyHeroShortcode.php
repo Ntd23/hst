@@ -29,7 +29,6 @@ class TechnologyHeroShortcode implements ShortcodeInterface
                 'secondary_url' => $attrs['secondary_url'] ?? '/du-an',
                 'capability_1' => $attrs['capability_1'] ?? 'Thiết kế UI/UX',
                 'capability_2' => $attrs['capability_2'] ?? 'Phát triển website',
-                'capability_3' => $attrs['capability_3'] ?? 'Ứng dụng và AI',
                 'primary_color' => $attrs['primary_color'] ?? '#0866FF',
                 'glow_color' => $attrs['glow_color'] ?? '#35D6FF',
                 'enable_3d' => $attrs['enable_3d'] ?? 'yes',

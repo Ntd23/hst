@@ -11,7 +11,6 @@ type TechnologyHeroData = {
   secondary_url?: string | null;
   capability_1?: string | null;
   capability_2?: string | null;
-  capability_3?: string | null;
   primary_color?: string | null;
   glow_color?: string | null;
   enable_3d?: string | number | boolean | null;
@@ -30,7 +29,6 @@ const TECHNOLOGY_HERO_DEFAULTS = {
   secondary_url: "/du-an",
   capability_1: "Thiết kế UI/UX",
   capability_2: "Phát triển website",
-  capability_3: "Ứng dụng và AI",
   primary_color: "#0866FF",
   glow_color: "#35D6FF",
 } as const;
@@ -84,7 +82,6 @@ export const useTechnologyHeroShortcode = (
     [
       sectionData.value.capability_1,
       sectionData.value.capability_2,
-      sectionData.value.capability_3,
     ].filter((item): item is string => Boolean(item?.trim()))
   );
 

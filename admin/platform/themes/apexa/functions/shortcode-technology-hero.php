@@ -115,14 +115,6 @@ app()->booted(function (): void {
                     ->toArray()
             )
             ->add(
-                'capability_3',
-                TextField::class,
-                TextFieldOption::make()
-                    ->label(__('Capability 3'))
-                    ->defaultValue('Ứng dụng và AI')
-                    ->toArray()
-            )
-            ->add(
                 'primary_color',
                 ColorField::class,
                 ColorFieldOption::make()
