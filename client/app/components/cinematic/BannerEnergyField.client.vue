@@ -710,7 +710,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 767px) {
   .banner-energy-field--ready {
-    opacity: 0.72;
+    opacity: 0.58;
   }
 }
 

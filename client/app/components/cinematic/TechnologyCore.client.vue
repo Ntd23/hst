@@ -11,7 +11,12 @@
   >
     <div class="technology-core__hint">
       <span class="technology-core__hint-icon">↔</span>
-      <span>Kéo để xoay · Nhấn tạo sóng</span>
+      <span class="technology-core__hint-text technology-core__hint-text--desktop">
+        Kéo để xoay · Nhấn tạo sóng
+      </span>
+      <span class="technology-core__hint-text technology-core__hint-text--mobile">
+        Chạm hoặc kéo để tương tác
+      </span>
     </div>
   </div>
 </template>
@@ -553,7 +558,11 @@ const resizeRenderer = () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 1.25));
   renderer.setSize(width, height, false);
 
-  baseResponsiveScale = isMobile ? 0.78 : width < 720 ? 0.9 : 1;
+  baseResponsiveScale = isMobile
+    ? Math.max(1, Math.min(1.12, width / 350))
+    : width < 720
+      ? 0.9
+      : 1;
   coreGroup.scale.setScalar(baseResponsiveScale);
   orbitGroup.scale.setScalar(baseResponsiveScale);
 
@@ -1560,6 +1569,10 @@ onBeforeUnmount(() => {
   letter-spacing: 0;
 }
 
+.technology-core__hint-text--mobile {
+  display: none;
+}
+
 .technology-core--interacted .technology-core__hint {
   opacity: 0;
   transform: translate(-50%, 0.35rem);
@@ -1578,13 +1591,25 @@ onBeforeUnmount(() => {
 
 @media (max-width: 767px) {
   .technology-core__hint {
-    bottom: 2%;
-    font-size: 0.54rem;
+    bottom: 1.5%;
+    max-width: calc(100% - 2rem);
+    font-size: 0.52rem;
+    letter-spacing: 0.065em;
+    white-space: normal;
   }
 
   .technology-core__hint::before,
   .technology-core__hint::after {
     width: 0.75rem;
+  }
+
+  .technology-core__hint-text--desktop {
+    display: none;
+  }
+
+  .technology-core__hint-text--mobile {
+    display: inline;
+    text-align: center;
   }
 }
 
