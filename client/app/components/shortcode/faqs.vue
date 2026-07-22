@@ -10,6 +10,7 @@
 
     <UContainer class="relative z-10">
       <CommonsSectionHeading
+        class="faq-heading"
         :title="sectionData.title"
         :description="sectionData.description"
         compact
@@ -25,8 +26,11 @@
               :class="{ 'faq-mobile-item--active': activeFaq?.id === item.id }"
             >
               <button
+                :id="`${faqInstanceId}-trigger-${item.id || idx}`"
                 type="button"
                 class="faq-mobile-item__trigger"
+                :aria-expanded="activeFaq?.id === item.id"
+                :aria-controls="`${faqInstanceId}-panel-${item.id || idx}`"
                 @click="setActiveFaq(item)"
               >
                 <span class="faq-mobile-item__index">0{{ Number(idx) + 1 }}</span>
@@ -38,7 +42,13 @@
                 />
               </button>
 
-              <div v-show="activeFaq?.id === item.id" class="faq-mobile-item__answer">
+              <div
+                v-show="activeFaq?.id === item.id"
+                :id="`${faqInstanceId}-panel-${item.id || idx}`"
+                class="faq-mobile-item__answer"
+                role="region"
+                :aria-labelledby="`${faqInstanceId}-trigger-${item.id || idx}`"
+              >
                 <div class="faq-mobile-item__answer-copy" v-html="item.answer" />
               </div>
             </article>
@@ -142,6 +152,7 @@ const props = defineProps<{
   data?: any;
 }>();
 
+const faqInstanceId = useId();
 const { siteUrl, canonicalUrl } = useSeoContext();
 const { sectionData, faqs, activeFaq, setActiveFaq } = useFaqsShortcode(
   toRef(props, "data")
@@ -204,6 +215,20 @@ useJsonLd(faqSchema);
 .node-index {
   font-family: var(--font-tech, sans-serif);
 }
+.faq-heading {
+  width: 100%;
+  max-width: 52rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+.faq-heading :deep(.section-heading__title) {
+  max-width: 18ch;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.faq-heading :deep(.section-heading__description) {
+  text-wrap: pretty;
+}
 .faq-mobile-shell {
   border-radius: 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.75);
@@ -215,9 +240,6 @@ useJsonLd(faqSchema);
 .faq-mobile-list {
   display: grid;
   gap: 0.65rem;
-  max-height: min(62svh, 34rem);
-  overflow: auto;
-  padding-right: 0.15rem;
 }
 .faq-mobile-item {
   border-radius: 1.25rem;
@@ -231,7 +253,7 @@ useJsonLd(faqSchema);
 }
 .faq-mobile-item__trigger {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
   width: 100%;
@@ -251,12 +273,21 @@ useJsonLd(faqSchema);
   font-weight: 800;
 }
 .faq-mobile-item__question {
+  min-width: 0;
   color: #0f172a;
   font-size: 0.96rem;
   font-weight: 700;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.faq-mobile-item__question :deep(*) {
+  margin: 0;
+  color: inherit !important;
+  font: inherit !important;
 }
 .faq-mobile-item__chevron {
+  width: 1.2rem;
+  height: 1.2rem;
   color: #0284c7;
   transition: transform 0.2s ease;
 }
@@ -267,6 +298,7 @@ useJsonLd(faqSchema);
   color: #64748b;
   font-size: 1rem;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 .faq-mobile-item__answer-copy :deep(*) {
   color: inherit !important;
@@ -276,6 +308,62 @@ useJsonLd(faqSchema);
 }
 .faq-mobile-item__answer-copy :deep(p:last-child) {
   margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .faq-heading.section-heading--compact {
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.25rem;
+  }
+  .faq-heading :deep(.section-heading__title) {
+    max-width: 18ch;
+    font-size: clamp(1.75rem, 8vw, 2.15rem);
+    line-height: 1.16;
+    letter-spacing: -0.03em;
+  }
+  .faq-heading :deep(.section-heading__title br) {
+    display: none;
+  }
+  .faq-heading :deep(.section-heading__description) {
+    max-width: 34rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .faq-mobile-shell {
+    padding: 0.5rem;
+    border-radius: 1.35rem;
+  }
+  .faq-mobile-list {
+    gap: 0.5rem;
+  }
+  .faq-mobile-item {
+    border-radius: 1rem;
+  }
+  .faq-mobile-item__trigger {
+    gap: 0.65rem;
+    padding: 0.85rem;
+  }
+  .faq-mobile-item__answer {
+    padding: 0 0.85rem 0.9rem 3.5rem;
+  }
+  .faq-mobile-item__answer-copy {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+}
+@media (max-width: 400px) {
+  .faq-mobile-item__trigger {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .faq-mobile-item__index {
+    display: none;
+  }
+  .faq-mobile-item__question {
+    font-size: 0.9rem;
+  }
+  .faq-mobile-item__answer {
+    padding-left: 0.85rem;
+  }
 }
 .vacuum-blob {
   position: absolute;
