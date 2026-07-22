@@ -187,6 +187,7 @@ jobs:
             rm -rf .output
             tar -xzf /tmp/hst-deploy/nuxt-output.tar.gz
             rm -f /tmp/hst-deploy/nuxt-output.tar.gz
+            pm2 reload hst-client --update-env
             if command -v pm2 >/dev/null 2>&1; then
               echo "Reloading pm2 app"
               pm2 reload hst-client --update-env || pm2 start .output/server/index.mjs --name hst-client --update-env
