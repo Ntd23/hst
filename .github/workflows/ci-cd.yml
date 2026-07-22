@@ -50,8 +50,11 @@ jobs:
           cache: pnpm
           cache-dependency-path: ${{ env.CLIENT_DIR }}/pnpm-lock.yaml
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies (including Three.js banner)
+        run: pnpm install --frozen-lockfile --prod=false
+
+      - name: Verify banner dependencies
+        run: pnpm list three @types/three vue-tsc --depth=0
 
       - name: Build Nuxt
         env:
