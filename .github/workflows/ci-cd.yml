@@ -20,6 +20,7 @@ concurrency:
 env:
   NODE_VERSION: "22"
   PNPM_VERSION: "11.7.0"
+  PM2_VERSION: "6"
   PHP_VERSION: "8.3"
   CLIENT_DIR: client
   ADMIN_DIR: admin
@@ -154,11 +155,12 @@ jobs:
           BRANCH_NAME: ${{ github.ref_name }}
           NODE_VERSION: ${{ env.NODE_VERSION }}
           PNPM_VERSION: ${{ env.PNPM_VERSION }}
+          PM2_VERSION: ${{ env.PM2_VERSION }}
         with:
           host: ${{ secrets.SERVER_HOST || secrets.SSH_HOST }}
           username: ${{ secrets.SERVER_USER || secrets.SSH_USER }}
           key: ${{ secrets.SERVER_SSH_KEY || secrets.SSH_KEY }}
-          envs: DEPLOY_PATH,BRANCH_NAME,NODE_VERSION,PNPM_VERSION
+          envs: DEPLOY_PATH,BRANCH_NAME,NODE_VERSION,PNPM_VERSION,PM2_VERSION
           script: |
             set -euo pipefail
 
@@ -187,11 +189,39 @@ jobs:
             rm -rf .output
             tar -xzf /tmp/hst-deploy/nuxt-output.tar.gz
             rm -f /tmp/hst-deploy/nuxt-output.tar.gz
-            pm2 reload hst-client --update-env
-            if command -v pm2 >/dev/null 2>&1; then
-              echo "Reloading pm2 app"
-              pm2 reload hst-client --update-env || pm2 start .output/server/index.mjs --name hst-client --update-env
-              pm2 save
-            else
-              echo "pm2 not found; build completed without process reload"
+
+            echo "Preparing Node.js and PM2"
+            DEPLOY_NVM_DIR="${NVM_DIR:-${HOME}/.nvm}"
+            if [ -s "${DEPLOY_NVM_DIR}/nvm.sh" ]; then
+              export NVM_DIR="${DEPLOY_NVM_DIR}"
+              set +u
+              . "${NVM_DIR}/nvm.sh"
+              if ! nvm use "${NODE_VERSION}"; then
+                echo "Node ${NODE_VERSION} is not installed in NVM; trying the default NVM version"
+                nvm use default || true
+              fi
+              set -u
             fi
+
+            if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+              echo "Node.js/npm not found for deploy user. Install Node ${NODE_VERSION} or fix SERVER_USER/NVM configuration."
+              exit 1
+            fi
+
+            DEPLOY_NPM_PREFIX="${HOME}/.local/npm"
+            export PATH="${DEPLOY_NPM_PREFIX}/bin:${PATH}"
+            if ! command -v pm2 >/dev/null 2>&1; then
+              echo "PM2 not found; installing PM2 ${PM2_VERSION} for deploy user"
+              mkdir -p "${DEPLOY_NPM_PREFIX}"
+              npm install --global --prefix "${DEPLOY_NPM_PREFIX}" "pm2@${PM2_VERSION}"
+            fi
+
+            pm2 --version
+            if pm2 describe hst-client >/dev/null 2>&1; then
+              echo "Reloading pm2 app"
+              pm2 reload hst-client --update-env
+            else
+              echo "Starting pm2 app"
+              pm2 start "$(pwd)/.output/server/index.mjs" --name hst-client --update-env
+            fi
+            pm2 save
